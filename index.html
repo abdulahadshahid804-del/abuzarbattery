@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Abuzar Battery Service</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial;
+    background:#f5f7fa;
+}
+
+/* TOP BAR */
+.topbar{
+    background:#0b3d91;
+    color:white;
+    padding:8px;
+    text-align:right;
+    font-size:14px;
+}
+
+/* HEADER */
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:15px;
+    background:white;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:bold;
+    color:#0b3d91;
+}
+
+/* NAVBAR */
+.navbar{
+    background:#0b3d91;
+    text-align:center;
+    padding:10px;
+}
+
+.navbar a{
+    color:white;
+    margin:10px;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+/* HERO */
+.hero{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:40px;
+    background:white;
+}
+
+.hero-text{
+    animation:fadeIn 1.5s;
+}
+
+.hero-text h1{
+    color:#0b3d91;
+}
+
+.hero-img{
+    animation:slideIn 2s;
+}
+
+.hero-img img{
+    width:300px;
+}
+
+/* BUTTON */
+.btn{
+    background:#0b3d91;
+    color:white;
+    padding:10px 20px;
+    border:none;
+    cursor:pointer;
+    margin-top:10px;
+}
+
+.btn:hover{
+    background:#092f6b;
+}
+
+/* PRODUCTS */
+.products{
+    padding:20px;
+}
+
+.grid{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+}
+
+.card{
+    background:white;
+    width:200px;
+    margin:10px;
+    padding:10px;
+    text-align:center;
+    border-radius:10px;
+    box-shadow:0 0 10px #ddd;
+    transition:0.3s;
+}
+
+.card:hover{
+    transform:scale(1.05);
+}
+
+.card img{
+    width:100%;
+}
+
+/* FOOTER */
+.footer{
+    background:#0b3d91;
+    color:white;
+    text-align:center;
+    padding:15px;
+}
+
+/* FLOAT WHATSAPP */
+.whatsapp{
+    position:fixed;
+    bottom:20px;
+    right:20px;
+    background:#25D366;
+    color:white;
+    padding:15px;
+    border-radius:50%;
+    font-size:22px;
+    text-decoration:none;
+}
+
+/* ANIMATION */
+@keyframes fadeIn{
+    from{opacity:0;}
+    to{opacity:1;}
+}
+
+@keyframes slideIn{
+    from{transform:translateX(100px); opacity:0;}
+    to{transform:translateX(0); opacity:1;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="topbar">
+📍 Gulshan-e-Ravi Lahore | 📞 +92 301 4681059
+</div>
+
+<div class="header">
+<div class="logo">ABUZAR BATTERY SERVICE 🔋</div>
+</div>
+
+<div class="navbar">
+<a href="#">Home</a>
+<a href="#">Car Batteries</a>
+<a href="#">UPS Batteries</a>
+<a href="#">Solar Batteries</a>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+<div class="hero-text">
+<h1>Reliable Power for Every Need</h1>
+<p>Premium Car, UPS & Solar Batteries in Lahore</p>
+<button class="btn" onclick="orderNow()">Order on WhatsApp</button>
+
+<p><b>Top Brands:</b><br>
+AGS | OSAKA | PHOENIX | EXIDE</p>
+</div>
+
+<div class="hero-img">
+<img src="https://via.placeholder.com/300">
+</div>
+</div>
+
+<!-- PRODUCTS -->
+<div class="products">
+<h2 style="text-align:center;">Popular Batteries</h2>
+
+<div class="grid">
+
+<div class="card">
+<img src="https://via.placeholder.com/150">
+<h3>AGS GR-65</h3>
+<p>Car Battery</p>
+<button class="btn" onclick="orderNow()">Order on WhatsApp</button>
+</div>
+
+<div class="card">
+<img src="https://via.placeholder.com/150">
+<h3>Osaka TA-1800</h3>
+<p>Tubular Battery</p>
+<button class="btn" onclick="orderNow()">Order on WhatsApp</button>
+</div>
+
+<div class="card">
+<img src="https://via.placeholder.com/150">
+<h3>Phoenix XP-70</h3>
+<p>Car Battery</p>
+<button class="btn" onclick="orderNow()">Order on WhatsApp</button>
+</div>
+
+</div>
+</div>
+
+<div class="footer">
+© 2026 Abuzar Battery Service
+</div>
+
+<!-- WHATSAPP SCRIPT -->
+<script>
+function orderNow(){
+    let phone = "923014681059";
+    let message = "Assalamualaikum, I want to order a battery.";
+    let url = "https://wa.me/" + phone + "?text=" + encodeURIComponent(message);
+    window.open(url, "_blank");
+}
+</script>
+
+<!-- FLOAT BUTTON -->
+<a class="whatsapp" href="https://wa.me/923014681059?text=Assalamualaikum, I want to order a battery." target="_blank">
+💬
+</a>
+
+</body>
+</html>
