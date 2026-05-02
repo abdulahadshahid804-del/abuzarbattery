@@ -2,7 +2,6 @@
 <html>
 <head>
 <title>Abuzar Battery Service</title>
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -12,13 +11,7 @@ font-family:Arial;
 background:#f4f7fb;
 }
 
-.topbar{
-background:#0b3d91;
-color:white;
-padding:8px;
-text-align:right;
-}
-
+/* HEADER */
 .header{
 display:flex;
 justify-content:space-between;
@@ -33,44 +26,57 @@ font-weight:bold;
 color:#0b3d91;
 }
 
-.navbar{
-background:#0b3d91;
-text-align:center;
-padding:10px;
-}
-
-.navbar a{
-color:white;
-margin:10px;
-text-decoration:none;
-}
-
-.hero{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:40px;
-background:white;
-flex-wrap:wrap;
-}
-
-.hero-text h1{
-color:#0b3d91;
-}
-
-.hero img{
-width:280px;
-}
-
 .btn{
 background:#0b3d91;
 color:white;
-padding:10px 20px;
+padding:8px 15px;
 border:none;
 cursor:pointer;
-margin-top:10px;
 }
 
+/* SLIDER */
+.brand-slider{
+overflow:hidden;
+background:white;
+padding:15px;
+}
+
+.track{
+display:flex;
+animation:scroll 15s linear infinite;
+}
+
+.slide{
+min-width:150px;
+text-align:center;
+font-weight:bold;
+color:#0b3d91;
+}
+
+@keyframes scroll{
+0%{transform:translateX(0);}
+100%{transform:translateX(-50%);}
+}
+
+/* CATEGORIES */
+.categories{
+display:flex;
+justify-content:space-around;
+padding:20px;
+flex-wrap:wrap;
+}
+
+.cat{
+background:white;
+padding:15px;
+width:120px;
+text-align:center;
+border-radius:10px;
+box-shadow:0 0 10px #ddd;
+margin:10px;
+}
+
+/* PRODUCTS */
 .products{
 padding:20px;
 }
@@ -83,7 +89,7 @@ justify-content:center;
 
 .card{
 background:white;
-width:220px;
+width:200px;
 margin:10px;
 padding:10px;
 text-align:center;
@@ -95,13 +101,7 @@ box-shadow:0 0 10px #ddd;
 width:100%;
 }
 
-.footer{
-background:#0b3d91;
-color:white;
-text-align:center;
-padding:15px;
-}
-
+/* WHATSAPP */
 .whatsapp{
 position:fixed;
 bottom:20px;
@@ -111,113 +111,95 @@ color:white;
 padding:15px;
 border-radius:50%;
 text-decoration:none;
-font-size:20px;
 }
 </style>
 </head>
 
 <body>
 
-<div class="topbar">
-📍 Gulshan-e-Ravi Lahore | 📞 +92 301 4681059
-</div>
-
 <div class="header">
 <div class="logo">ABUZAR BATTERY 🔋</div>
 <button class="btn" onclick="showCart()">🛒 Cart</button>
 </div>
 
-<div class="navbar">
-<a href="#">Home</a>
-<a href="#">Car Batteries</a>
-<a href="#">UPS Batteries</a>
-<a href="#">Solar Batteries</a>
+<!-- BRAND SLIDER -->
+<div class="brand-slider">
+<div class="track">
+<div class="slide">OSAKA</div>
+<div class="slide">PHOENIX</div>
+<div class="slide">AGS</div>
+<div class="slide">EXIDE</div>
+<div class="slide">VOLTA</div>
+<div class="slide">DAEWOO</div>
+</div>
 </div>
 
-<div class="hero">
-<div class="hero-text">
-<h1>Power That Never Stops</h1>
-<p>Top Quality Batteries for Car, UPS & Solar Systems</p>
-<button class="btn" onclick="sendCartWhatsApp()">Order Cart on WhatsApp</button>
-</div>
-<img src="https://via.placeholder.com/300">
+<!-- CATEGORIES -->
+<div class="categories">
+<div class="cat"><img src="https://via.placeholder.com/80"><p>Car</p></div>
+<div class="cat"><img src="https://via.placeholder.com/80"><p>UPS</p></div>
+<div class="cat"><img src="https://via.placeholder.com/80"><p>Solar</p></div>
+<div class="cat"><img src="https://via.placeholder.com/80"><p>Dry</p></div>
 </div>
 
+<!-- PRODUCTS -->
 <div class="products">
-<h2 style="text-align:center;">Our Products</h2>
+<h2 style="text-align:center;">Products</h2>
 
 <div class="grid">
 
-<div class="card">
+<div class="card" data-brand="ags">
 <img src="https://via.placeholder.com/150">
 <h3>AGS GR-65</h3>
-<p>Car Battery</p>
 <button class="btn" onclick="addToCart('AGS GR-65')">Add to Cart</button>
 </div>
 
-<div class="card">
+<div class="card" data-brand="osaka">
 <img src="https://via.placeholder.com/150">
 <h3>Osaka NS60</h3>
-<p>Car Battery</p>
 <button class="btn" onclick="addToCart('Osaka NS60')">Add to Cart</button>
 </div>
 
-<div class="card">
+<div class="card" data-brand="phoenix">
 <img src="https://via.placeholder.com/150">
 <h3>Phoenix XP-70</h3>
-<p>Car Battery</p>
 <button class="btn" onclick="addToCart('Phoenix XP-70')">Add to Cart</button>
 </div>
 
-<div class="card">
-<img src="https://via.placeholder.com/150">
-<h3>AGS SP-180</h3>
-<p>UPS Battery</p>
-<button class="btn" onclick="addToCart('AGS SP-180')">Add to Cart</button>
-</div>
-
-<div class="card">
+<div class="card" data-brand="osaka">
 <img src="https://via.placeholder.com/150">
 <h3>Osaka TA-1800</h3>
-<p>Tubular Battery</p>
 <button class="btn" onclick="addToCart('Osaka TA-1800')">Add to Cart</button>
 </div>
 
 </div>
 </div>
 
-<div class="footer">
-© 2026 Abuzar Battery Service
-</div>
-
-<a class="whatsapp" href="https://wa.me/923014681059" target="_blank">💬</a>
+<a class="whatsapp" href="#" onclick="sendCartWhatsApp()">💬</a>
 
 <script>
 let cart = [];
 
 function addToCart(product){
-    cart.push(product);
-    alert(product + " add ho gaya cart me 🛒");
+cart.push(product);
+alert(product + " added 🛒");
 }
 
 function showCart(){
-    if(cart.length === 0){
-        alert("Cart empty hai");
-    } else {
-        alert("Cart:\n" + cart.join("\n"));
-    }
+if(cart.length===0){
+alert("Cart empty");
+}else{
+alert(cart.join("\n"));
+}
 }
 
 function sendCartWhatsApp(){
-    if(cart.length === 0){
-        alert("Cart empty hai");
-        return;
-    }
-
-    let phone = "923014681059";
-    let message = "Assalamualaikum, mujhe ye batteries chahiye:\n\n" + cart.join("\n");
-    let url = "https://wa.me/" + phone + "?text=" + encodeURIComponent(message);
-    window.open(url, "_blank");
+if(cart.length===0){
+alert("Cart empty");
+return;
+}
+let msg="Assalamualaikum, mujhe ye batteries chahiye:\n\n"+cart.join("\n");
+window.open("https://wa.me/923014681059?text="+encodeURIComponent(msg));
 }
 </script>
 
