@@ -3,6 +3,8 @@
 <head>
 <title>Abuzar Battery Service</title>
 
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <style>
 body{
 margin:0;
@@ -10,7 +12,6 @@ font-family:Arial;
 background:#f4f7fb;
 }
 
-/* TOP BAR */
 .topbar{
 background:#0b3d91;
 color:white;
@@ -18,10 +19,10 @@ padding:8px;
 text-align:right;
 }
 
-/* HEADER */
 .header{
 display:flex;
 justify-content:space-between;
+align-items:center;
 padding:15px;
 background:white;
 }
@@ -32,7 +33,6 @@ font-weight:bold;
 color:#0b3d91;
 }
 
-/* NAV */
 .navbar{
 background:#0b3d91;
 text-align:center;
@@ -45,13 +45,13 @@ margin:10px;
 text-decoration:none;
 }
 
-/* HERO */
 .hero{
 display:flex;
 justify-content:space-between;
 align-items:center;
 padding:40px;
 background:white;
+flex-wrap:wrap;
 }
 
 .hero-text h1{
@@ -62,7 +62,6 @@ color:#0b3d91;
 width:280px;
 }
 
-/* BUTTON */
 .btn{
 background:#0b3d91;
 color:white;
@@ -72,7 +71,6 @@ cursor:pointer;
 margin-top:10px;
 }
 
-/* PRODUCTS */
 .products{
 padding:20px;
 }
@@ -91,18 +89,12 @@ padding:10px;
 text-align:center;
 border-radius:10px;
 box-shadow:0 0 10px #ddd;
-transition:0.3s;
-}
-
-.card:hover{
-transform:scale(1.05);
 }
 
 .card img{
 width:100%;
 }
 
-/* FOOTER */
 .footer{
 background:#0b3d91;
 color:white;
@@ -110,7 +102,6 @@ text-align:center;
 padding:15px;
 }
 
-/* WHATSAPP FLOAT */
 .whatsapp{
 position:fixed;
 bottom:20px;
@@ -133,6 +124,7 @@ font-size:20px;
 
 <div class="header">
 <div class="logo">ABUZAR BATTERY 🔋</div>
+<button class="btn" onclick="showCart()">🛒 Cart</button>
 </div>
 
 <div class="navbar">
@@ -142,18 +134,15 @@ font-size:20px;
 <a href="#">Solar Batteries</a>
 </div>
 
-<!-- HERO -->
 <div class="hero">
 <div class="hero-text">
 <h1>Power That Never Stops</h1>
 <p>Top Quality Batteries for Car, UPS & Solar Systems</p>
-<button class="btn" onclick="orderNow('General Inquiry')">Order on WhatsApp</button>
+<button class="btn" onclick="sendCartWhatsApp()">Order Cart on WhatsApp</button>
 </div>
-
 <img src="https://via.placeholder.com/300">
 </div>
 
-<!-- PRODUCTS -->
 <div class="products">
 <h2 style="text-align:center;">Our Products</h2>
 
@@ -163,35 +152,35 @@ font-size:20px;
 <img src="https://via.placeholder.com/150">
 <h3>AGS GR-65</h3>
 <p>Car Battery</p>
-<button class="btn" onclick="orderNow('AGS GR-65')">Order on WhatsApp</button>
+<button class="btn" onclick="addToCart('AGS GR-65')">Add to Cart</button>
 </div>
 
 <div class="card">
 <img src="https://via.placeholder.com/150">
 <h3>Osaka NS60</h3>
 <p>Car Battery</p>
-<button class="btn" onclick="orderNow('Osaka NS60')">Order on WhatsApp</button>
+<button class="btn" onclick="addToCart('Osaka NS60')">Add to Cart</button>
 </div>
 
 <div class="card">
 <img src="https://via.placeholder.com/150">
 <h3>Phoenix XP-70</h3>
 <p>Car Battery</p>
-<button class="btn" onclick="orderNow('Phoenix XP-70')">Order on WhatsApp</button>
+<button class="btn" onclick="addToCart('Phoenix XP-70')">Add to Cart</button>
 </div>
 
 <div class="card">
 <img src="https://via.placeholder.com/150">
 <h3>AGS SP-180</h3>
 <p>UPS Battery</p>
-<button class="btn" onclick="orderNow('AGS SP-180')">Order on WhatsApp</button>
+<button class="btn" onclick="addToCart('AGS SP-180')">Add to Cart</button>
 </div>
 
 <div class="card">
 <img src="https://via.placeholder.com/150">
 <h3>Osaka TA-1800</h3>
 <p>Tubular Battery</p>
-<button class="btn" onclick="orderNow('Osaka TA-1800')">Order on WhatsApp</button>
+<button class="btn" onclick="addToCart('Osaka TA-1800')">Add to Cart</button>
 </div>
 
 </div>
@@ -201,17 +190,36 @@ font-size:20px;
 © 2026 Abuzar Battery Service
 </div>
 
+<a class="whatsapp" href="https://wa.me/923014681059" target="_blank">💬</a>
+
 <script>
-function orderNow(product){
-let phone = "923014681059";
-let message = "Assalamualaikum, I want to order " + product + " battery.";
-let url = "https://wa.me/" + phone + "?text=" + encodeURIComponent(message);
-window.open(url, "_blank");
+let cart = [];
+
+function addToCart(product){
+    cart.push(product);
+    alert(product + " add ho gaya cart me 🛒");
+}
+
+function showCart(){
+    if(cart.length === 0){
+        alert("Cart empty hai");
+    } else {
+        alert("Cart:\n" + cart.join("\n"));
+    }
+}
+
+function sendCartWhatsApp(){
+    if(cart.length === 0){
+        alert("Cart empty hai");
+        return;
+    }
+
+    let phone = "923014681059";
+    let message = "Assalamualaikum, mujhe ye batteries chahiye:\n\n" + cart.join("\n");
+    let url = "https://wa.me/" + phone + "?text=" + encodeURIComponent(message);
+    window.open(url, "_blank");
 }
 </script>
 
-<a class="whatsapp" href="https://wa.me/923014681059" target="_blank">💬</a>
-
 </body>
 </html>
-
