@@ -5,148 +5,122 @@
 
 <style>
 body{
-    margin:0;
-    font-family:Arial;
-    background:#f5f7fa;
+margin:0;
+font-family:Arial;
+background:#f4f7fb;
 }
 
 /* TOP BAR */
 .topbar{
-    background:#0b3d91;
-    color:white;
-    padding:8px;
-    text-align:right;
-    font-size:14px;
+background:#0b3d91;
+color:white;
+padding:8px;
+text-align:right;
 }
 
 /* HEADER */
 .header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:15px;
-    background:white;
+display:flex;
+justify-content:space-between;
+padding:15px;
+background:white;
 }
 
 .logo{
-    font-size:22px;
-    font-weight:bold;
-    color:#0b3d91;
+font-size:22px;
+font-weight:bold;
+color:#0b3d91;
 }
 
-/* NAVBAR */
+/* NAV */
 .navbar{
-    background:#0b3d91;
-    text-align:center;
-    padding:10px;
+background:#0b3d91;
+text-align:center;
+padding:10px;
 }
 
 .navbar a{
-    color:white;
-    margin:10px;
-    text-decoration:none;
-    font-weight:bold;
+color:white;
+margin:10px;
+text-decoration:none;
 }
 
 /* HERO */
 .hero{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:40px;
-    background:white;
-}
-
-.hero-text{
-    animation:fadeIn 1.5s;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:40px;
+background:white;
 }
 
 .hero-text h1{
-    color:#0b3d91;
+color:#0b3d91;
 }
 
-.hero-img{
-    animation:slideIn 2s;
-}
-
-.hero-img img{
-    width:300px;
+.hero img{
+width:280px;
 }
 
 /* BUTTON */
 .btn{
-    background:#0b3d91;
-    color:white;
-    padding:10px 20px;
-    border:none;
-    cursor:pointer;
-    margin-top:10px;
-}
-
-.btn:hover{
-    background:#092f6b;
+background:#0b3d91;
+color:white;
+padding:10px 20px;
+border:none;
+cursor:pointer;
+margin-top:10px;
 }
 
 /* PRODUCTS */
 .products{
-    padding:20px;
+padding:20px;
 }
 
 .grid{
-    display:flex;
-    flex-wrap:wrap;
-    justify-content:center;
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
 }
 
 .card{
-    background:white;
-    width:200px;
-    margin:10px;
-    padding:10px;
-    text-align:center;
-    border-radius:10px;
-    box-shadow:0 0 10px #ddd;
-    transition:0.3s;
+background:white;
+width:220px;
+margin:10px;
+padding:10px;
+text-align:center;
+border-radius:10px;
+box-shadow:0 0 10px #ddd;
+transition:0.3s;
 }
 
 .card:hover{
-    transform:scale(1.05);
+transform:scale(1.05);
 }
 
 .card img{
-    width:100%;
+width:100%;
 }
 
 /* FOOTER */
 .footer{
-    background:#0b3d91;
-    color:white;
-    text-align:center;
-    padding:15px;
+background:#0b3d91;
+color:white;
+text-align:center;
+padding:15px;
 }
 
-/* FLOAT WHATSAPP */
+/* WHATSAPP FLOAT */
 .whatsapp{
-    position:fixed;
-    bottom:20px;
-    right:20px;
-    background:#25D366;
-    color:white;
-    padding:15px;
-    border-radius:50%;
-    font-size:22px;
-    text-decoration:none;
-}
-
-/* ANIMATION */
-@keyframes fadeIn{
-    from{opacity:0;}
-    to{opacity:1;}
-}
-
-@keyframes slideIn{
-    from{transform:translateX(100px); opacity:0;}
-    to{transform:translateX(0); opacity:1;}
+position:fixed;
+bottom:20px;
+right:20px;
+background:#25D366;
+color:white;
+padding:15px;
+border-radius:50%;
+text-decoration:none;
+font-size:20px;
 }
 </style>
 </head>
@@ -158,7 +132,7 @@ body{
 </div>
 
 <div class="header">
-<div class="logo">ABUZAR BATTERY SERVICE 🔋</div>
+<div class="logo">ABUZAR BATTERY 🔋</div>
 </div>
 
 <div class="navbar">
@@ -171,22 +145,17 @@ body{
 <!-- HERO -->
 <div class="hero">
 <div class="hero-text">
-<h1>Reliable Power for Every Need</h1>
-<p>Premium Car, UPS & Solar Batteries in Lahore</p>
-<button class="btn" onclick="orderNow()">Order on WhatsApp</button>
-
-<p><b>Top Brands:</b><br>
-AGS | OSAKA | PHOENIX | EXIDE</p>
+<h1>Power That Never Stops</h1>
+<p>Top Quality Batteries for Car, UPS & Solar Systems</p>
+<button class="btn" onclick="orderNow('General Inquiry')">Order on WhatsApp</button>
 </div>
 
-<div class="hero-img">
 <img src="https://via.placeholder.com/300">
-</div>
 </div>
 
 <!-- PRODUCTS -->
 <div class="products">
-<h2 style="text-align:center;">Popular Batteries</h2>
+<h2 style="text-align:center;">Our Products</h2>
 
 <div class="grid">
 
@@ -194,21 +163,35 @@ AGS | OSAKA | PHOENIX | EXIDE</p>
 <img src="https://via.placeholder.com/150">
 <h3>AGS GR-65</h3>
 <p>Car Battery</p>
-<button class="btn" onclick="orderNow()">Order on WhatsApp</button>
+<button class="btn" onclick="orderNow('AGS GR-65')">Order on WhatsApp</button>
 </div>
 
 <div class="card">
 <img src="https://via.placeholder.com/150">
-<h3>Osaka TA-1800</h3>
-<p>Tubular Battery</p>
-<button class="btn" onclick="orderNow()">Order on WhatsApp</button>
+<h3>Osaka NS60</h3>
+<p>Car Battery</p>
+<button class="btn" onclick="orderNow('Osaka NS60')">Order on WhatsApp</button>
 </div>
 
 <div class="card">
 <img src="https://via.placeholder.com/150">
 <h3>Phoenix XP-70</h3>
 <p>Car Battery</p>
-<button class="btn" onclick="orderNow()">Order on WhatsApp</button>
+<button class="btn" onclick="orderNow('Phoenix XP-70')">Order on WhatsApp</button>
+</div>
+
+<div class="card">
+<img src="https://via.placeholder.com/150">
+<h3>AGS SP-180</h3>
+<p>UPS Battery</p>
+<button class="btn" onclick="orderNow('AGS SP-180')">Order on WhatsApp</button>
+</div>
+
+<div class="card">
+<img src="https://via.placeholder.com/150">
+<h3>Osaka TA-1800</h3>
+<p>Tubular Battery</p>
+<button class="btn" onclick="orderNow('Osaka TA-1800')">Order on WhatsApp</button>
 </div>
 
 </div>
@@ -218,20 +201,16 @@ AGS | OSAKA | PHOENIX | EXIDE</p>
 © 2026 Abuzar Battery Service
 </div>
 
-<!-- WHATSAPP SCRIPT -->
 <script>
-function orderNow(){
-    let phone = "923014681059";
-    let message = "Assalamualaikum, I want to order a battery.";
-    let url = "https://wa.me/" + phone + "?text=" + encodeURIComponent(message);
-    window.open(url, "_blank");
+function orderNow(product){
+let phone = "923014681059";
+let message = "Assalamualaikum, I want to order " + product + " battery.";
+let url = "https://wa.me/" + phone + "?text=" + encodeURIComponent(message);
+window.open(url, "_blank");
 }
 </script>
 
-<!-- FLOAT BUTTON -->
-<a class="whatsapp" href="https://wa.me/923014681059?text=Assalamualaikum, I want to order a battery." target="_blank">
-💬
-</a>
+<a class="whatsapp" href="https://wa.me/923014681059" target="_blank">💬</a>
 
 </body>
 </html>
