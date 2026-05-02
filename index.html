@@ -3,39 +3,115 @@
 <head>
 <title>Abuzar Battery Service</title>
 
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <style>
-body{margin:0;font-family:Arial;background:#f4f7fb;}
-
-.topbar{background:#0b3d91;color:white;padding:8px;text-align:right;}
-.header{padding:15px;background:white;}
-.logo{font-size:22px;font-weight:bold;color:#0b3d91;}
-
-.navbar{background:#0b3d91;text-align:center;padding:10px;}
-.navbar a{color:white;margin:10px;text-decoration:none;}
-
-.section{padding:20px;}
-.section h2{color:#0b3d91;text-align:center;}
-
-.grid{display:flex;flex-wrap:wrap;justify-content:center;}
-
-.card{
-background:white;width:200px;margin:10px;padding:10px;text-align:center;
-border-radius:10px;box-shadow:0 0 10px #ddd;transition:0.3s;
+body{
+margin:0;
+font-family:Arial;
+background:#f4f7fb;
 }
-.card:hover{transform:scale(1.05);}
-.card img{width:100%;}
+
+.topbar{
+background:#0b3d91;
+color:white;
+padding:8px;
+text-align:right;
+}
+
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:15px;
+background:white;
+}
+
+.logo{
+font-size:22px;
+font-weight:bold;
+color:#0b3d91;
+}
+
+.navbar{
+background:#0b3d91;
+text-align:center;
+padding:10px;
+}
+
+.navbar a{
+color:white;
+margin:10px;
+text-decoration:none;
+}
+
+.hero{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:40px;
+background:white;
+flex-wrap:wrap;
+}
+
+.hero-text h1{
+color:#0b3d91;
+}
+
+.hero img{
+width:280px;
+}
 
 .btn{
-background:#0b3d91;color:white;padding:8px 15px;border:none;cursor:pointer;
+background:#0b3d91;
+color:white;
+padding:10px 20px;
+border:none;
+cursor:pointer;
+margin-top:10px;
+}
+
+.products{
+padding:20px;
+}
+
+.grid{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+}
+
+.card{
+background:white;
+width:220px;
+margin:10px;
+padding:10px;
+text-align:center;
+border-radius:10px;
+box-shadow:0 0 10px #ddd;
+}
+
+.card img{
+width:100%;
 }
 
 .footer{
-background:#0b3d91;color:white;text-align:center;padding:15px;
+background:#0b3d91;
+color:white;
+text-align:center;
+padding:15px;
 }
 
 .whatsapp{
-position:fixed;bottom:20px;right:20px;background:#25D366;
-color:white;padding:15px;border-radius:50%;text-decoration:none;
+position:fixed;
+bottom:20px;
+right:20px;
+background:#25D366;
+color:white;
+padding:15px;
+border-radius:50%;
+text-decoration:none;
+font-size:20px;
 }
 </style>
 </head>
@@ -47,56 +123,65 @@ color:white;padding:15px;border-radius:50%;text-decoration:none;
 </div>
 
 <div class="header">
-<div class="logo">ABUZAR BATTERY SERVICE 🔋</div>
+<div class="logo">ABUZAR BATTERY 🔋</div>
+<button class="btn" onclick="showCart()">🛒 Cart</button>
 </div>
 
 <div class="navbar">
 <a href="#">Home</a>
-<a href="#">Car</a>
-<a href="#">UPS</a>
-<a href="#">Solar</a>
+<a href="#">Car Batteries</a>
+<a href="#">UPS Batteries</a>
+<a href="#">Solar Batteries</a>
 </div>
 
-<!-- CAR BATTERIES -->
-<div class="section">
-<h2>Car Batteries 🚗</h2>
+<div class="hero">
+<div class="hero-text">
+<h1>Power That Never Stops</h1>
+<p>Top Quality Batteries for Car, UPS & Solar Systems</p>
+<button class="btn" onclick="sendCartWhatsApp()">Order Cart on WhatsApp</button>
+</div>
+<img src="https://via.placeholder.com/300">
+</div>
+
+<div class="products">
+<h2 style="text-align:center;">Our Products</h2>
+
 <div class="grid">
 
-<div class="card"><img src="https://via.placeholder.com/150"><h3>AGS GR-46</h3><button class="btn" onclick="orderNow('AGS GR-46')">Order</button></div>
-<div class="card"><img src="https://via.placeholder.com/150"><h3>AGS GR-65</h3><button class="btn" onclick="orderNow('AGS GR-65')">Order</button></div>
-<div class="card"><img src="https://via.placeholder.com/150"><h3>AGS GL-50</h3><button class="btn" onclick="orderNow('AGS GL-50')">Order</button></div>
-<div class="card"><img src="https://via.placeholder.com/150"><h3>Osaka NS60</h3><button class="btn" onclick="orderNow('Osaka NS60')">Order</button></div>
-<div class="card"><img src="https://via.placeholder.com/150"><h3>Phoenix XP-70</h3><button class="btn" onclick="orderNow('Phoenix XP-70')">Order</button></div>
-<div class="card"><img src="https://via.placeholder.com/150"><h3>Daewoo DL-65</h3><button class="btn" onclick="orderNow('Daewoo DL-65')">Order</button></div>
-<div class="card"><img src="https://via.placeholder.com/150"><h3>Exide N65</h3><button class="btn" onclick="orderNow('Exide N65')">Order</button></div>
-
-</div>
+<div class="card">
+<img src="https://via.placeholder.com/150">
+<h3>AGS GR-65</h3>
+<p>Car Battery</p>
+<button class="btn" onclick="addToCart('AGS GR-65')">Add to Cart</button>
 </div>
 
-<!-- UPS -->
-<div class="section">
-<h2>UPS / Tubular Batteries 🔌</h2>
-<div class="grid">
-
-<div class="card"><img src="https://via.placeholder.com/150"><h3>AGS SP-145</h3><button class="btn" onclick="orderNow('AGS SP-145')">Order</button></div>
-<div class="card"><img src="https://via.placeholder.com/150"><h3>AGS SP-180</h3><button class="btn" onclick="orderNow('AGS SP-180')">Order</button></div>
-<div class="card"><img src="https://via.placeholder.com/150"><h3>Osaka TA-1200</h3><button class="btn" onclick="orderNow('Osaka TA-1200')">Order</button></div>
-<div class="card"><img src="https://via.placeholder.com/150"><h3>Osaka TA-1800</h3><button class="btn" onclick="orderNow('Osaka TA-1800')">Order</button></div>
-<div class="card"><img src="https://via.placeholder.com/150"><h3>Phoenix PX-150</h3><button class="btn" onclick="orderNow('Phoenix PX-150')">Order</button></div>
-<div class="card"><img src="https://via.placeholder.com/150"><h3>Volta T-125</h3><button class="btn" onclick="orderNow('Volta T-125')">Order</button></div>
-
-</div>
+<div class="card">
+<img src="https://via.placeholder.com/150">
+<h3>Osaka NS60</h3>
+<p>Car Battery</p>
+<button class="btn" onclick="addToCart('Osaka NS60')">Add to Cart</button>
 </div>
 
-<!-- SOLAR -->
-<div class="section">
-<h2>Solar Batteries ☀️</h2>
-<div class="grid">
+<div class="card">
+<img src="https://via.placeholder.com/150">
+<h3>Phoenix XP-70</h3>
+<p>Car Battery</p>
+<button class="btn" onclick="addToCart('Phoenix XP-70')">Add to Cart</button>
+</div>
 
-<div class="card"><img src="https://via.placeholder.com/150"><h3>AGS 200Ah</h3><button class="btn" onclick="orderNow('AGS 200Ah')">Order</button></div>
-<div class="card"><img src="https://via.placeholder.com/150"><h3>Osaka Solar T-180</h3><button class="btn" onclick="orderNow('Osaka Solar T-180')">Order</button></div>
-<div class="card"><img src="https://via.placeholder.com/150"><h3>Phoenix PX-200T</h3><button class="btn" onclick="orderNow('Phoenix PX-200T')">Order</button></div>
-<div class="card"><img src="https://via.placeholder.com/150"><h3>Exide Solar-100</h3><button class="btn" onclick="orderNow('Exide Solar-100')">Order</button></div>
+<div class="card">
+<img src="https://via.placeholder.com/150">
+<h3>AGS SP-180</h3>
+<p>UPS Battery</p>
+<button class="btn" onclick="addToCart('AGS SP-180')">Add to Cart</button>
+</div>
+
+<div class="card">
+<img src="https://via.placeholder.com/150">
+<h3>Osaka TA-1800</h3>
+<p>Tubular Battery</p>
+<button class="btn" onclick="addToCart('Osaka TA-1800')">Add to Cart</button>
+</div>
 
 </div>
 </div>
@@ -105,16 +190,36 @@ color:white;padding:15px;border-radius:50%;text-decoration:none;
 © 2026 Abuzar Battery Service
 </div>
 
+<a class="whatsapp" href="https://wa.me/923014681059" target="_blank">💬</a>
+
 <script>
-function orderNow(product){
-let phone = "923014681059";
-let message = "Assalamualaikum, I want to order " + product + " battery.";
-let url = "https://wa.me/" + phone + "?text=" + encodeURIComponent(message);
-window.open(url, "_blank");
+let cart = [];
+
+function addToCart(product){
+    cart.push(product);
+    alert(product + " add ho gaya cart me 🛒");
+}
+
+function showCart(){
+    if(cart.length === 0){
+        alert("Cart empty hai");
+    } else {
+        alert("Cart:\n" + cart.join("\n"));
+    }
+}
+
+function sendCartWhatsApp(){
+    if(cart.length === 0){
+        alert("Cart empty hai");
+        return;
+    }
+
+    let phone = "923014681059";
+    let message = "Assalamualaikum, mujhe ye batteries chahiye:\n\n" + cart.join("\n");
+    let url = "https://wa.me/" + phone + "?text=" + encodeURIComponent(message);
+    window.open(url, "_blank");
 }
 </script>
-
-<a class="whatsapp" href="https://wa.me/923014681059" target="_blank">💬</a>
 
 </body>
 </html>
