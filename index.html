@@ -11,14 +11,16 @@ display:flex;justify-content:space-between;
 align-items:center;padding:15px;background:white;
 box-shadow:0 2px 10px #ddd;
 }
-.logo{font-size:22px;font-weight:bold;color:#0b3d91;}
-.btn{background:#0b3d91;color:white;padding:8px 15px;border:none;border-radius:20px;cursor:pointer;margin:3px;}
+.logo{font-size:22px;font-weight:bold;color:#0b3d91;cursor:pointer;}
+.btn{background:#0b3d91;color:white;padding:10px 20px;border:none;border-radius:25px;cursor:pointer;}
+
 .main{display:flex;gap:20px;padding:20px;}
 .left{flex:3;}
 .right{
 flex:1;background:white;padding:15px;border-radius:10px;
 box-shadow:0 0 10px #ddd;height:fit-content;
 }
+
 .hero{
 display:flex;justify-content:space-between;align-items:center;
 background:linear-gradient(135deg,#0b3d91,#1456d1);
@@ -26,41 +28,53 @@ color:white;padding:30px;border-radius:15px;margin-bottom:20px;
 }
 .hero-text{max-width:50%;}
 .hero img{width:260px;}
+
 .search{text-align:center;margin:15px 0;}
 .search input{
 width:70%;padding:12px;border-radius:25px;border:1px solid #ccc;
 }
+
 .categories{display:flex;justify-content:space-between;margin:20px 0;}
 .cat{
 flex:1;background:white;margin:5px;padding:15px;text-align:center;
 border-radius:12px;box-shadow:0 0 10px #ddd;cursor:pointer;
+transition:0.3s;
 }
-.cat img{width:60px;}
+.cat:hover{transform:scale(1.05);}
+
 .brands{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
 gap:10px;
 }
 .brand{
-background:white;padding:15px;text-align:center;
-border-radius:10px;box-shadow:0 0 10px #ddd;cursor:pointer;
+background:white;padding:15px;text-align:center;border-radius:10px;
+box-shadow:0 0 10px #ddd;cursor:pointer;transition:0.3s;
 }
-.brand img{width:80px;}
-.products{display:none;padding:10px;}
-.card{
-background:white;padding:15px;margin:10px;
-border-radius:10px;box-shadow:0 0 10px #ddd;
-}
-.qty{
-display:flex;justify-content:center;align-items:center;
-gap:10px;margin:10px 0;
-}
+.brand:hover{transform:scale(1.07);}
+
+/* SLIDER */
 .slider{overflow:hidden;background:white;margin:15px 0;padding:10px;border-radius:10px;}
 .track{display:flex;gap:40px;animation:scroll 15s linear infinite;}
 @keyframes scroll{
 0%{transform:translateX(100%);}
 100%{transform:translateX(-100%);}
 }
+
+/* PRODUCT PAGE */
+.productPage{display:none;padding:20px;}
+.productBox{
+display:flex;gap:30px;background:white;padding:20px;
+border-radius:15px;box-shadow:0 0 15px #ddd;
+}
+.productBox img{width:250px;}
+.qty{
+display:flex;align-items:center;gap:10px;margin:10px 0;
+}
+.qty button{
+padding:5px 12px;font-size:18px;
+}
+
+/* WHATSAPP */
 .whatsapp{
 position:fixed;bottom:20px;right:20px;
 background:#25D366;color:white;padding:15px;border-radius:50%;
@@ -75,11 +89,12 @@ cursor:pointer;
 </div>
 
 <div class="header">
-<div class="logo">ABUZAR BATTERY 🔋</div>
+<div class="logo" onclick="goHome()">ABUZAR BATTERY 🔋</div>
 <button class="btn" onclick="showCart()">🛒 Cart</button>
 </div>
 
-<div class="main">
+<div class="main" id="home">
+
 <div class="left">
 
 <div class="hero">
@@ -90,12 +105,16 @@ cursor:pointer;
 <img src="https://via.placeholder.com/250">
 </div>
 
+<div class="search">
+<input type="text" placeholder="Search battery..." onkeyup="searchProduct(this.value)">
+</div>
+
 <div class="categories">
-<div class="cat"><img src="https://via.placeholder.com/60"><p>Solar Battery</p></div>
-<div class="cat"><img src="https://via.placeholder.com/60"><p>UPS Battery</p></div>
-<div class="cat"><img src="https://via.placeholder.com/60"><p>Car Battery</p></div>
-<div class="cat"><img src="https://via.placeholder.com/60"><p>Dry Battery</p></div>
-<div class="cat"><img src="https://via.placeholder.com/60"><p>Deep Cycle Battery</p></div>
+<div class="cat"><p>Solar Battery</p></div>
+<div class="cat"><p>UPS Battery</p></div>
+<div class="cat"><p>Car Battery</p></div>
+<div class="cat"><p>Dry Battery</p></div>
+<div class="cat"><p>Deep Cycle Battery</p></div>
 </div>
 
 <div class="slider">
@@ -110,87 +129,107 @@ cursor:pointer;
 </div>
 </div>
 
-<!-- BRANDS -->
-<div id="brands" class="brands">
-<div class="brand" onclick="showBrand('osaka')"><img src="https://via.placeholder.com/80"><p>OSAKA</p></div>
-<div class="brand" onclick="showBrand('ags')"><img src="https://via.placeholder.com/80"><p>AGS</p></div>
-<div class="brand" onclick="showBrand('phoenix')"><img src="https://via.placeholder.com/80"><p>PHOENIX</p></div>
-<div class="brand" onclick="showBrand('exide')"><img src="https://via.placeholder.com/80"><p>EXIDE</p></div>
-<div class="brand" onclick="showBrand('volta')"><img src="https://via.placeholder.com/80"><p>VOLTA</p></div>
-<div class="brand" onclick="showBrand('daewoo')"><img src="https://via.placeholder.com/80"><p>DAEWOO</p></div>
-<div class="brand" onclick="showBrand('unique')"><img src="https://via.placeholder.com/80"><p>UNIQUE</p></div>
+<div class="brands">
+<div class="brand" onclick="openProduct('OSAKA Battery')"><p>OSAKA</p></div>
+<div class="brand" onclick="openProduct('AGS Battery')"><p>AGS</p></div>
+<div class="brand" onclick="openProduct('PHOENIX Battery')"><p>PHOENIX</p></div>
+<div class="brand" onclick="openProduct('EXIDE Battery')"><p>EXIDE</p></div>
+<div class="brand" onclick="openProduct('VOLTA Battery')"><p>VOLTA</p></div>
+<div class="brand" onclick="openProduct('DAEWOO Battery')"><p>DAEWOO</p></div>
+<div class="brand" onclick="openProduct('UNIQUE Battery')"><p>UNIQUE</p></div>
 </div>
-
-<!-- PRODUCTS -->
-<div id="products" class="products"></div>
 
 </div>
 
 <div class="right">
 <h3>Top Brands</h3>
-<p>Osaka</p><p>AGS</p><p>Phoenix</p><p>Exide</p>
-<p>Volta</p><p>Daewoo</p><p>Unique</p>
+<p>Osaka</p>
+<p>AGS</p>
+<p>Phoenix</p>
+<p>Exide</p>
+<p>Volta</p>
+<p>Daewoo</p>
+<p>Unique</p>
+</div>
+
+</div>
+
+<!-- PRODUCT PAGE -->
+<div class="productPage" id="productPage">
+<button class="btn" onclick="goHome()">⬅ Back</button>
+
+<div class="productBox">
+<img src="https://via.placeholder.com/250">
+
+<div>
+<h2 id="pName"></h2>
+<p>High quality battery with long backup 🔋</p>
+
+<div class="qty">
+<button onclick="changeQty(-1)">-</button>
+<span id="qty">1</span>
+<button onclick="changeQty(1)">+</button>
+</div>
+
+<button class="btn" onclick="addToCart()">Add to Cart</button>
+<button class="btn" onclick="orderNow()">Buy Now</button>
+
 </div>
 </div>
 
-<div class="whatsapp" onclick="orderNow('Hello')">💬</div>
+</div>
+
+<div class="whatsapp" onclick="orderNow()">💬</div>
 
 <script>
 let cart=[];
-let data={
-osaka:["NS40","NS60","NS70"],
-ags:["GR-46","GR-65"],
-phoenix:["XP-50","XP-70"],
-exide:["N50","N65"],
-volta:["T-125","T-150"],
-daewoo:["DL-50","DL-60"],
-unique:["U-100","U-120"]
-};
+let currentProduct="";
+let quantity=1;
 
-function showBrand(brand){
-document.getElementById("brands").style.display="none";
-let container=document.getElementById("products");
-container.style.display="block";
-container.innerHTML="";
-
-data[brand].forEach(model=>{
-container.innerHTML+=`
-<div class="card">
-<h3>${brand.toUpperCase()} ${model}</h3>
-
-<div class="qty">
-<button onclick="changeQty(this,-1)">-</button>
-<span>1</span>
-<button onclick="changeQty(this,1)">+</button>
-</div>
-
-<button class="btn" onclick="addToCart('${brand} ${model}',this)">Add to Cart</button>
-</div>
-`;
-});
+function openProduct(name){
+currentProduct=name;
+document.getElementById("home").style.display="none";
+document.getElementById("productPage").style.display="block";
+document.getElementById("pName").innerText=name;
+quantity=1;
+document.getElementById("qty").innerText=1;
 }
 
-function changeQty(btn,val){
-let span=btn.parentElement.querySelector("span");
-let num=parseInt(span.innerText);
-num+=val;
-if(num<1) num=1;
-span.innerText=num;
+function goHome(){
+document.getElementById("home").style.display="flex";
+document.getElementById("productPage").style.display="none";
 }
 
-function addToCart(product,btn){
-let qty=btn.parentElement.querySelector("span").innerText;
-cart.push(product+" x"+qty);
-alert("Added: "+product+" x"+qty);
+function changeQty(val){
+quantity+=val;
+if(quantity<1) quantity=1;
+document.getElementById("qty").innerText=quantity;
+}
+
+function addToCart(){
+cart.push(currentProduct+" x"+quantity);
+alert("Added to cart");
 }
 
 function showCart(){
-if(cart.length==0) alert("Cart empty");
-else alert(cart.join("\n"));
+alert(cart.join("\n"));
 }
 
-function orderNow(msg){
+function orderNow(){
+let msg="Mujhe chahiye: "+currentProduct+" Qty:"+quantity;
 window.open("https://wa.me/923014681059?text="+msg);
+}
+
+function searchProduct(val){
+val=val.toLowerCase();
+let brands=document.querySelectorAll(".brand");
+brands.forEach(b=>{
+if(b.innerText.toLowerCase().includes(val)){
+b.style.display="block";
+}else{
+b.style.display="none";
+}
+});
 }
 </script>
 
