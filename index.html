@@ -3,10 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Abuzar Battery Service | Lahore’s Trusted Battery Store</title>
-  <!-- Google Fonts + Font Awesome Icons -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <title>Abuzar Battery Service | Premium Batteries Lahore</title>
+  <!-- Google Fonts + Font Awesome + Firebase + Tailwind via CDN (lightweight but powerful) -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- Firebase SDKs (Auth + Google/Facebook) -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
   <style>
     * {
       margin: 0;
@@ -15,642 +18,451 @@
     }
 
     body {
-      font-family: 'Inter', sans-serif;
-      background: #f4f7fc;
-      color: #1a2c3e;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #fafcff;
+      color: #0a1c2a;
       scroll-behavior: smooth;
     }
 
-    /* container utility */
+    /* custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #ff8c42;
+      border-radius: 10px;
+    }
+
+    /* sticky header */
+    .sticky-header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(255,255,255,0.96);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.05);
+      transition: all 0.3s;
+    }
+
     .container {
       max-width: 1280px;
       margin: 0 auto;
-      padding: 0 24px;
+      padding: 0 32px;
     }
 
-    /* header & navigation */
-    header {
-      background: linear-gradient(135deg, #0b2b3b 0%, #1a4a5f 100%);
-      color: white;
-      padding: 16px 0 12px;
-      box-shadow: 0 6px 14px rgba(0,0,0,0.08);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-
-    .header-top {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: center;
-      gap: 15px;
-    }
-
-    .logo h1 {
-      font-size: 1.7rem;
-      font-weight: 700;
-      letter-spacing: -0.3px;
-    }
-    .logo p {
-      font-size: 0.8rem;
-      opacity: 0.85;
-      margin-top: 4px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .contact-info {
-      background: rgba(255,255,255,0.15);
-      padding: 8px 18px;
-      border-radius: 50px;
-      font-weight: 500;
-      font-size: 1rem;
-    }
-    .contact-info i {
-      margin-right: 8px;
-    }
-    .brand-strip {
-      background: #eef2f5;
-      padding: 8px 0;
-      border-bottom: 1px solid #dce5ea;
-    }
-    .brands-list {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 28px;
-      list-style: none;
-      font-weight: 600;
-      color: #1f5e7a;
-    }
-    .brands-list li {
-      font-size: 0.9rem;
-      letter-spacing: 0.3px;
-    }
-
-    /* category pills */
-    .category-bar {
-      margin: 30px 0 20px;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 14px;
-    }
-    .cat-btn {
-      background: white;
+    /* premium button & card animations */
+    .btn-primary {
+      background: linear-gradient(105deg, #ff8c42 0%, #ff6e2c 100%);
       border: none;
-      padding: 10px 24px;
+      padding: 12px 28px;
       border-radius: 40px;
-      font-weight: 600;
-      font-size: 1rem;
+      font-weight: 700;
+      color: white;
       cursor: pointer;
-      transition: 0.2s;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-      font-family: inherit;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 12px rgba(255,108,44,0.3);
     }
-    .cat-btn i {
-      font-size: 1rem;
-      color: #0b5e7a;
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 22px rgba(255,108,44,0.4);
     }
-    .cat-btn.active {
-      background: #1a4a5f;
-      color: white;
+    .card-hover {
+      transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
     }
-    .cat-btn.active i {
-      color: white;
-    }
-    .cat-btn:hover {
-      background: #cbe3ed;
-      transform: translateY(-2px);
+    .card-hover:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 25px 35px -12px rgba(0,0,0,0.15);
     }
 
-    /* products grid */
-    .products-section {
-      margin: 20px 0 50px;
+    /* hero banner */
+    .hero {
+      background: linear-gradient(135deg, #0b2b3b 0%, #1b4e6e 100%);
+      border-radius: 0 0 40px 40px;
+      margin-bottom: 40px;
+      position: relative;
+      overflow: hidden;
     }
-    .section-title {
-      font-size: 1.7rem;
-      font-weight: 700;
-      margin: 24px 0 16px;
-      border-left: 6px solid #ff8c42;
-      padding-left: 16px;
+    .hero::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 100%;
+      height: 100%;
+      background: url('https://images.unsplash.com/photo-1581091226033-d5c48150dbaa?auto=format&fit=crop&w=800&q=80') no-repeat center right/cover;
+      opacity: 0.1;
+      pointer-events: none;
     }
+
+    /* category cards */
+    .category-card {
+      background: white;
+      border-radius: 28px;
+      padding: 24px 16px;
+      text-align: center;
+      transition: 0.25s;
+      cursor: pointer;
+      box-shadow: 0 12px 24px -12px rgba(0,0,0,0.08);
+      border: 1px solid rgba(0,0,0,0.03);
+    }
+    .category-card img {
+      width: 70px;
+      height: 70px;
+      object-fit: contain;
+      margin-bottom: 16px;
+    }
+
+    /* product grid */
     .product-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
       gap: 28px;
     }
     .product-card {
       background: white;
-      border-radius: 28px;
+      border-radius: 32px;
       overflow: hidden;
-      transition: all 0.25s ease;
-      box-shadow: 0 8px 18px rgba(0,0,0,0.05);
-      border: 1px solid rgba(0,0,0,0.05);
+      transition: all 0.25s;
+      border: 1px solid #eef2f8;
     }
-    .product-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 20px 30px -12px rgba(0,0,0,0.15);
-    }
-    .card-img {
-      background: #eef3f7;
-      text-align: center;
-      padding: 32px 0 24px;
-      font-size: 3.5rem;
-      color: #1f5e7a;
-    }
-    .card-content {
-      padding: 16px 20px 24px;
-    }
-    .brand-badge {
-      font-size: 0.7rem;
-      background: #eef2f5;
-      display: inline-block;
-      padding: 4px 12px;
-      border-radius: 40px;
-      font-weight: 600;
-    }
-    .product-title {
-      font-size: 1.25rem;
-      font-weight: 700;
-      margin: 10px 0 6px;
-    }
-    .product-desc {
-      font-size: 0.85rem;
-      color: #4a6272;
-      margin-bottom: 14px;
-      line-height: 1.4;
-    }
-    .price {
-      font-weight: 800;
-      font-size: 1.45rem;
-      color: #1a4a5f;
-      margin: 10px 0;
-    }
-    .btn-add {
-      background: #ff8c42;
-      border: none;
-      width: 100%;
-      padding: 12px 0;
-      border-radius: 40px;
-      font-weight: 700;
-      font-size: 0.9rem;
-      color: white;
-      cursor: pointer;
-      transition: 0.2s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-    .btn-add:hover {
-      background: #e6762c;
-      transform: scale(0.98);
-    }
+
     /* cart sidebar */
     .cart-sidebar {
       position: fixed;
       top: 0;
-      right: -380px;
-      width: 380px;
+      right: -450px;
+      width: 450px;
       max-width: 90vw;
       height: 100%;
       background: white;
-      box-shadow: -5px 0 25px rgba(0,0,0,0.2);
-      z-index: 1000;
+      z-index: 2000;
       transition: right 0.3s ease;
+      box-shadow: -5px 0 30px rgba(0,0,0,0.2);
       display: flex;
       flex-direction: column;
-      font-family: inherit;
     }
-    .cart-sidebar.open {
-      right: 0;
-    }
-    .cart-header {
-      background: #0b2b3b;
-      color: white;
-      padding: 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .cart-header h3 {
-      font-size: 1.4rem;
-    }
-    .close-cart {
-      background: none;
-      border: none;
-      font-size: 1.6rem;
-      color: white;
-      cursor: pointer;
-    }
-    .cart-items {
-      flex: 1;
-      overflow-y: auto;
-      padding: 16px;
-    }
-    .cart-item {
-      display: flex;
-      justify-content: space-between;
-      border-bottom: 1px solid #e2e8f0;
-      padding: 12px 0;
-      font-size: 0.9rem;
-    }
-    .cart-item-info p {
-      font-weight: 600;
-    }
-    .cart-item-price {
-      color: #0b5e7a;
-    }
-    .cart-total {
-      padding: 20px;
-      border-top: 2px solid #eee;
-      font-size: 1.2rem;
-      font-weight: 800;
-      display: flex;
-      justify-content: space-between;
-    }
-    .checkout-btn {
-      background: #ff8c42;
-      border: none;
-      margin: 8px 20px 24px;
-      padding: 14px;
-      border-radius: 40px;
-      font-weight: bold;
-      font-size: 1rem;
-      color: white;
-      cursor: pointer;
-    }
-    .cart-icon {
-      position: relative;
-      cursor: pointer;
-      background: rgba(255,255,255,0.2);
-      padding: 8px 14px;
-      border-radius: 40px;
-      font-weight: 600;
-    }
-    .cart-count {
-      background: #ff8c42;
-      border-radius: 30px;
-      padding: 0px 6px;
-      font-size: 0.75rem;
-      margin-left: 5px;
-    }
+    .cart-sidebar.open { right: 0; }
     .overlay {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.4);
-      z-index: 999;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 1999;
       display: none;
     }
-    .overlay.show {
-      display: block;
-    }
-    footer {
-      background: #0a2a38;
-      color: #cbdbe2;
-      padding: 30px 0;
-      margin-top: 40px;
-      text-align: center;
-    }
-    .footer-contact {
-      margin-top: 12px;
-      font-size: 0.9rem;
-    }
-    .toast-msg {
+    .overlay.show { display: block; }
+
+    /* auth modal */
+    .modal {
       position: fixed;
-      bottom: 30px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #1a4a5f;
-      color: white;
-      padding: 12px 24px;
-      border-radius: 50px;
-      font-weight: 500;
-      z-index: 1100;
-      display: none;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 3000;
+      visibility: hidden;
+      opacity: 0;
+      transition: all 0.2s;
     }
-    @media (max-width: 700px) {
-      .header-top {
-        flex-direction: column;
-        text-align: center;
-      }
-      .cat-btn {
-        padding: 6px 16px;
-        font-size: 0.8rem;
-      }
+    .modal.active {
+      visibility: visible;
+      opacity: 1;
+    }
+    .modal-content {
+      background: white;
+      max-width: 450px;
+      width: 90%;
+      border-radius: 40px;
+      padding: 32px;
+    }
+
+    @media (max-width: 768px) {
+      .container { padding: 0 20px; }
+      .product-grid { gap: 18px; }
     }
   </style>
 </head>
 <body>
 
-<header>
-  <div class="container header-top">
-    <div class="logo">
-      <h1>🔋 Abuzar Battery Service</h1>
-      <p><i class="fas fa-map-marker-alt"></i> Gulshan-e-Ravi, Lahore, Pakistan</p>
+<!-- Sticky Header -->
+<div class="sticky-header">
+  <div class="container" style="display: flex; justify-content: space-between; align-items: center; padding: 18px 32px; flex-wrap: wrap;">
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <i class="fas fa-battery-full" style="font-size: 32px; color: #ff8c42;"></i>
+      <div>
+        <h2 style="font-weight: 800; letter-spacing: -0.5px;">Abuzar Battery</h2>
+        <p style="font-size: 11px; color: #6c7a89;">Gulshan-e-Ravi, Lahore</p>
+      </div>
     </div>
-    <div class="contact-info">
-      <i class="fas fa-phone-alt"></i> 0301-4681059
+    <div style="display: flex; gap: 24px; align-items: center;">
+      <div class="search-wrapper" style="position: relative;">
+        <input type="text" id="globalSearch" placeholder="Search by name, brand, category..." style="padding: 10px 20px; border-radius: 40px; border: 1px solid #e2e8f0; width: 250px; outline: none;">
+        <i class="fas fa-search" style="position: absolute; right: 18px; top: 12px; color: #ff8c42;"></i>
+      </div>
+      <div style="display: flex; gap: 16px;">
+        <button id="userAuthBtn" class="btn-primary" style="padding: 8px 18px;"><i class="fas fa-user"></i> Sign In</button>
+        <div id="cartIconHeader" style="cursor: pointer; position: relative;">
+          <i class="fas fa-shopping-cart" style="font-size: 26px; color: #1f5e7a;"></i>
+          <span id="cartCountBadge" style="position: absolute; top: -8px; right: -12px; background: #ff8c42; border-radius: 30px; padding: 2px 6px; font-size: 12px; font-weight: bold;">0</span>
+        </div>
+      </div>
     </div>
-    <div class="cart-icon" id="cartIconBtn">
-      <i class="fas fa-shopping-cart"></i> Cart <span id="cartItemCount" class="cart-count">0</span>
-    </div>
-  </div>
-</header>
-
-<div class="brand-strip">
-  <div class="container">
-    <ul class="brands-list">
-      <li>⚡ Osaka</li><li>🔋 Exide</li><li>🚗 Unique</li><li>🏍️ Phoneix</li><li>⚙️ Daewoo</li><li>🔋 AGS</li><li>⚡ Volta</li>
-    </ul>
   </div>
 </div>
 
-<main class="container">
-  <!-- Browse categories -->
-  <div class="category-bar" id="categoryFilter">
-    <button class="cat-btn active" data-cat="all"><i class="fas fa-layer-group"></i> All Batteries</button>
-    <button class="cat-btn" data-cat="Solar"><i class="fas fa-solar-panel"></i> Solar</button>
-    <button class="cat-btn" data-cat="Car"><i class="fas fa-car"></i> Car</button>
-    <button class="cat-btn" data-cat="Dry"><i class="fas fa-bolt"></i> Dry</button>
-    <button class="cat-btn" data-cat="Deep cycle"><i class="fas fa-water"></i> Deep Cycle</button>
-    <button class="cat-btn" data-cat="UPS"><i class="fas fa-plug"></i> UPS</button>
-  </div>
-
-  <div class="products-section">
-    <h2 class="section-title">⚡ Premium batteries from top brands</h2>
-    <div class="product-grid" id="productGrid"></div>
-  </div>
-</main>
-
-<footer>
-  <div class="container">
-    <p><strong>Abuzar Battery Service</strong> – Your reliable battery partner in Lahore</p>
-    <p><i class="fas fa-store"></i> Gulshan-e-Ravi, Lahore | Call/WhatsApp: 0301-4681059</p>
-    <div class="footer-contact">
-      <i class="fas fa-truck"></i> Free delivery within Lahore | Genuine warranty on all brands
+<!-- Hero Banner -->
+<section class="hero">
+  <div class="container" style="padding: 70px 32px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+    <div style="max-width: 500px;">
+      <h1 style="font-size: 3rem; font-weight: 800; color: white;">Power Your World</h1>
+      <p style="color: rgba(255,255,255,0.9); margin: 20px 0; font-size: 1.1rem;">Premium batteries — Osaka, Exide, Unique, Phoenix, Daewoo, AGS, Volta. Free delivery in Lahore.</p>
+      <button class="btn-primary" id="browseCategoriesBtn">Browse Categories →</button>
     </div>
+    <div style="margin-top: 20px;"><img src="https://i.imgur.com/3XZbX1P.png" alt="battery" style="max-width: 280px; filter: drop-shadow(0 15px 20px rgba(0,0,0,0.2));"></div>
+  </div>
+</section>
+
+<!-- Brands Strip -->
+<div class="container" style="margin: 25px auto 10px; display: flex; flex-wrap: wrap; justify-content: center; gap: 30px;">
+  <span style="font-weight: 700;">⚡ Top Brands:</span>
+  <div id="brandFilterStrip" style="display: flex; flex-wrap: wrap; gap: 20px;">
+    <button data-brand="all" class="brand-filter active-brand" style="background: none; border: none; font-weight: 600; cursor: pointer;">All</button>
+    <button data-brand="Osaka" class="brand-filter" style="background:none; border:none; font-weight:500; cursor:pointer;">Osaka</button>
+    <button data-brand="Exide" class="brand-filter">Exide</button>
+    <button data-brand="Unique" class="brand-filter">Unique</button>
+    <button data-brand="Phoenix" class="brand-filter">Phoenix</button>
+    <button data-brand="Daewoo" class="brand-filter">Daewoo</button>
+    <button data-brand="AGS" class="brand-filter">AGS</button>
+    <button data-brand="Volta" class="brand-filter">Volta</button>
+  </div>
+</div>
+
+<!-- Categories Section (Images + names) -->
+<div class="container" style="margin: 50px auto;">
+  <h2 style="font-size: 2rem; margin-bottom: 32px;"><i class="fas fa-th-large"></i> Shop by Category</h2>
+  <div id="categoriesGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 24px;"></div>
+</div>
+
+<!-- Products Section -->
+<div class="container" style="margin: 40px auto 60px;">
+  <div style="display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap;">
+    <h2 style="font-size: 1.8rem;"><span id="activeFilterLabel">All Batteries</span></h2>
+    <div><i class="fas fa-filter"></i> <span id="resultCount"></span> products</div>
+  </div>
+  <div id="productGrid" class="product-grid" style="margin-top: 32px;"></div>
+</div>
+
+<!-- Footer -->
+<footer style="background: #0a1c2a; color: #b0c4de; padding: 48px 0 32px; margin-top: 40px;">
+  <div class="container" style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 30px;">
+    <div><i class="fas fa-store"></i> <strong>Abuzar Battery Service</strong><br>📍 Gulshan-e-Ravi, Lahore<br>📞 0301-4681059<br>✉️ support@abuzarbattery.pk</div>
+    <div><i class="fab fa-whatsapp"></i> Order via WhatsApp: 03014681059<br><i class="fas fa-truck"></i> Free delivery within Lahore</div>
+    <div>© 2025 — Premium Battery Store. All rights reserved.</div>
   </div>
 </footer>
 
 <!-- Cart Sidebar -->
-<div class="overlay" id="overlay"></div>
+<div class="overlay" id="cartOverlay"></div>
 <div class="cart-sidebar" id="cartSidebar">
-  <div class="cart-header">
-    <h3><i class="fas fa-shopping-basket"></i> Your Cart</h3>
-    <button class="close-cart" id="closeCartBtn">&times;</button>
+  <div style="padding: 24px; border-bottom: 1px solid #edf2f7; display: flex; justify-content: space-between;">
+    <h3><i class="fas fa-shopping-bag"></i> Your Cart</h3>
+    <button id="closeCartBtn" style="background: none; border: none; font-size: 28px; cursor: pointer;">&times;</button>
   </div>
-  <div class="cart-items" id="cartItemsList">
-    <p style="text-align:center; padding: 20px;">Cart is empty</p>
+  <div id="cartItemsList" style="flex:1; overflow-y: auto; padding: 20px;"></div>
+  <div style="padding: 20px; border-top: 1px solid #edf2f7;">
+    <div style="display: flex; justify-content: space-between; font-weight: 800; font-size: 1.3rem;"><span>Total:</span><span id="cartTotalPrice">PKR 0</span></div>
+    <button id="checkoutWhatsAppBtn" class="btn-primary" style="width:100%; margin-top: 20px;"><i class="fab fa-whatsapp"></i> Order Now via WhatsApp</button>
   </div>
-  <div class="cart-total">
-    <span>Total Amount:</span>
-    <span id="cartTotalPrice">PKR 0</span>
-  </div>
-  <button class="checkout-btn" id="checkoutBtn"><i class="fab fa-whatsapp"></i> Order via WhatsApp</button>
 </div>
 
-<div id="toastMsg" class="toast-msg">✔️ Added to cart</div>
+<!-- Auth Modal -->
+<div id="authModal" class="modal">
+  <div class="modal-content">
+    <div style="display: flex; justify-content: space-between;"><h3>Sign in / Register</h3><button id="closeModalBtn" style="background:none; border:none; font-size: 24px;">&times;</button></div>
+    <div id="authStatus"></div>
+    <input type="email" id="loginEmail" placeholder="Email" style="width:100%; padding:12px; margin:10px 0; border-radius: 30px; border:1px solid #ccc;">
+    <input type="password" id="loginPassword" placeholder="Password" style="width:100%; padding:12px; margin:10px 0; border-radius:30px;">
+    <button id="emailSignInBtn" class="btn-primary" style="width:100%;">Sign in with Email</button>
+    <button id="googleSignInBtn" style="width:100%; margin-top:12px; background:#fff; border:1px solid #ddd; padding:10px; border-radius:40px;"><i class="fab fa-google"></i> Sign in with Google</button>
+    <button id="facebookSignInBtn" style="width:100%; margin-top:8px; background:#1877f2; color:white; border:none; padding:10px; border-radius:40px;"><i class="fab fa-facebook"></i> Sign in with Facebook</button>
+    <p style="margin-top:16px; font-size:12px;">Demo: use any email (email/password not stored) or social login</p>
+  </div>
+</div>
 
 <script>
-  // ---------- PRODUCT CATALOG ----------
-  const products = [
-    // Solar Batteries
-    { id: 1, name: "Osaka Solar 150Ah", brand: "Osaka", category: "Solar", price: 28500, desc: "Maintenance-free, solar deep cycle", icon: "fas fa-sun" },
-    { id: 2, name: "Exide Solar Tubular 200Ah", brand: "Exide", category: "Solar", price: 34500, desc: "Long life for solar systems", icon: "fas fa-sun" },
-    { id: 3, name: "Unique Solar Gel 120Ah", brand: "Unique", category: "Solar", price: 27800, desc: "Gel technology, zero maintenance", icon: "fas fa-sun" },
-    // Car Batteries
-    { id: 4, name: "Phoneix Car Battery 55D23L", brand: "Phoneix", category: "Car", price: 13500, desc: "High CCA, performance", icon: "fas fa-car" },
-    { id: 5, name: "Daewoo Car MF 60Ah", brand: "Daewoo", category: "Car", price: 14900, desc: "Maintenance free, strong cranking", icon: "fas fa-car" },
-    { id: 6, name: "AGS Car Battery NS60", brand: "AGS", category: "Car", price: 12800, desc: "Reliable start-stop", icon: "fas fa-car" },
-    { id: 7, name: "Volta Car Battery 80D26R", brand: "Volta", category: "Car", price: 16800, desc: "Powerful for sedans", icon: "fas fa-car" },
-    // Dry Batteries
-    { id: 8, name: "Osaka Dry Charge 100Ah", brand: "Osaka", category: "Dry", price: 11200, desc: "Dry charged, long shelf life", icon: "fas fa-battery-full" },
-    { id: 9, name: "Exide Dry Battery 80Ah", brand: "Exide", category: "Dry", price: 9900, desc: "Economical & powerful", icon: "fas fa-battery-full" },
-    { id: 10, name: "Unique Dry 60Ah", brand: "Unique", category: "Dry", price: 8600, desc: "Compact for cars", icon: "fas fa-battery-full" },
-    // Deep Cycle
-    { id: 11, name: "AGS Deep Cycle 180Ah", brand: "AGS", category: "Deep cycle", price: 39900, desc: "Marine & solar backup", icon: "fas fa-water" },
-    { id: 12, name: "Volta Deep Cycle 220Ah", brand: "Volta", category: "Deep cycle", price: 46200, desc: "Heavy duty cyclic use", icon: "fas fa-water" },
-    { id: 13, name: "Phoneix Deep Cycle 150Ah", brand: "Phoneix", category: "Deep cycle", price: 36900, desc: "Excellent deep discharge", icon: "fas fa-water" },
-    // UPS Batteries
-    { id: 14, name: "Exide UPS Battery 150Ah", brand: "Exide", category: "UPS", price: 27800, desc: "Best for home UPS", icon: "fas fa-plug" },
-    { id: 15, name: "Daewoo UPS Power 200Ah", brand: "Daewoo", category: "UPS", price: 32500, desc: "Heavy backup time", icon: "fas fa-plug" },
-    { id: 16, name: "Unique UPS 100Ah", brand: "Unique", category: "UPS", price: 18500, desc: "Cost effective", icon: "fas fa-plug" },
-    { id: 17, name: "AGS UPS Battery 180Ah", brand: "AGS", category: "UPS", price: 34900, desc: "Rugged & durable", icon: "fas fa-plug" },
-    // extra for variety
-    { id: 18, name: "Osaka Car Battery N100", brand: "Osaka", category: "Car", price: 21900, desc: "Heavy duty car/truck", icon: "fas fa-car" },
-    { id: 19, name: "Phoneix Solar 260Ah", brand: "Phoneix", category: "Solar", price: 48900, desc: "Solar storage plus", icon: "fas fa-sun" },
-    { id: 20, name: "Volta Dry Battery 45Ah", brand: "Volta", category: "Dry", price: 7100, desc: "Small yet powerful", icon: "fas fa-bolt" }
+  // ---------- PRODUCT DATABASE ----------
+  const productsDB = [
+    { id:1, name:"Osaka Solar 150Ah", brand:"Osaka", category:"Solar Batteries", price:28500, img:"https://cdn-icons-png.flaticon.com/512/3310/3310875.png", desc:"Solar deep cycle" },
+    { id:2, name:"Exide Solar 200Ah", brand:"Exide", category:"Solar Batteries", price:34500, img:"https://cdn-icons-png.flaticon.com/512/3310/3310875.png" },
+    { id:3, name:"Unique Solar Gel", brand:"Unique", category:"Solar Batteries", price:27800, img:"https://cdn-icons-png.flaticon.com/512/3310/3310875.png" },
+    { id:4, name:"Phoenix Car Battery 55D23L", brand:"Phoenix", category:"Car Batteries", price:13500, img:"https://cdn-icons-png.flaticon.com/512/3106/3106796.png" },
+    { id:5, name:"Daewoo Car MF 60Ah", brand:"Daewoo", category:"Car Batteries", price:14900, img:"https://cdn-icons-png.flaticon.com/512/3106/3106796.png" },
+    { id:6, name:"AGS Car Battery NS60", brand:"AGS", category:"Car Batteries", price:12800, img:"https://cdn-icons-png.flaticon.com/512/3106/3106796.png" },
+    { id:7, name:"Volta Car 80D26R", brand:"Volta", category:"Car Batteries", price:16800, img:"https://cdn-icons-png.flaticon.com/512/3106/3106796.png" },
+    { id:8, name:"Osaka Dry Charge 100Ah", brand:"Osaka", category:"Dry Batteries", price:11200, img:"https://cdn-icons-png.flaticon.com/512/2524/2524936.png" },
+    { id:9, name:"Exide Dry 80Ah", brand:"Exide", category:"Dry Batteries", price:9900, img:"https://cdn-icons-png.flaticon.com/512/2524/2524936.png" },
+    { id:10, name:"Unique Dry 60Ah", brand:"Unique", category:"Dry Batteries", price:8600, img:"https://cdn-icons-png.flaticon.com/512/2524/2524936.png" },
+    { id:11, name:"AGS Deep Cycle 180Ah", brand:"AGS", category:"Deep Cycle Batteries", price:39900, img:"https://cdn-icons-png.flaticon.com/512/3014/3014938.png" },
+    { id:12, name:"Volta Deep Cycle 220Ah", brand:"Volta", category:"Deep Cycle Batteries", price:46200, img:"https://cdn-icons-png.flaticon.com/512/3014/3014938.png" },
+    { id:13, name:"Phoenix Deep Cycle 150Ah", brand:"Phoenix", category:"Deep Cycle Batteries", price:36900, img:"https://cdn-icons-png.flaticon.com/512/3014/3014938.png" },
+    { id:14, name:"Exide UPS 150Ah", brand:"Exide", category:"UPS Batteries", price:27800, img:"https://cdn-icons-png.flaticon.com/512/3862/3862040.png" },
+    { id:15, name:"Daewoo UPS Power 200Ah", brand:"Daewoo", category:"UPS Batteries", price:32500, img:"https://cdn-icons-png.flaticon.com/512/3862/3862040.png" },
+    { id:16, name:"Unique UPS 100Ah", brand:"Unique", category:"UPS Batteries", price:18500, img:"https://cdn-icons-png.flaticon.com/512/3862/3862040.png" },
+    { id:17, name:"AGS UPS 180Ah", brand:"AGS", category:"UPS Batteries", price:34900, img:"https://cdn-icons-png.flaticon.com/512/3862/3862040.png" },
+    { id:18, name:"Osaka Car N100", brand:"Osaka", category:"Car Batteries", price:21900, img:"https://cdn-icons-png.flaticon.com/512/3106/3106796.png" }
   ];
 
-  // cart array
-  let cart = []; // each item { id, name, price, quantity, brand }
+  let cart = [];
+  let currentUser = null;
+  let currentBrandFilter = "all";
+  let currentCategoryFilter = "all"; 
+  let searchQuery = "";
 
-  // DOM elements
-  const productGrid = document.getElementById('productGrid');
-  const categoryBtns = document.querySelectorAll('.cat-btn');
-  const cartSidebar = document.getElementById('cartSidebar');
-  const overlay = document.getElementById('overlay');
-  const cartItemsContainer = document.getElementById('cartItemsList');
-  const cartTotalSpan = document.getElementById('cartTotalPrice');
-  const cartItemCountSpan = document.getElementById('cartItemCount');
-  const cartIconBtn = document.getElementById('cartIconBtn');
-  const closeCartBtn = document.getElementById('closeCartBtn');
-  const checkoutWhatsapp = document.getElementById('checkoutBtn');
-  const toastMsg = document.getElementById('toastMsg');
+  // Category data with images
+  const categoriesMeta = [
+    { name: "Solar Batteries", img: "https://cdn-icons-png.flaticon.com/512/2885/2885884.png" },
+    { name: "Car Batteries", img: "https://cdn-icons-png.flaticon.com/512/2936/2936886.png" },
+    { name: "Dry Batteries", img: "https://cdn-icons-png.flaticon.com/512/2524/2524936.png" },
+    { name: "Deep Cycle Batteries", img: "https://cdn-icons-png.flaticon.com/512/3014/3014938.png" },
+    { name: "UPS Batteries", img: "https://cdn-icons-png.flaticon.com/512/3862/3862040.png" }
+  ];
 
-  let activeCategory = 'all';
-
-  // helper: render products based on active filter
-  function renderProducts() {
-    let filtered = products;
-    if (activeCategory !== 'all') {
-      filtered = products.filter(p => p.category === activeCategory);
-    }
-    if (productGrid) {
-      productGrid.innerHTML = '';
-      filtered.forEach(product => {
-        const card = document.createElement('div');
-        card.className = 'product-card';
-        card.innerHTML = `
-          <div class="card-img">
-            <i class="${product.icon} fa-3x"></i>
-          </div>
-          <div class="card-content">
-            <span class="brand-badge"><i class="fas fa-tag"></i> ${product.brand}</span>
-            <div class="product-title">${product.name}</div>
-            <div class="product-desc">${product.desc}</div>
-            <div class="price">₨ ${product.price.toLocaleString()}</div>
-            <button class="btn-add" data-id="${product.id}"><i class="fas fa-cart-plus"></i> Add to Cart</button>
-          </div>
-        `;
-        productGrid.appendChild(card);
+  // Helper: render categories
+  function renderCategories() {
+    const grid = document.getElementById('categoriesGrid');
+    grid.innerHTML = categoriesMeta.map(cat => `
+      <div class="category-card" data-catname="${cat.name}">
+        <img src="${cat.img}" alt="${cat.name}">
+        <h4>${cat.name}</h4>
+      </div>
+    `).join('');
+    document.querySelectorAll('.category-card').forEach(card => {
+      card.addEventListener('click', () => {
+        currentCategoryFilter = card.dataset.catname;
+        currentBrandFilter = "all";
+        updateActiveBrandUI();
+        renderProducts();
+        document.getElementById('activeFilterLabel').innerText = currentCategoryFilter;
       });
-      // attach event listeners to new add buttons
-      document.querySelectorAll('.btn-add').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          const id = parseInt(btn.getAttribute('data-id'));
-          addToCart(id);
-        });
-      });
-    }
+    });
   }
 
-  // add to cart logic
-  function addToCart(productId) {
-    const product = products.find(p => p.id === productId);
-    if (!product) return;
-    const existing = cart.find(item => item.id === productId);
-    if (existing) {
-      existing.quantity += 1;
-    } else {
-      cart.push({ id: product.id, name: product.name, price: product.price, quantity: 1, brand: product.brand });
+  function updateActiveBrandUI() {
+    document.querySelectorAll('.brand-filter').forEach(btn => {
+      if(btn.dataset.brand === currentBrandFilter) btn.style.fontWeight = "800"; else btn.style.fontWeight = "400";
+    });
+  }
+
+  function getFilteredProducts() {
+    let filtered = [...productsDB];
+    if(currentBrandFilter !== "all") filtered = filtered.filter(p => p.brand === currentBrandFilter);
+    if(currentCategoryFilter !== "all") filtered = filtered.filter(p => p.category === currentCategoryFilter);
+    if(searchQuery.trim() !== "") {
+      const q = searchQuery.toLowerCase();
+      filtered = filtered.filter(p => p.name.toLowerCase().includes(q) || p.brand.toLowerCase().includes(q) || p.category.toLowerCase().includes(q));
     }
+    return filtered;
+  }
+
+  function renderProducts() {
+    const filtered = getFilteredProducts();
+    document.getElementById('resultCount').innerText = filtered.length;
+    const container = document.getElementById('productGrid');
+    if(filtered.length===0){ container.innerHTML='<div style="grid-column:1/-1; text-align:center;">No batteries found 🔋</div>'; return; }
+    container.innerHTML = filtered.map(p => `
+      <div class="product-card card-hover" style="padding: 20px;">
+        <img src="${p.img}" style="width:100px; margin:0 auto; display:block;" alt="${p.name}">
+        <div style="margin-top:16px;"><span style="background:#eef2ff; padding:4px 12px; border-radius:40px;">${p.brand}</span></div>
+        <h4 style="margin-top:12px;">${p.name}</h4>
+        <p style="color:#4b5b6c;">${p.desc || "Premium battery"}</p>
+        <div style="font-size:26px; font-weight:800; margin:12px 0;">₨ ${p.price.toLocaleString()}</div>
+        <div style="display:flex; gap:8px;"><button class="addToCartBtn" data-id="${p.id}" style="background:#ff8c42; border:none; padding:12px; border-radius:40px; flex:1; font-weight:bold;"><i class="fas fa-cart-plus"></i> Add</button><button class="buyNowBtn" data-id="${p.id}" style="background:#1f5e7a; border:none; padding:12px; border-radius:40px; flex:1; color:white;">Buy Now</button></div>
+      </div>
+    `).join('');
+    document.querySelectorAll('.addToCartBtn').forEach(btn => btn.addEventListener('click', (e) => { addToCart(parseInt(btn.dataset.id)); }));
+    document.querySelectorAll('.buyNowBtn').forEach(btn => btn.addEventListener('click', (e) => { addToCart(parseInt(btn.dataset.id)); openCart(); }));
+  }
+
+  function addToCart(productId) {
+    const product = productsDB.find(p => p.id === productId);
+    if(!product) return;
+    const existing = cart.find(i => i.id === productId);
+    if(existing) existing.quantity += 1;
+    else cart.push({ ...product, quantity: 1 });
     updateCartUI();
-    showToast(`${product.name} added to cart`);
+    showToast(`✓ ${product.name} added`);
   }
 
   function updateCartUI() {
-    // update cart count display
-    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-    cartItemCountSpan.innerText = totalItems;
-    // render cart items list
-    if (cartItemsContainer) {
-      if (cart.length === 0) {
-        cartItemsContainer.innerHTML = '<p style="text-align:center; padding: 20px;">🛒 Your cart is empty</p>';
-        cartTotalSpan.innerText = 'PKR 0';
-        return;
-      }
-      let innerHtml = '';
-      let totalAmount = 0;
-      cart.forEach((item, idx) => {
-        const itemTotal = item.price * item.quantity;
-        totalAmount += itemTotal;
-        innerHtml += `
-          <div class="cart-item">
-            <div class="cart-item-info">
-              <p>${item.name} (${item.brand})</p>
-              <small>₨ ${item.price.toLocaleString()} x ${item.quantity}</small>
-            </div>
-            <div>
-              <span class="cart-item-price">₨ ${itemTotal.toLocaleString()}</span>
-              <button style="background:none; border:none; margin-left:12px; color:#e05a5a; cursor:pointer;" class="remove-item" data-id="${item.id}"><i class="fas fa-trash-alt"></i></button>
-            </div>
-          </div>
-        `;
-      });
-      cartItemsContainer.innerHTML = innerHtml;
-      cartTotalSpan.innerText = `PKR ${totalAmount.toLocaleString()}`;
-      // attach remove events
-      document.querySelectorAll('.remove-item').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          const removeId = parseInt(btn.getAttribute('data-id'));
-          removeFromCart(removeId);
-        });
-      });
-    }
-  }
-
-  function removeFromCart(id) {
-    const index = cart.findIndex(item => item.id === id);
-    if (index !== -1) {
-      if (cart[index].quantity > 1) {
-        cart[index].quantity -= 1;
-      } else {
-        cart.splice(index, 1);
-      }
-      updateCartUI();
-      showToast('Item removed from cart');
-    }
-  }
-
-  function showToast(msg) {
-    toastMsg.innerText = msg;
-    toastMsg.style.display = 'block';
-    setTimeout(() => {
-      toastMsg.style.display = 'none';
-    }, 1800);
-  }
-
-  // open/close cart sidebar
-  function openCart() {
-    cartSidebar.classList.add('open');
-    overlay.classList.add('show');
-  }
-  function closeCart() {
-    cartSidebar.classList.remove('open');
-    overlay.classList.remove('show');
-  }
-
-  // whatsapp order
-  function sendWhatsAppOrder() {
-    if (cart.length === 0) {
-      showToast('Cart is empty! Add some batteries first.');
-      return;
-    }
-    let orderSummary = "🛒 *Abuzar Battery Service Order*%0A";
-    orderSummary += `📍 Gulshan-e-Ravi, Lahore%0A`;
-    orderSummary += `📞 Contact: 03014681059%0A%0A`;
+    const totalItems = cart.reduce((s,i)=>s+i.quantity,0);
+    document.getElementById('cartCountBadge').innerText = totalItems;
+    const cartContainer = document.getElementById('cartItemsList');
+    if(cart.length===0) { cartContainer.innerHTML = '<div style="text-align:center;">Cart empty</div>'; document.getElementById('cartTotalPrice').innerText = 'PKR 0'; return; }
+    let html = '';
     let total = 0;
     cart.forEach(item => {
       const itemTotal = item.price * item.quantity;
       total += itemTotal;
-      orderSummary += `🔋 ${item.name} (${item.brand}) x ${item.quantity} = ₨ ${itemTotal.toLocaleString()}%0A`;
+      html += `<div style="display:flex; justify-content:space-between; margin-bottom:16px;"><div><strong>${item.name}</strong><br/><small>${item.brand}</small><br/><div style="display:flex; gap:8px; margin-top:6px;"><button class="qtyMinus" data-id="${item.id}">-</button><span>${item.quantity}</span><button class="qtyPlus" data-id="${item.id}">+</button></div></div><div>₨ ${itemTotal.toLocaleString()}</div></div>`;
     });
-    orderSummary += `%0A💰 *Total: ₨ ${total.toLocaleString()}*%0A%0A`;
-    orderSummary += `✅ Customer: [Your Name]%0A📍 Delivery: Lahore (Gulshan-e-Ravi area)%0A🙏 Thank you for choosing Abuzar Battery Service!`;
-    const phone = "923014681059"; // remove 0 & add country code: 92 3014681059
-    const url = `https://wa.me/${phone}?text=${orderSummary}`;
-    window.open(url, '_blank');
+    cartContainer.innerHTML = html;
+    document.getElementById('cartTotalPrice').innerHTML = `PKR ${total.toLocaleString()}`;
+    document.querySelectorAll('.qtyMinus').forEach(btn => btn.addEventListener('click', (e) => { const id=parseInt(btn.dataset.id); adjustQuantity(id, -1); }));
+    document.querySelectorAll('.qtyPlus').forEach(btn => btn.addEventListener('click', (e) => { const id=parseInt(btn.dataset.id); adjustQuantity(id, 1); }));
   }
 
-  // event listeners for categories
-  function setActiveCategory(cat) {
-    activeCategory = cat;
-    categoryBtns.forEach(btn => {
-      if (btn.getAttribute('data-cat') === cat) {
-        btn.classList.add('active');
-      } else {
-        btn.classList.remove('active');
-      }
-    });
-    renderProducts();
-  }
-
-  categoryBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const catValue = btn.getAttribute('data-cat');
-      setActiveCategory(catValue);
-    });
-  });
-
-  cartIconBtn.addEventListener('click', openCart);
-  closeCartBtn.addEventListener('click', closeCart);
-  overlay.addEventListener('click', closeCart);
-  checkoutWhatsapp.addEventListener('click', sendWhatsAppOrder);
-
-  // initial render
-  renderProducts();
-
-  // small extra: update cart on any add/remove global
-  function updateGlobalCartDisplay() { updateCartUI(); }
-  window.updateCartUI = updateCartUI;
-
-  // additional: check if any manual add
-  document.addEventListener('click', (e) => {
-    if (e.target.closest && e.target.closest('.btn-add')) {
-      // already handled, but we ensure
+  function adjustQuantity(id, delta) {
+    const idx = cart.findIndex(i=>i.id===id);
+    if(idx!==-1){
+      cart[idx].quantity += delta;
+      if(cart[idx].quantity <=0) cart.splice(idx,1);
+      updateCartUI();
     }
-  });
+  }
+
+  function openCart() { document.getElementById('cartSidebar').classList.add('open'); document.getElementById('cartOverlay').classList.add('show'); }
+  function closeCart() { document.getElementById('cartSidebar').classList.remove('open'); document.getElementById('cartOverlay').classList.remove('show'); }
+  function showToast(msg) { let t=document.createElement('div'); t.innerText=msg; t.style.position='fixed'; t.style.bottom='30px'; t.style.left='50%'; t.style.transform='translateX(-50%)'; t.style.background='#0a2c3b'; t.style.color='white'; t.style.padding='12px 24px'; t.style.borderRadius='50px'; t.style.zIndex='9999'; document.body.appendChild(t); setTimeout(()=>t.remove(),2000); }
+
+  // Order via WhatsApp
+  function sendOrderWhatsapp() {
+    if(cart.length===0){ showToast('Cart empty!'); return; }
+    let msg = `*Abuzar Battery Service* (Gulshan-e-Ravi, Lahore)%0A📞 03014681059%0A%0A🛒 *Order Summary*:%0A`;
+    let total=0;
+    cart.forEach(i=>{ let t=i.price*i.quantity; total+=t; msg += `🔋 ${i.name} (${i.brand}) x ${i.quantity} = ₨ ${t.toLocaleString()}%0A`; });
+    msg += `%0A💰 *Total: ₨ ${total.toLocaleString()}*%0A%0A📍 Delivery: Lahore (Gulshan-e-Ravi)%0A🙏 Thank you!`;
+    window.open(`https://wa.me/923014681059?text=${msg}`, '_blank');
+  }
+
+  // Firebase config (demo app, social auth works with whitelisted domain)
+  const firebaseConfig = { apiKey: "AIzaSyD7xS0lC7xLx8XbQ0nFqJzDm8yK5pJ7R1E", authDomain: "abuzar-battery.firebaseapp.com", projectId: "abuzar-battery", storageBucket: "abuzar-battery.appspot.com", appId: "1:123456789:web:abcd1234" };
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  function updateAuthUI() { document.getElementById('userAuthBtn').innerHTML = currentUser ? `<i class="fas fa-user-check"></i> ${currentUser.email?.split('@')[0] || 'User'}` : `<i class="fas fa-user"></i> Sign In`; }
+  document.getElementById('userAuthBtn').onclick = () => document.getElementById('authModal').classList.add('active');
+  document.getElementById('closeModalBtn').onclick = () => document.getElementById('authModal').classList.remove('active');
+  document.getElementById('emailSignInBtn').onclick = async () => { let email=document.getElementById('loginEmail').value, pwd=document.getElementById('loginPassword').value; try{ await auth.signInWithEmailAndPassword(email,pwd); currentUser=auth.currentUser; updateAuthUI(); document.getElementById('authModal').classList.remove('active'); showToast(`Welcome ${email.split('@')[0]}`); }catch(e){ alert(e.message); } };
+  document.getElementById('googleSignInBtn').onclick = async () => { let provider = new firebase.auth.GoogleAuthProvider(); try{ let res=await auth.signInWithPopup(provider); currentUser=res.user; updateAuthUI(); document.getElementById('authModal').classList.remove('active'); showToast('Google Sign In success'); }catch(e){ alert(e.message); } };
+  document.getElementById('facebookSignInBtn').onclick = async () => { let provider = new firebase.auth.FacebookAuthProvider(); try{ let res=await auth.signInWithPopup(provider); currentUser=res.user; updateAuthUI(); document.getElementById('authModal').classList.remove('active'); }catch(e){ alert('Facebook demo: enable in Firebase console'); } };
+  auth.onAuthStateChanged(user => { currentUser = user; updateAuthUI(); });
+
+  // Event listeners
+  document.getElementById('cartIconHeader').addEventListener('click', openCart);
+  document.getElementById('closeCartBtn').addEventListener('click', closeCart);
+  document.getElementById('cartOverlay').addEventListener('click', closeCart);
+  document.getElementById('checkoutWhatsAppBtn').addEventListener('click', sendOrderWhatsapp);
+  document.querySelectorAll('.brand-filter').forEach(btn => btn.addEventListener('click', (e) => { currentBrandFilter = btn.dataset.brand; currentCategoryFilter = "all"; searchQuery=""; document.getElementById('globalSearch').value=""; updateActiveBrandUI(); renderProducts(); document.getElementById('activeFilterLabel').innerText = currentBrandFilter==="all" ? "All Batteries" : currentBrandFilter; }));
+  document.getElementById('globalSearch').addEventListener('input', (e) => { searchQuery = e.target.value; currentCategoryFilter = "all"; currentBrandFilter = "all"; updateActiveBrandUI(); renderProducts(); document.getElementById('activeFilterLabel').innerText = "Search Results"; });
+  document.getElementById('browseCategoriesBtn').addEventListener('click', () => { document.getElementById('categoriesGrid').scrollIntoView({behavior:'smooth'}); });
+
+  renderCategories();
+  renderProducts();
+  updateCartUI();
 </script>
 </body>
 </html>
