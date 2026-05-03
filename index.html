@@ -7,180 +7,185 @@
 <style>
 body{margin:0;font-family:Arial;background:#f4f7fb;}
 
-/* TOP BAR */
-.topbar{background:#0b3d91;color:white;padding:8px;text-align:right;font-size:14px;}
+/* TOP */
+.topbar{background:#0b3d91;color:white;padding:8px;text-align:center;}
 
 /* HEADER */
-.header{padding:15px;background:white;text-align:center;}
-.logo{font-size:24px;font-weight:bold;color:#0b3d91;}
+.header{display:flex;justify-content:space-between;align-items:center;padding:15px;background:white;}
+.logo{font-size:22px;font-weight:bold;color:#0b3d91;}
 
-/* NAV */
-.navbar{background:#0b3d91;text-align:center;padding:10px;}
-.navbar a{color:white;margin:10px;text-decoration:none;font-weight:bold;}
+/* BUTTON */
+.btn{background:#0b3d91;color:white;padding:8px 15px;border:none;border-radius:20px;cursor:pointer;}
 
-/* HERO SLIDER */
+/* LAYOUT */
+.main{display:flex;}
+.sidebar{
+width:200px;background:white;padding:15px;
+box-shadow:0 0 10px #ddd;
+}
+.sidebar p{cursor:pointer;margin:8px 0;}
+
+.content{flex:1;padding:10px;}
+
+/* HERO */
 .hero{
-height:300px;
-display:flex;
-align-items:center;
-justify-content:center;
-color:white;
-text-align:center;
-animation:slider 10s infinite;
+background:linear-gradient(135deg,#0b3d91,#1456d1);
+color:white;padding:25px;border-radius:10px;
 }
 
-@keyframes slider{
-0%{background:#0b3d91;}
-50%{background:#1456d1;}
-100%{background:#0b3d91;}
+/* SLIDER */
+.slider{overflow:hidden;background:white;margin-top:10px;}
+.track{display:flex;gap:50px;animation:scroll 15s linear infinite;}
+@keyframes scroll{
+0%{transform:translateX(100%);}
+100%{transform:translateX(-100%);}
 }
-
-.hero h1{font-size:32px;margin:0;}
-.hero p{margin:10px 0;}
-
-.btn{
-background:white;color:#0b3d91;padding:10px 20px;border:none;cursor:pointer;
-font-weight:bold;border-radius:5px;
-}
-
-/* SEARCH */
-.search{padding:20px;text-align:center;}
-.search input{
-width:60%;padding:10px;border-radius:5px;border:1px solid #ccc;
-}
-
-/* SECTION */
-.section{padding:20px;}
-.section h2{text-align:center;color:#0b3d91;}
 
 /* GRID */
 .grid{display:flex;flex-wrap:wrap;justify-content:center;}
-
 .card{
-background:white;width:220px;margin:10px;padding:10px;text-align:center;
-border-radius:10px;box-shadow:0 0 10px #ddd;transition:0.3s;
+background:white;width:200px;margin:10px;padding:10px;
+text-align:center;border-radius:10px;
+box-shadow:0 0 10px #ddd;
 }
-.card:hover{transform:scale(1.07);}
+.card img{width:100%;}
 
-.card img{width:100%;border-radius:5px;}
-
-.price{color:green;font-weight:bold;margin:5px 0;}
-
-/* FOOTER */
-.footer{background:#0b3d91;color:white;text-align:center;padding:15px;}
+/* DETAIL */
+.detail{display:none;padding:20px;}
+.detail img{width:250px;}
 
 /* WHATSAPP */
 .whatsapp{
 position:fixed;bottom:20px;right:20px;
 background:#25D366;color:white;padding:15px;border-radius:50%;
-text-decoration:none;font-size:22px;
 }
 </style>
 </head>
 
 <body>
 
-<div class="topbar">
-📍 Gulshan-e-Ravi Lahore | 📞 +92 301 4681059
-</div>
+<div class="topbar">📍 Lahore | 📞 03014681059</div>
 
 <div class="header">
-<div class="logo">ABUZAR BATTERY SERVICE 🔋</div>
+<div class="logo">ABUZAR BATTERY 🔋</div>
+<button class="btn" onclick="showCart()">Cart 🛒</button>
 </div>
 
-<div class="navbar">
-<a href="#">Home</a>
-<a href="#">Car</a>
-<a href="#">UPS</a>
-<a href="#">Solar</a>
+<div class="main">
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+<h3>Top Brands</h3>
+<p onclick="showBrand('osaka')">Osaka</p>
+<p onclick="showBrand('ags')">AGS</p>
+<p onclick="showBrand('phoenix')">Phoenix</p>
+<p onclick="showBrand('exide')">Exide</p>
+<p onclick="showBrand('volta')">Volta</p>
+<p onclick="showBrand('daewoo')">Daewoo</p>
+<p onclick="showBrand('unique')">Unique</p>
+
+<button class="btn" onclick="goHome()">View All</button>
 </div>
+
+<!-- CONTENT -->
+<div class="content">
 
 <!-- HERO -->
 <div class="hero">
-<div>
-<h1>Power That Never Stops 🔋</h1>
-<p>Best Batteries in Lahore</p>
-<button class="btn" onclick="orderNow('General Inquiry')">Order on WhatsApp</button>
-</div>
+<h2>Need Help Choosing Battery? 🔋</h2>
+<p>Contact us for best recommendation</p>
+<button class="btn" onclick="orderNow('Help')">Get Help</button>
 </div>
 
-<!-- SEARCH -->
-<div class="search">
-<input type="text" id="searchInput" placeholder="Search battery..." onkeyup="searchBattery()">
+<!-- SLIDER -->
+<div class="slider">
+<div class="track">
+<div>OSAKA</div><div>AGS</div><div>PHOENIX</div>
+<div>EXIDE</div><div>VOLTA</div><div>DAEWOO</div>
+<div>UNIQUE</div>
+</div>
 </div>
 
 <!-- PRODUCTS -->
-<div class="section">
-<h2>Our Batteries</h2>
-
-<div class="grid">
-
-<div class="card">
-<img src="https://via.placeholder.com/150">
-<h3>AGS GR-65</h3>
-<p>Car Battery</p>
-<p class="price">Price: Call for Price</p>
-<button onclick="orderNow('AGS GR-65')">Order</button>
+<div id="products">
+<h2>Products</h2>
+<div class="grid" id="list"></div>
 </div>
 
-<div class="card">
-<img src="https://via.placeholder.com/150">
-<h3>Osaka NS60</h3>
-<p>Car Battery</p>
-<p class="price">Price: Call for Price</p>
-<button onclick="orderNow('Osaka NS60')">Order</button>
-</div>
-
-<div class="card">
-<img src="https://via.placeholder.com/150">
-<h3>Phoenix XP-70</h3>
-<p>Car Battery</p>
-<p class="price">Price: Call for Price</p>
-<button onclick="orderNow('Phoenix XP-70')">Order</button>
-</div>
-
-<div class="card">
-<img src="https://via.placeholder.com/150">
-<h3>AGS SP-180</h3>
-<p>UPS Battery</p>
-<p class="price">Price: Call for Price</p>
-<button onclick="orderNow('AGS SP-180')">Order</button>
-</div>
-
-<div class="card">
-<img src="https://via.placeholder.com/150">
-<h3>Osaka TA-1800</h3>
-<p>Tubular Battery</p>
-<p class="price">Price: Call for Price</p>
-<button onclick="orderNow('Osaka TA-1800')">Order</button>
+<!-- DETAIL -->
+<div id="detail" class="detail">
+<button class="btn" onclick="back()">⬅ Back</button>
+<h2 id="name"></h2>
+<img id="img">
+<br>
+<button onclick="dec()">-</button>
+<span id="qty">1</span>
+<button onclick="inc()">+</button>
+<br><br>
+<button class="btn" onclick="addCart()">Add to Cart</button>
+<button class="btn" onclick="buy()">Buy Now</button>
 </div>
 
 </div>
 </div>
 
-<div class="footer">
-© 2026 Abuzar Battery Service
-</div>
+<a class="whatsapp" onclick="sendCart()">💬</a>
 
 <script>
-function orderNow(product){
-let phone="923014681059";
-let message="Assalamualaikum, I want to order "+product+" battery.";
-window.open("https://wa.me/"+phone+"?text="+encodeURIComponent(message));
+let data={
+osaka:["NS60","TA-1800"],
+ags:["GR-65","SP-180"],
+phoenix:["XP-70"],
+exide:["N55"],
+volta:["T-125"],
+daewoo:["DL-60"],
+unique:["UT-100"]
+};
+
+let cart=[];
+let current="";
+let q=1;
+
+function showBrand(b){
+let list=document.getElementById("list");
+list.innerHTML="";
+data[b].forEach(x=>{
+list.innerHTML+=`<div class="card" onclick="openDetail('${b} ${x}')">
+<img src="https://via.placeholder.com/200">
+<h3>${b.toUpperCase()} ${x}</h3>
+</div>`;
+});
 }
 
-function searchBattery(){
-let input=document.getElementById("searchInput").value.toLowerCase();
-let cards=document.getElementsByClassName("card");
-
-for(let i=0;i<cards.length;i++){
-let text=cards[i].innerText.toLowerCase();
-cards[i].style.display=text.includes(input)?"block":"none";
+function openDetail(p){
+current=p;
+q=1;
+document.getElementById("products").style.display="none";
+document.getElementById("detail").style.display="block";
+document.getElementById("name").innerText=p;
+document.getElementById("img").src="https://via.placeholder.com/300";
+document.getElementById("qty").innerText=q;
 }
+
+function back(){
+document.getElementById("products").style.display="block";
+document.getElementById("detail").style.display="none";
+}
+
+function inc(){q++;qty.innerText=q;}
+function dec(){if(q>1)q--;qty.innerText=q;}
+
+function addCart(){for(let i=0;i<q;i++)cart.push(current);alert("Added");}
+function buy(){window.open("https://wa.me/923014681059?text="+current+" x"+q);}
+function sendCart(){window.open("https://wa.me/923014681059?text="+cart.join("\n"));}
+
+function showCart(){alert(cart.length?cart.join("\n"):"Empty");}
+function goHome(){location.reload();}
+
+function orderNow(msg){
+window.open("https://wa.me/923014681059?text="+msg);
 }
 </script>
-
-<a class="whatsapp" href="https://wa.me/923014681059" target="_blank">💬</a>
 
 </body>
 </html>
