@@ -7,85 +7,75 @@
 <style>
 body{margin:0;font-family:Arial;background:#f5f7fb;}
 
-/* TOP */
-.topbar{background:#0b3d91;color:white;padding:8px;text-align:center;}
+/* TOP BAR */
+.topbar{background:#0b3d91;color:white;padding:8px;text-align:center;font-size:14px;}
 
 /* HEADER */
-.header{display:flex;justify-content:space-between;align-items:center;padding:15px;background:white;}
-.logo{font-size:22px;font-weight:bold;color:#0b3d91;}
-
-/* MAIN LAYOUT */
-.main{display:flex;padding:15px;}
-
-/* LEFT SIDE */
-.left{flex:3;}
-
-/* RIGHT SIDE (TOP BRANDS) */
-.right{
-flex:1;
-background:white;
-padding:15px;
-border-radius:10px;
-box-shadow:0 0 10px #ddd;
-height:fit-content;
+.header{
+display:flex;justify-content:space-between;align-items:center;
+padding:15px;background:white;box-shadow:0 2px 10px #ddd;
 }
-.right h3{color:#0b3d91;}
-.right p{cursor:pointer;margin:8px 0;}
+.logo{font-size:22px;font-weight:bold;color:#0b3d91;}
+.btn{background:#0b3d91;color:white;padding:8px 15px;border:none;border-radius:20px;cursor:pointer;}
+
+/* MAIN */
+.main{display:flex;padding:15px;gap:15px;}
+.left{flex:3;}
+.right{
+flex:1;background:white;padding:15px;border-radius:10px;
+box-shadow:0 0 10px #ddd;height:fit-content;
+}
 
 /* HERO */
 .hero{
 background:linear-gradient(135deg,#0b3d91,#1456d1);
-color:white;padding:25px;border-radius:10px;
-margin-bottom:15px;
+color:white;padding:30px;border-radius:10px;margin-bottom:15px;
+}
+.hero h1{margin:0;}
+.hero p{margin:10px 0;}
+
+/* SEARCH */
+.search{text-align:center;margin:10px 0;}
+.search input{
+width:70%;padding:12px;border-radius:25px;border:1px solid #ccc;
 }
 
-/* CATEGORIES */
+/* CATEGORY */
 .categories{
-display:flex;
-flex-wrap:wrap;
-gap:10px;
-margin-bottom:15px;
+display:flex;flex-wrap:wrap;gap:10px;margin-bottom:15px;
 }
 .cat{
-background:white;
-padding:15px;
-border-radius:10px;
-flex:1;
-text-align:center;
-box-shadow:0 0 10px #ddd;
-cursor:pointer;
-transition:0.3s;
+flex:1;background:white;padding:15px;text-align:center;
+border-radius:10px;box-shadow:0 0 10px #ddd;
+cursor:pointer;transition:0.3s;
 }
 .cat:hover{transform:scale(1.05);}
 
-/* BRANDS */
+/* BRANDS GRID */
 .brands{
-display:flex;
-flex-wrap:wrap;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
 gap:10px;
 }
 .brand{
-background:white;
-flex:1;
-padding:15px;
-text-align:center;
-border-radius:10px;
-box-shadow:0 0 10px #ddd;
-cursor:pointer;
-transition:0.3s;
+background:white;padding:15px;text-align:center;
+border-radius:10px;box-shadow:0 0 10px #ddd;
+cursor:pointer;transition:0.3s;
 }
-.brand:hover{transform:scale(1.05);}
+.brand:hover{transform:scale(1.07);}
+
+/* RIGHT SIDE */
+.right h3{color:#0b3d91;margin-top:0;}
+.right p{cursor:pointer;margin:8px 0;}
+
+/* FOOTER */
+.footer{text-align:center;padding:20px;color:#777;}
 
 /* WHATSAPP */
 .whatsapp{
-position:fixed;
-bottom:20px;
-right:20px;
-background:#25D366;
-color:white;
-padding:15px;
-border-radius:50%;
-cursor:pointer;
+position:fixed;bottom:20px;right:20px;
+background:#25D366;color:white;padding:15px;border-radius:50%;
+font-size:20px;cursor:pointer;
 }
 </style>
 </head>
@@ -93,22 +83,29 @@ cursor:pointer;
 <body>
 
 <div class="topbar">
-📍 Lahore | 📞 03014681059
+📍 Gulshan-e-Ravi Lahore | 📞 +92 301 4681059
 </div>
 
 <div class="header">
 <div class="logo">ABUZAR BATTERY 🔋</div>
+<button class="btn" onclick="orderNow('General Inquiry')">Order Now</button>
 </div>
 
 <div class="main">
 
-<!-- LEFT SIDE -->
+<!-- LEFT -->
 <div class="left">
 
 <!-- HERO -->
 <div class="hero">
-<h2>Pakistan ki Best Battery Service 🔋</h2>
-<p>All Top Brands Available</p>
+<h1>Pakistan's Best Battery Store 🔋</h1>
+<p>All Top Brands Available | Car, UPS & Solar Batteries</p>
+<button class="btn" onclick="orderNow('Help')">Need Help?</button>
+</div>
+
+<!-- SEARCH -->
+<div class="search">
+<input type="text" placeholder="Search battery...">
 </div>
 
 <!-- CATEGORIES -->
@@ -137,30 +134,33 @@ cursor:pointer;
 <div class="right">
 <h3>Top Brands</h3>
 
-<p>Osaka</p>
-<p>AGS</p>
-<p>Phoenix</p>
-<p>Exide</p>
-<p>Volta</p>
-<p>Daewoo</p>
-<p>Unique</p>
+<p onclick="orderNow('Osaka')">Osaka</p>
+<p onclick="orderNow('AGS')">AGS</p>
+<p onclick="orderNow('Phoenix')">Phoenix</p>
+<p onclick="orderNow('Exide')">Exide</p>
+<p onclick="orderNow('Volta')">Volta</p>
+<p onclick="orderNow('Daewoo')">Daewoo</p>
+<p onclick="orderNow('Unique')">Unique</p>
 
 <hr>
 
-<button onclick="orderNow('All Batteries')" style="padding:10px;background:#0b3d91;color:white;border:none;">
-View All
-</button>
+<button class="btn" onclick="orderNow('All Batteries')">View All</button>
 
 </div>
 
 </div>
 
-<!-- WHATSAPP -->
+<div class="footer">
+© 2026 Abuzar Battery Service
+</div>
+
 <div class="whatsapp" onclick="orderNow('Hello')">💬</div>
 
 <script>
 function orderNow(msg){
-window.open("https://wa.me/923014681059?text="+msg);
+let phone="923014681059";
+let url="https://wa.me/"+phone+"?text="+encodeURIComponent("Assalamualaikum, I want to order "+msg);
+window.open(url,"_blank");
 }
 </script>
 
