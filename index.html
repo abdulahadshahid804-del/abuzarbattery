@@ -7,19 +7,20 @@
 <style>
 body{margin:0;font-family:Arial;background:#f5f7fb;}
 
-/* TOP BAR */
-.topbar{background:#0b3d91;color:white;padding:8px;text-align:center;font-size:14px;}
+/* TOP */
+.topbar{background:#0b3d91;color:white;padding:8px;text-align:center;}
 
 /* HEADER */
 .header{
-display:flex;justify-content:space-between;align-items:center;
-padding:15px;background:white;box-shadow:0 2px 10px #ddd;
+display:flex;justify-content:space-between;
+align-items:center;padding:15px;background:white;
+box-shadow:0 2px 10px #ddd;
 }
 .logo{font-size:22px;font-weight:bold;color:#0b3d91;}
-.btn{background:#0b3d91;color:white;padding:8px 15px;border:none;border-radius:20px;cursor:pointer;}
+.btn{background:#0b3d91;color:white;padding:10px 20px;border:none;border-radius:25px;cursor:pointer;}
 
 /* MAIN */
-.main{display:flex;padding:15px;gap:15px;}
+.main{display:flex;gap:20px;padding:20px;}
 .left{flex:3;}
 .right{
 flex:1;background:white;padding:15px;border-radius:10px;
@@ -28,26 +29,41 @@ box-shadow:0 0 10px #ddd;height:fit-content;
 
 /* HERO */
 .hero{
+display:flex;
+justify-content:space-between;
+align-items:center;
 background:linear-gradient(135deg,#0b3d91,#1456d1);
-color:white;padding:30px;border-radius:10px;margin-bottom:15px;
+color:white;
+padding:30px;
+border-radius:15px;
+margin-bottom:20px;
 }
-.hero h1{margin:0;}
-.hero p{margin:10px 0;}
+.hero-text{max-width:50%;}
+.hero h1{margin:0;font-size:32px;}
+.hero img{width:280px;}
 
 /* SEARCH */
-.search{text-align:center;margin:10px 0;}
+.search{text-align:center;margin:15px 0;}
 .search input{
 width:70%;padding:12px;border-radius:25px;border:1px solid #ccc;
 }
 
 /* CATEGORY */
 .categories{
-display:flex;flex-wrap:wrap;gap:10px;margin-bottom:15px;
+display:flex;
+justify-content:space-between;
+margin:20px 0;
 }
 .cat{
-flex:1;background:white;padding:15px;text-align:center;
-border-radius:10px;box-shadow:0 0 10px #ddd;
-cursor:pointer;transition:0.3s;
+flex:1;
+background:white;
+margin:5px;
+padding:15px;
+text-align:center;
+border-radius:12px;
+box-shadow:0 0 10px #ddd;
+transition:0.3s;
+cursor:pointer;
 }
 .cat:hover{transform:scale(1.05);}
 
@@ -58,15 +74,27 @@ grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
 gap:10px;
 }
 .brand{
-background:white;padding:15px;text-align:center;
-border-radius:10px;box-shadow:0 0 10px #ddd;
-cursor:pointer;transition:0.3s;
+background:white;
+padding:15px;
+text-align:center;
+border-radius:10px;
+box-shadow:0 0 10px #ddd;
+transition:0.3s;
+cursor:pointer;
 }
 .brand:hover{transform:scale(1.07);}
 
 /* RIGHT SIDE */
-.right h3{color:#0b3d91;margin-top:0;}
+.right h3{color:#0b3d91;}
 .right p{cursor:pointer;margin:8px 0;}
+
+/* ANIMATION */
+.slider{overflow:hidden;background:white;margin:15px 0;padding:10px;border-radius:10px;}
+.track{display:flex;gap:40px;animation:scroll 15s linear infinite;}
+@keyframes scroll{
+0%{transform:translateX(100%);}
+100%{transform:translateX(-100%);}
+}
 
 /* FOOTER */
 .footer{text-align:center;padding:20px;color:#777;}
@@ -98,9 +126,13 @@ font-size:20px;cursor:pointer;
 
 <!-- HERO -->
 <div class="hero">
-<h1>Pakistan's Best Battery Store 🔋</h1>
-<p>All Top Brands Available | Car, UPS & Solar Batteries</p>
-<button class="btn" onclick="orderNow('Help')">Need Help?</button>
+<div class="hero-text">
+<h1>Power That Never Stops 🔋</h1>
+<p>Best Car, UPS & Solar Batteries in Lahore</p>
+<button class="btn" onclick="orderNow('Help')">Get Help</button>
+</div>
+
+<img src="https://via.placeholder.com/300">
 </div>
 
 <!-- SEARCH -->
@@ -108,13 +140,26 @@ font-size:20px;cursor:pointer;
 <input type="text" placeholder="Search battery...">
 </div>
 
-<!-- CATEGORIES -->
+<!-- CATEGORY -->
 <div class="categories">
-<div class="cat">Solar Batteries</div>
-<div class="cat">UPS Batteries</div>
-<div class="cat">Car Batteries</div>
-<div class="cat">Dry Batteries</div>
+<div class="cat">Solar</div>
+<div class="cat">UPS</div>
+<div class="cat">Car</div>
+<div class="cat">Dry</div>
 <div class="cat">Deep Cycle</div>
+</div>
+
+<!-- ANIMATION -->
+<div class="slider">
+<div class="track">
+<div>OSAKA</div>
+<div>AGS</div>
+<div>PHOENIX</div>
+<div>EXIDE</div>
+<div>VOLTA</div>
+<div>DAEWOO</div>
+<div>UNIQUE</div>
+</div>
 </div>
 
 <!-- BRANDS -->
@@ -130,7 +175,7 @@ font-size:20px;cursor:pointer;
 
 </div>
 
-<!-- RIGHT SIDE -->
+<!-- RIGHT -->
 <div class="right">
 <h3>Top Brands</h3>
 
@@ -145,7 +190,6 @@ font-size:20px;cursor:pointer;
 <hr>
 
 <button class="btn" onclick="orderNow('All Batteries')">View All</button>
-
 </div>
 
 </div>
