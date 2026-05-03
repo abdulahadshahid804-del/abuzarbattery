@@ -39,8 +39,7 @@ border-radius:15px;
 margin-bottom:20px;
 }
 .hero-text{max-width:50%;}
-.hero h1{margin:0;font-size:32px;}
-.hero img{width:280px;}
+.hero img{width:260px;}
 
 /* SEARCH */
 .search{text-align:center;margin:15px 0;}
@@ -65,9 +64,10 @@ box-shadow:0 0 10px #ddd;
 transition:0.3s;
 cursor:pointer;
 }
+.cat img{width:60px;}
 .cat:hover{transform:scale(1.05);}
 
-/* BRANDS GRID */
+/* BRANDS */
 .brands{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
@@ -82,13 +82,14 @@ box-shadow:0 0 10px #ddd;
 transition:0.3s;
 cursor:pointer;
 }
+.brand img{width:80px;}
 .brand:hover{transform:scale(1.07);}
 
-/* RIGHT SIDE */
+/* RIGHT */
 .right h3{color:#0b3d91;}
 .right p{cursor:pointer;margin:8px 0;}
 
-/* ANIMATION */
+/* SLIDER */
 .slider{overflow:hidden;background:white;margin:15px 0;padding:10px;border-radius:10px;}
 .track{display:flex;gap:40px;animation:scroll 15s linear infinite;}
 @keyframes scroll{
@@ -96,14 +97,11 @@ cursor:pointer;
 100%{transform:translateX(-100%);}
 }
 
-/* FOOTER */
-.footer{text-align:center;padding:20px;color:#777;}
-
 /* WHATSAPP */
 .whatsapp{
 position:fixed;bottom:20px;right:20px;
 background:#25D366;color:white;padding:15px;border-radius:50%;
-font-size:20px;cursor:pointer;
+cursor:pointer;
 }
 </style>
 </head>
@@ -121,18 +119,16 @@ font-size:20px;cursor:pointer;
 
 <div class="main">
 
-<!-- LEFT -->
 <div class="left">
 
 <!-- HERO -->
 <div class="hero">
 <div class="hero-text">
-<h1>Power That Never Stops 🔋</h1>
+<h2>Power That Never Stops 🔋</h2>
 <p>Best Car, UPS & Solar Batteries in Lahore</p>
 <button class="btn" onclick="orderNow('Help')">Get Help</button>
 </div>
-
-<img src="https://via.placeholder.com/300">
+<img src="https://via.placeholder.com/250">
 </div>
 
 <!-- SEARCH -->
@@ -140,16 +136,35 @@ font-size:20px;cursor:pointer;
 <input type="text" placeholder="Search battery...">
 </div>
 
-<!-- CATEGORY -->
+<!-- CATEGORIES -->
 <div class="categories">
-<div class="cat">Solar</div>
-<div class="cat">UPS</div>
-<div class="cat">Car</div>
-<div class="cat">Dry</div>
-<div class="cat">Deep Cycle</div>
+<div class="cat">
+<img src="https://via.placeholder.com/60">
+<p>Solar Battery</p>
 </div>
 
-<!-- ANIMATION -->
+<div class="cat">
+<img src="https://via.placeholder.com/60">
+<p>UPS Battery</p>
+</div>
+
+<div class="cat">
+<img src="https://via.placeholder.com/60">
+<p>Car Battery</p>
+</div>
+
+<div class="cat">
+<img src="https://via.placeholder.com/60">
+<p>Dry Battery</p>
+</div>
+
+<div class="cat">
+<img src="https://via.placeholder.com/60">
+<p>Deep Cycle Battery</p>
+</div>
+</div>
+
+<!-- SLIDER -->
 <div class="slider">
 <div class="track">
 <div>OSAKA</div>
@@ -164,13 +179,40 @@ font-size:20px;cursor:pointer;
 
 <!-- BRANDS -->
 <div class="brands">
-<div class="brand">OSAKA</div>
-<div class="brand">AGS</div>
-<div class="brand">PHOENIX</div>
-<div class="brand">EXIDE</div>
-<div class="brand">VOLTA</div>
-<div class="brand">DAEWOO</div>
-<div class="brand">UNIQUE</div>
+<div class="brand">
+<img src="https://via.placeholder.com/80">
+<p>OSAKA</p>
+</div>
+
+<div class="brand">
+<img src="https://via.placeholder.com/80">
+<p>AGS</p>
+</div>
+
+<div class="brand">
+<img src="https://via.placeholder.com/80">
+<p>PHOENIX</p>
+</div>
+
+<div class="brand">
+<img src="https://via.placeholder.com/80">
+<p>EXIDE</p>
+</div>
+
+<div class="brand">
+<img src="https://via.placeholder.com/80">
+<p>VOLTA</p>
+</div>
+
+<div class="brand">
+<img src="https://via.placeholder.com/80">
+<p>DAEWOO</p>
+</div>
+
+<div class="brand">
+<img src="https://via.placeholder.com/80">
+<p>UNIQUE</p>
+</div>
 </div>
 
 </div>
@@ -179,23 +221,16 @@ font-size:20px;cursor:pointer;
 <div class="right">
 <h3>Top Brands</h3>
 
-<p onclick="orderNow('Osaka')">Osaka</p>
-<p onclick="orderNow('AGS')">AGS</p>
-<p onclick="orderNow('Phoenix')">Phoenix</p>
-<p onclick="orderNow('Exide')">Exide</p>
-<p onclick="orderNow('Volta')">Volta</p>
-<p onclick="orderNow('Daewoo')">Daewoo</p>
-<p onclick="orderNow('Unique')">Unique</p>
-
-<hr>
-
-<button class="btn" onclick="orderNow('All Batteries')">View All</button>
-</div>
+<p>Osaka</p>
+<p>AGS</p>
+<p>Phoenix</p>
+<p>Exide</p>
+<p>Volta</p>
+<p>Daewoo</p>
+<p>Unique</p>
 
 </div>
 
-<div class="footer">
-© 2026 Abuzar Battery Service
 </div>
 
 <div class="whatsapp" onclick="orderNow('Hello')">💬</div>
@@ -203,8 +238,7 @@ font-size:20px;cursor:pointer;
 <script>
 function orderNow(msg){
 let phone="923014681059";
-let url="https://wa.me/"+phone+"?text="+encodeURIComponent("Assalamualaikum, I want to order "+msg);
-window.open(url,"_blank");
+window.open("https://wa.me/"+phone+"?text="+msg);
 }
 </script>
 
