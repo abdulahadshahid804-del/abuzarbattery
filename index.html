@@ -3,101 +3,64 @@
 <head>
 <title>Abuzar Battery Service</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <style>
 body{margin:0;font-family:Arial;background:#f5f7fb;}
-
-/* TOP */
 .topbar{background:#0b3d91;color:white;padding:8px;text-align:center;}
-
-/* HEADER */
 .header{
 display:flex;justify-content:space-between;
 align-items:center;padding:15px;background:white;
 box-shadow:0 2px 10px #ddd;
 }
 .logo{font-size:22px;font-weight:bold;color:#0b3d91;}
-.btn{background:#0b3d91;color:white;padding:10px 20px;border:none;border-radius:25px;cursor:pointer;}
-
-/* MAIN */
+.btn{background:#0b3d91;color:white;padding:8px 15px;border:none;border-radius:20px;cursor:pointer;margin:3px;}
 .main{display:flex;gap:20px;padding:20px;}
 .left{flex:3;}
 .right{
 flex:1;background:white;padding:15px;border-radius:10px;
 box-shadow:0 0 10px #ddd;height:fit-content;
 }
-
-/* HERO */
 .hero{
-display:flex;
-justify-content:space-between;
-align-items:center;
+display:flex;justify-content:space-between;align-items:center;
 background:linear-gradient(135deg,#0b3d91,#1456d1);
-color:white;
-padding:30px;
-border-radius:15px;
-margin-bottom:20px;
+color:white;padding:30px;border-radius:15px;margin-bottom:20px;
 }
 .hero-text{max-width:50%;}
 .hero img{width:260px;}
-
-/* SEARCH */
 .search{text-align:center;margin:15px 0;}
 .search input{
 width:70%;padding:12px;border-radius:25px;border:1px solid #ccc;
 }
-
-/* CATEGORY */
-.categories{
-display:flex;
-justify-content:space-between;
-margin:20px 0;
-}
+.categories{display:flex;justify-content:space-between;margin:20px 0;}
 .cat{
-flex:1;
-background:white;
-margin:5px;
-padding:15px;
-text-align:center;
-border-radius:12px;
-box-shadow:0 0 10px #ddd;
-transition:0.3s;
-cursor:pointer;
+flex:1;background:white;margin:5px;padding:15px;text-align:center;
+border-radius:12px;box-shadow:0 0 10px #ddd;cursor:pointer;
 }
 .cat img{width:60px;}
-.cat:hover{transform:scale(1.05);}
-
-/* BRANDS */
 .brands{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
 gap:10px;
 }
 .brand{
-background:white;
-padding:15px;
-text-align:center;
-border-radius:10px;
-box-shadow:0 0 10px #ddd;
-transition:0.3s;
-cursor:pointer;
+background:white;padding:15px;text-align:center;
+border-radius:10px;box-shadow:0 0 10px #ddd;cursor:pointer;
 }
 .brand img{width:80px;}
-.brand:hover{transform:scale(1.07);}
-
-/* RIGHT */
-.right h3{color:#0b3d91;}
-.right p{cursor:pointer;margin:8px 0;}
-
-/* SLIDER */
+.products{display:none;padding:10px;}
+.card{
+background:white;padding:15px;margin:10px;
+border-radius:10px;box-shadow:0 0 10px #ddd;
+}
+.qty{
+display:flex;justify-content:center;align-items:center;
+gap:10px;margin:10px 0;
+}
 .slider{overflow:hidden;background:white;margin:15px 0;padding:10px;border-radius:10px;}
 .track{display:flex;gap:40px;animation:scroll 15s linear infinite;}
 @keyframes scroll{
 0%{transform:translateX(100%);}
 100%{transform:translateX(-100%);}
 }
-
-/* WHATSAPP */
 .whatsapp{
 position:fixed;bottom:20px;right:20px;
 background:#25D366;color:white;padding:15px;border-radius:50%;
@@ -105,7 +68,6 @@ cursor:pointer;
 }
 </style>
 </head>
-
 <body>
 
 <div class="topbar">
@@ -114,57 +76,28 @@ cursor:pointer;
 
 <div class="header">
 <div class="logo">ABUZAR BATTERY 🔋</div>
-<button class="btn" onclick="orderNow('General Inquiry')">Order Now</button>
+<button class="btn" onclick="showCart()">🛒 Cart</button>
 </div>
 
 <div class="main">
-
 <div class="left">
 
-<!-- HERO -->
 <div class="hero">
 <div class="hero-text">
 <h2>Power That Never Stops 🔋</h2>
 <p>Best Car, UPS & Solar Batteries in Lahore</p>
-<button class="btn" onclick="orderNow('Help')">Get Help</button>
 </div>
 <img src="https://via.placeholder.com/250">
 </div>
 
-<!-- SEARCH -->
-<div class="search">
-<input type="text" placeholder="Search battery...">
-</div>
-
-<!-- CATEGORIES -->
 <div class="categories">
-<div class="cat">
-<img src="https://via.placeholder.com/60">
-<p>Solar Battery</p>
+<div class="cat"><img src="https://via.placeholder.com/60"><p>Solar Battery</p></div>
+<div class="cat"><img src="https://via.placeholder.com/60"><p>UPS Battery</p></div>
+<div class="cat"><img src="https://via.placeholder.com/60"><p>Car Battery</p></div>
+<div class="cat"><img src="https://via.placeholder.com/60"><p>Dry Battery</p></div>
+<div class="cat"><img src="https://via.placeholder.com/60"><p>Deep Cycle Battery</p></div>
 </div>
 
-<div class="cat">
-<img src="https://via.placeholder.com/60">
-<p>UPS Battery</p>
-</div>
-
-<div class="cat">
-<img src="https://via.placeholder.com/60">
-<p>Car Battery</p>
-</div>
-
-<div class="cat">
-<img src="https://via.placeholder.com/60">
-<p>Dry Battery</p>
-</div>
-
-<div class="cat">
-<img src="https://via.placeholder.com/60">
-<p>Deep Cycle Battery</p>
-</div>
-</div>
-
-<!-- SLIDER -->
 <div class="slider">
 <div class="track">
 <div>OSAKA</div>
@@ -178,67 +111,86 @@ cursor:pointer;
 </div>
 
 <!-- BRANDS -->
-<div class="brands">
-<div class="brand">
-<img src="https://via.placeholder.com/80">
-<p>OSAKA</p>
+<div id="brands" class="brands">
+<div class="brand" onclick="showBrand('osaka')"><img src="https://via.placeholder.com/80"><p>OSAKA</p></div>
+<div class="brand" onclick="showBrand('ags')"><img src="https://via.placeholder.com/80"><p>AGS</p></div>
+<div class="brand" onclick="showBrand('phoenix')"><img src="https://via.placeholder.com/80"><p>PHOENIX</p></div>
+<div class="brand" onclick="showBrand('exide')"><img src="https://via.placeholder.com/80"><p>EXIDE</p></div>
+<div class="brand" onclick="showBrand('volta')"><img src="https://via.placeholder.com/80"><p>VOLTA</p></div>
+<div class="brand" onclick="showBrand('daewoo')"><img src="https://via.placeholder.com/80"><p>DAEWOO</p></div>
+<div class="brand" onclick="showBrand('unique')"><img src="https://via.placeholder.com/80"><p>UNIQUE</p></div>
 </div>
 
-<div class="brand">
-<img src="https://via.placeholder.com/80">
-<p>AGS</p>
-</div>
-
-<div class="brand">
-<img src="https://via.placeholder.com/80">
-<p>PHOENIX</p>
-</div>
-
-<div class="brand">
-<img src="https://via.placeholder.com/80">
-<p>EXIDE</p>
-</div>
-
-<div class="brand">
-<img src="https://via.placeholder.com/80">
-<p>VOLTA</p>
-</div>
-
-<div class="brand">
-<img src="https://via.placeholder.com/80">
-<p>DAEWOO</p>
-</div>
-
-<div class="brand">
-<img src="https://via.placeholder.com/80">
-<p>UNIQUE</p>
-</div>
-</div>
+<!-- PRODUCTS -->
+<div id="products" class="products"></div>
 
 </div>
 
-<!-- RIGHT -->
 <div class="right">
 <h3>Top Brands</h3>
-
-<p>Osaka</p>
-<p>AGS</p>
-<p>Phoenix</p>
-<p>Exide</p>
-<p>Volta</p>
-<p>Daewoo</p>
-<p>Unique</p>
-
+<p>Osaka</p><p>AGS</p><p>Phoenix</p><p>Exide</p>
+<p>Volta</p><p>Daewoo</p><p>Unique</p>
 </div>
-
 </div>
 
 <div class="whatsapp" onclick="orderNow('Hello')">💬</div>
 
 <script>
+let cart=[];
+let data={
+osaka:["NS40","NS60","NS70"],
+ags:["GR-46","GR-65"],
+phoenix:["XP-50","XP-70"],
+exide:["N50","N65"],
+volta:["T-125","T-150"],
+daewoo:["DL-50","DL-60"],
+unique:["U-100","U-120"]
+};
+
+function showBrand(brand){
+document.getElementById("brands").style.display="none";
+let container=document.getElementById("products");
+container.style.display="block";
+container.innerHTML="";
+
+data[brand].forEach(model=>{
+container.innerHTML+=`
+<div class="card">
+<h3>${brand.toUpperCase()} ${model}</h3>
+
+<div class="qty">
+<button onclick="changeQty(this,-1)">-</button>
+<span>1</span>
+<button onclick="changeQty(this,1)">+</button>
+</div>
+
+<button class="btn" onclick="addToCart('${brand} ${model}',this)">Add to Cart</button>
+</div>
+`;
+});
+}
+
+function changeQty(btn,val){
+let span=btn.parentElement.querySelector("span");
+let num=parseInt(span.innerText);
+num+=val;
+if(num<1) num=1;
+span.innerText=num;
+}
+
+function addToCart(product,btn){
+let qty=btn.parentElement.querySelector("span").innerText;
+cart.push(product+" x"+qty);
+alert("Added: "+product+" x"+qty);
+}
+
+function showCart(){
+if(cart.length==0) alert("Cart empty");
+else alert(cart.join("\n"));
+}
+
 function orderNow(msg){
-let phone="923014681059";
-window.open("https://wa.me/"+phone+"?text="+msg);
+window.open("https://wa.me/923014681059?text="+msg);
 }
 </script>
 
