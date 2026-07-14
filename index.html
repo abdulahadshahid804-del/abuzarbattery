@@ -3,103 +3,423 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kadam Soft | Premium Men & Women Footwear Lahore</title>
-    <link rel="stylesheet" href="style.css">
-    <!-- FontAwesome for Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>LOL Factory - 3D Racing Game</title>
+    <!-- Tailwind CSS for UI HUD styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #0d0e12;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            user-select: none;
+        }
+        canvas {
+            display: block;
+            width: 100vw;
+            height: 100vh;
+        }
+        /* Custom glow effects for the factory HUD */
+        .neon-border {
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.5);
+            border: 2px solid rgba(239, 68, 68, 0.8);
+        }
+        .neon-text {
+            text-shadow: 0 0 8px rgba(243, 244, 246, 0.6);
+        }
+    </style>
 </head>
 <body>
 
-    <!-- Global Announcement Bar -->
-    <div class="announcement-bar">
-        <p>🌍 International Shipping from Lahore! Free Worldwide Delivery on Orders Over $150</p>
+    <!-- HUD Overlay -->
+    <div class="absolute top-0 left-0 w-full h-full pointer-events-none flex flex-col justify-between p-6 z-10">
+        <!-- Top Row: Logo & High Scores -->
+        <div class="flex justify-between items-start">
+            <div class="bg-gray-900/90 p-4 rounded-lg neon-border pointer-events-auto">
+                <h1 class="text-3xl font-extrabold text-red-500 tracking-wider uppercase m-0">🏭 LOL Factory</h1>
+                <p class="text-xs text-gray-400 mt-1">Navigate the factory floor! Avoid boxes. Hit yellow boosts.</p>
+            </div>
+            
+            <div class="bg-gray-900/90 p-4 rounded-lg border border-gray-700 text-right">
+                <div class="text-sm text-gray-400">HIGH SCORE</div>
+                <div id="highScoreVal" class="text-2xl font-bold text-yellow-400">0</div>
+            </div>
+        </div>
+
+        <!-- Bottom Row: Speedometer & Controls Info -->
+        <div class="flex justify-between items-end">
+            <!-- Left Side controls guide -->
+            <div class="bg-gray-900/80 p-4 rounded-lg border border-gray-700 text-gray-300 text-xs space-y-1">
+                <p class="font-bold text-red-400 mb-1">CONTROLS:</p>
+                <p>⚡ <span class="font-bold">W / Up Arrow:</span> Accelerate</p>
+                <p>🛑 <span class="font-bold">S / Down Arrow:</span> Reverse / Brake</p>
+                <p>🔄 <span class="font-bold">A/D / Left/Right:</span> Steer</p>
+            </div>
+
+            <!-- Middle Speedometer & Score -->
+            <div class="flex flex-col items-center bg-gray-900/90 p-6 rounded-xl neon-border min-w-[200px]">
+                <div class="text-xs text-gray-400 uppercase tracking-widest">Score</div>
+                <div id="scoreVal" class="text-3xl font-black text-white neon-text">0</div>
+                <div class="w-full bg-gray-800 h-1 my-2 rounded-full overflow-hidden">
+                    <div id="speedBar" class="bg-red-500 h-full transition-all duration-75" style="width: 0%"></div>
+                </div>
+                <div class="text-xs text-gray-400"><span id="speedVal" class="text-lg font-bold text-red-400">0</span> KM/H</div>
+            </div>
+
+            <!-- Reset Button pointer-events-auto -->
+            <button id="resetBtn" class="pointer-events-auto bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:scale-105 active:scale-95 transition-transform">
+                RESET CAR
+            </button>
+        </div>
     </div>
 
-    <!-- Navigation Header -->
-    <header>
-        <div class="logo">KADAM<span>SOFT</span></div>
-        <nav>
-            <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#men">Men's Collection</a></li>
-                <li><a href="#women">Women's Collection</a></li>
-                <li><a href="#about">Our Story</a></li>
-            </ul>
-        </nav>
-        <div class="header-icons">
-            <i class="fas fa-search"></i>
-            <i class="fas fa-user"></i>
-            <i class="fas fa-shopping-bag"></i>
-        </div>
-    </header>
+    <!-- Three.js Library via CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-content">
-            <h1>Walk in Absolute Comfort</h1>
-            <p>Premium quality leather and PU footwear crafted locally in Lahore, delivered internationally.</p>
-            <div class="hero-buttons">
-                <a href="#men" class="btn">Shop Men</a>
-                <a href="#women" class="btn btn-secondary">Shop Women</a>
-            </div>
-        </div>
-    </section>
+    <script>
+        // --- GAME STATE ---
+        const game = {
+            score: 0,
+            highScore: localStorage.getItem('lol_highScore') || 0,
+            speed: 0,
+            maxSpeed: 0.8,
+            maxReverseSpeed: -0.2,
+            acceleration: 0.015,
+            deceleration: 0.008,
+            friction: 0.005,
+            steerSpeed: 0.04,
+            carRotation: 0,
+            boostActive: false,
+            boostTimer: 0
+        };
 
-    <!-- Featured Categories Section -->
-    <section class="collections" id="collections">
-        <h2 class="section-title">Explore Collections</h2>
-        <div class="grid-container">
-            <!-- Men's Card -->
-            <div class="category-card" id="men">
-                <div class="card-img bg-men"></div>
-                <div class="card-info">
-                    <h3>Men's Collection</h3>
-                    <p>Formal Shoes, Casual Chappals & Premium Sandals</p>
-                    <a href="#" class="shop-link">View All <i class="fas fa-arrow-right"></i></a>
-                </div>
-            </div>
-            <!-- Women's Card -->
-            <div class="category-card" id="women">
-                <div class="card-img bg-women"></div>
-                <div class="card-info">
-                    <h3>Women's Collection</h3>
-                    <p>Soft-sole Chappals, Heels & Comfort Cushioned Flats</p>
-                    <a href="#" class="shop-link">View All <i class="fas fa-arrow-right"></i></a>
-                </div>
-            </div>
-        </div>
-    </section>
+        document.getElementById('highScoreVal').innerText = game.highScore;
 
-    <!-- International trust features -->
-    <section class="features">
-        <div class="feature-item">
-            <i class="fas fa-plane"></i>
-            <h4>Global Logistics</h4>
-            <p>Fast track worldwide shipping via DHL & FedEx</p>
-        </div>
-        <div class="feature-item">
-            <i class="fas fa-feather-alt"></i>
-            <h4>Lahori Craftsmanship</h4>
-            <p>100% ultra-soft materials built for extreme durability</p>
-        </div>
-        <div class="feature-item">
-            <i class="fas fa-shield-alt"></i>
-            <h4>Secure Checkouts</h4>
-            <p>Pay safely with Credit Card, PayPal or Local COD</p>
-        </div>
-    </section>
+        // --- KEYBOARD CONTROLS ---
+        const keys = { w: false, a: false, s: false, d: false, ArrowUp: false, ArrowDown: false, ArrowLeft: false, ArrowRight: false };
+        window.addEventListener('keydown', (e) => { if (e.key in keys) keys[e.key] = true; });
+        window.addEventListener('keyup', (e) => { if (e.key in keys) keys[e.key] = false; });
 
-    <!-- Footer -->
-    <footer>
-        <div class="footer-content">
-            <p>&copy; 2026 Kadam Soft Footwear Company. Lahore, Pakistan.</p>
-            <div class="socials">
-                <i class="fab fa-facebook"></i>
-                <i class="fab fa-instagram"></i>
-                <i class="fab fa-whatsapp"></i>
-            </div>
-        </div>
-    </footer>
+        // --- SETUP THREE.JS SCENE ---
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x0a0b10);
+        scene.fog = new THREE.FogExp2(0x0a0b10, 0.015);
 
+        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        document.body.appendChild(renderer.domElement);
+
+        // --- LIGHTING ---
+        const ambientLight = new THREE.AmbientLight(0x111122, 1.5);
+        scene.add(ambientLight);
+
+        const dirLight = new THREE.DirectionalLight(0xff0055, 1.5);
+        dirLight.position.set(50, 100, 50);
+        dirLight.castShadow = true;
+        dirLight.shadow.mapSize.width = 1024;
+        dirLight.shadow.mapSize.height = 1024;
+        scene.add(dirLight);
+
+        const pointLight = new THREE.PointLight(0x00ffff, 2, 100);
+        pointLight.position.set(0, 20, 0);
+        scene.add(pointLight);
+
+        // --- ENVIRONMENT: THE LOL FACTORY FLOOR ---
+        // Floor Grid Floor
+        const floorGeo = new THREE.PlaneGeometry(300, 300);
+        const floorMat = new THREE.MeshStandardMaterial({ 
+            color: 0x1a1c23, 
+            roughness: 0.8, 
+            metalness: 0.2 
+        });
+        const floor = new THREE.Mesh(floorGeo, floorMat);
+        floor.rotation.x = -Math.PI / 2;
+        floor.receiveShadow = true;
+        scene.add(floor);
+
+        // Add a factory grid helper to style the floor
+        const gridHelper = new THREE.GridHelper(300, 60, 0xef4444, 0x2d3748);
+        gridHelper.position.y = 0.01;
+        scene.add(gridHelper);
+
+        // --- FACTORY WALLS ---
+        const wallMat = new THREE.MeshStandardMaterial({ color: 0x0f1115 });
+        const wallGeo = new THREE.BoxGeometry(300, 20, 4);
+        
+        const walls = [];
+        const wallPositions = [
+            { x: 0, z: 150, rotY: 0 },
+            { x: 0, z: -150, rotY: 0 },
+            { x: 150, z: 0, rotY: Math.PI / 2 },
+            { x: -150, z: 0, rotY: Math.PI / 2 }
+        ];
+
+        wallPositions.forEach(pos => {
+            const wall = new THREE.Mesh(wallGeo, wallMat);
+            wall.position.set(pos.x, 10, pos.z);
+            wall.rotation.y = pos.rotY;
+            scene.add(wall);
+            walls.push(wall);
+        });
+
+        // --- THE PLAYER CAR (assembled from primitives) ---
+        const carGroup = new THREE.Group();
+        
+        // Body (Red chassis)
+        const bodyGeo = new THREE.BoxGeometry(2, 0.8, 4);
+        const bodyMat = new THREE.MeshStandardMaterial({ color: 0xef4444, metalness: 0.8, roughness: 0.2 });
+        const bodyMesh = new THREE.Mesh(bodyGeo, bodyMat);
+        bodyMesh.position.y = 0.6;
+        bodyMesh.castShadow = true;
+        carGroup.add(bodyMesh);
+
+        // Cabin (Glass/Top area)
+        const cabinGeo = new THREE.BoxGeometry(1.4, 0.6, 1.8);
+        const cabinMat = new THREE.MeshStandardMaterial({ color: 0x111111, metalness: 0.9, roughness: 0.1 });
+        const cabinMesh = new THREE.Mesh(cabinGeo, cabinMat);
+        cabinMesh.position.set(0, 1.1, -0.2);
+        cabinMesh.castShadow = true;
+        carGroup.add(cabinMesh);
+
+        // Spoiler
+        const spoilerGeo = new THREE.BoxGeometry(2.2, 0.1, 0.5);
+        const spoilerMesh = new THREE.Mesh(spoilerGeo, bodyMat);
+        spoilerMesh.position.set(0, 1.3, 1.8);
+        spoilerMesh.castShadow = true;
+        carGroup.add(spoilerMesh);
+
+        // Spoiler Mounts
+        const mountGeo = new THREE.BoxGeometry(0.1, 0.5, 0.1);
+        const m1 = new THREE.Mesh(mountGeo, bodyMat);
+        m1.position.set(0.8, 1.05, 1.8);
+        const m2 = m1.clone();
+        m2.position.x = -0.8;
+        carGroup.add(m1, m2);
+
+        // Wheels
+        const wheelGeo = new THREE.CylinderGeometry(0.5, 0.5, 0.4, 12);
+        const wheelMat = new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.9 });
+        wheelGeo.rotateZ(Math.PI / 2);
+
+        const wheels = [
+            { x: -1.1, y: 0.5, z: -1.2 },
+            { x: 1.1, y: 0.5, z: -1.2 },
+            { x: -1.1, y: 0.5, z: 1.2 },
+            { x: 1.1, y: 0.5, z: 1.2 }
+        ];
+
+        const wheelMeshes = [];
+        wheels.forEach(wPos => {
+            const wMesh = new THREE.Mesh(wheelGeo, wheelMat);
+            wMesh.position.set(wPos.x, wPos.y, wPos.z);
+            wMesh.castShadow = true;
+            carGroup.add(wMesh);
+            wheelMeshes.push(wMesh);
+        });
+
+        scene.add(carGroup);
+        carGroup.position.set(0, 0, 10);
+
+        // --- SPEED BOOST PADS ---
+        const boosts = [];
+        const boostGeo = new THREE.BoxGeometry(6, 0.1, 6);
+        const boostMat = new THREE.MeshStandardMaterial({ color: 0xeab308, emissive: 0xeab308, emissiveIntensity: 1 });
+
+        function createBoost(x, z) {
+            const bMesh = new THREE.Mesh(boostGeo, boostMat);
+            bMesh.position.set(x, 0.05, z);
+            scene.add(bMesh);
+            boosts.push(bMesh);
+        }
+        // Spawn scattered boosts
+        createBoost(-20, -30);
+        createBoost(30, 40);
+        createBoost(-40, 50);
+        createBoost(50, -50);
+        createBoost(0, -80);
+
+        // --- HAZARDS / OBSTACLES (Factory Boxes) ---
+        const obstacles = [];
+        const boxGeo = new THREE.BoxGeometry(4, 4, 4);
+        const boxMat = new THREE.MeshStandardMaterial({ color: 0x4b5563, roughness: 0.6 });
+
+        function createBox(x, z) {
+            const box = new THREE.Mesh(boxGeo, boxMat);
+            box.position.set(x, 2, z);
+            box.castShadow = true;
+            scene.add(box);
+            obstacles.push(box);
+        }
+
+        // Generate an obstacle maze layout
+        for(let i = 0; i < 25; i++) {
+            let rx = (Math.random() - 0.5) * 200;
+            let rz = (Math.random() - 0.5) * 200;
+            // Don't spawn right next to start
+            if (Math.abs(rx) > 10 || Math.abs(rz - 10) > 10) {
+                createBox(rx, rz);
+            }
+        }
+
+        // --- PROCEDURAL BACKGROUND MACHINERY ---
+        for (let i = 0; i < 8; i++) {
+            const pillarGeo = new THREE.CylinderGeometry(2, 2, 40, 8);
+            const pillarMat = new THREE.MeshStandardMaterial({ color: 0x1f2937, metalness: 0.8 });
+            const pillar = new THREE.Mesh(pillarGeo, pillarMat);
+            pillar.position.set((Math.random() - 0.5) * 280, 20, (Math.random() - 0.5) * 280);
+            scene.add(pillar);
+        }
+
+        // --- COLLISION LOGIC ---
+        function checkCollision(box1, box2, width1, length1, width2, length2) {
+            return Math.abs(box1.position.x - box2.position.x) < (width1 + width2) / 2 &&
+                   Math.abs(box1.position.z - box2.position.z) < (length1 + length2) / 2;
+        }
+
+        // --- GAME LOOP ---
+        const clock = new THREE.Clock();
+
+        function animate() {
+            requestAnimationFrame(animate);
+            const delta = clock.getDelta();
+
+            // Handle Input & Physics
+            const isAcc = keys.w || keys.ArrowUp;
+            const isDec = keys.s || keys.ArrowDown;
+            const isLeft = keys.a || keys.ArrowLeft;
+            const isRight = keys.d || keys.ArrowRight;
+
+            // Speed Boost cooldown/timer
+            if (game.boostActive) {
+                game.boostTimer -= delta;
+                if (game.boostTimer <= 0) {
+                    game.boostActive = false;
+                    game.maxSpeed = 0.8;
+                }
+            }
+
+            // Forward / Backward Acceleration
+            if (isAcc) {
+                game.speed += game.acceleration;
+                if (game.speed > game.maxSpeed) game.speed = game.maxSpeed;
+            } else if (isDec) {
+                game.speed -= game.acceleration;
+                if (game.speed < game.maxReverseSpeed) game.speed = game.maxReverseSpeed;
+            } else {
+                // Apply friction
+                if (game.speed > 0) {
+                    game.speed -= game.friction;
+                    if (game.speed < 0) game.speed = 0;
+                } else if (game.speed < 0) {
+                    game.speed += game.friction;
+                    if (game.speed > 0) game.speed = 0;
+                }
+            }
+
+            // Steering (Only turns while moving)
+            if (Math.abs(game.speed) > 0.05) {
+                const dir = game.speed > 0 ? 1 : -1;
+                if (isLeft) game.carRotation += game.steerSpeed * dir;
+                if (isRight) game.carRotation -= game.steerSpeed * dir;
+            }
+
+            // Spin wheels based on movement
+            wheelMeshes.forEach(wheel => {
+                wheel.rotation.x -= game.speed;
+            });
+
+            // Update Car Position
+            carGroup.rotation.y = game.carRotation;
+            
+            // Temporary storage of old position in case of collision
+            const oldPos = carGroup.position.clone();
+
+            carGroup.position.x -= Math.sin(game.carRotation) * game.speed;
+            carGroup.position.z -= Math.cos(game.carRotation) * game.speed;
+
+            // --- BORDERS & COLLISION RESOLUTION ---
+            // Outer wall bounds
+            if (Math.abs(carGroup.position.x) > 146 || Math.abs(carGroup.position.z) > 146) {
+                carGroup.position.copy(oldPos);
+                game.speed = -game.speed * 0.4; // Bounce backward slightly
+            }
+
+            // Obstacle Collisions
+            obstacles.forEach(obs => {
+                if (checkCollision(carGroup, obs, 2.2, 4.2, 4, 4)) {
+                    // Collision occurred! Bounce back
+                    carGroup.position.copy(oldPos);
+                    game.speed = -game.speed * 0.5;
+                    // Flash screen or decrease score
+                    game.score = Math.max(0, game.score - 50);
+                }
+            });
+
+            // Boost Pad Overlap Checks
+            boosts.forEach(boost => {
+                if (checkCollision(carGroup, boost, 2.2, 4.2, 6, 6)) {
+                    if (!game.boostActive) {
+                        game.boostActive = true;
+                        game.boostTimer = 1.5; // boost duration
+                        game.maxSpeed = 1.6; // double speed cap
+                        game.speed = 1.6;
+                        game.score += 200; // bonus points
+                    }
+                }
+            });
+
+            // Dynamic camera trail following behind the car
+            const targetCamOffset = new THREE.Vector3(
+                Math.sin(game.carRotation) * 12,
+                6,
+                Math.cos(game.carRotation) * 12
+            );
+            const targetCamPos = carGroup.position.clone().add(targetCamOffset);
+            camera.position.lerp(targetCamPos, 0.1);
+            camera.lookAt(carGroup.position);
+
+            // Increment simple survival/driving score
+            if (Math.abs(game.speed) > 0.1) {
+                game.score += Math.round(Math.abs(game.speed) * 2);
+            }
+
+            // Keep high score saved
+            if (game.score > game.highScore) {
+                game.highScore = game.score;
+                localStorage.setItem('lol_highScore', game.highScore);
+                document.getElementById('highScoreVal').innerText = game.highScore;
+            }
+
+            // Update UI HUD values
+            document.getElementById('scoreVal').innerText = game.score;
+            const displaySpeed = Math.round(Math.abs(game.speed) * 180);
+            document.getElementById('speedVal').innerText = displaySpeed;
+            document.getElementById('speedBar').style.width = `${Math.min(100, (displaySpeed / 288) * 100)}%`;
+
+            renderer.render(scene, camera);
+        }
+
+        // --- RESET BUTTON FUNCTIONALITY ---
+        document.getElementById('resetBtn').addEventListener('click', () => {
+            carGroup.position.set(0, 0, 10);
+            carGroup.rotation.set(0, 0, 0);
+            game.speed = 0;
+            game.carRotation = 0;
+            game.score = 0;
+        });
+
+        // --- WINDOW RESIZE SUPPORT ---
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Start the engine!
+        animate();
+    </script>
 </body>
 </html>
