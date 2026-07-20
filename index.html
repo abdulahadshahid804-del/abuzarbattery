@@ -3,423 +3,1470 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LOL Factory - 3D Racing Game</title>
-    <!-- Tailwind CSS for UI HUD styling -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>SANA | Premium Beauty & Cosmetics Ecosystem</title>
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
+    
     <style>
-        body {
+        :root {
+            --bg-dark: #0a0a0c;
+            --bg-light: #fcf8f8;
+            --text-dark: #111115;
+            --text-light: #f5f5f7;
+            --primary: #d4a373; /* Rose Gold Accent */
+            --accent-pink: #fae1dd;
+            --luxury-purple: linear-gradient(135deg, #1a0b2e 0%, #0a0a0c 100%);
+            --glass-dark: rgba(15, 15, 20, 0.7);
+            --glass-light: rgba(255, 255, 255, 0.75);
+            --border-dark: rgba(212, 163, 115, 0.2);
+            --border-light: rgba(17, 11, 21, 0.1);
+            --glow: 0 0 20px rgba(212, 163, 115, 0.4);
+            
+            /* Active Dynamic Variables */
+            --main-bg: var(--bg-dark);
+            --main-text: var(--text-light);
+            --glass-core: var(--glass-dark);
+            --border-core: var(--border-dark);
+            --card-bg: rgba(20, 20, 25, 0.6);
+        }
+
+        .light-theme {
+            --main-bg: var(--bg-light);
+            --main-text: var(--text-dark);
+            --glass-core: var(--glass-light);
+            --border-core: var(--border-light);
+            --card-bg: rgba(255, 255, 255, 0.8);
+        }
+
+        * {
+            box-sizing: border-box;
             margin: 0;
-            overflow: hidden;
-            background-color: #0d0e12;
-            font-family: 'Segoe UI', Roboto, sans-serif;
+            padding: 0;
             user-select: none;
         }
-        canvas {
-            display: block;
-            width: 100vw;
-            height: 100vh;
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--main-bg);
+            color: var(--main-text);
+            overflow-x: hidden;
+            transition: background-color 0.5s ease, color 0.5s ease;
         }
-        /* Custom glow effects for the factory HUD */
-        .neon-border {
-            box-shadow: 0 0 15px rgba(239, 68, 68, 0.5);
-            border: 2px solid rgba(239, 68, 68, 0.8);
+
+        h1, h2, h3, .logo-text {
+            font-family: 'Cinzel', serif;
+            letter-spacing: 2px;
         }
-        .neon-text {
-            text-shadow: 0 0 8px rgba(243, 244, 246, 0.6);
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-dark); }
+        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
+
+        /* Loader */
+        #luxury-loader {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: #000; z-index: 9999;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+        }
+        .loader-logo {
+            font-size: 3.5rem; color: #fff; letter-spacing: 10px;
+            margin-bottom: 20px; opacity: 0; transform: translateY(20px);
+        }
+        .loader-bar {
+            width: 200px; height: 1px; background: rgba(255,255,255,0.1);
+            position: relative; overflow: hidden;
+        }
+        .loader-progress {
+            position: absolute; width: 0%; height: 100%;
+            background: var(--primary); top:0; left:0;
+        }
+
+        /* Interactive Dynamic Cursor */
+        #custom-cursor {
+            width: 8px; height: 8px; background: var(--primary);
+            border-radius: 50%; position: fixed; transform: translate(-50%, -50%);
+            pointer-events: none; z-index: 10000; transition: width 0.2s, height 0.2s;
+        }
+        #custom-cursor-blur {
+            width: 40px; height: 40px; border: 1px solid var(--primary);
+            border-radius: 50%; position: fixed; transform: translate(-50%, -50%);
+            pointer-events: none; z-index: 9999; transition: transform 0.1s linear, width 0.3s, height 0.3s;
+            opacity: 0.5;
+        }
+
+        /* Structural Framework Header */
+        header {
+            position: fixed; top: 0; left: 0; width: 100%; z-index: 900;
+            background: var(--glass-core); backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--border-core);
+            transition: all 0.4s ease;
+        }
+        .nav-container {
+            max-width: 1400px; margin: 0 auto; padding: 20px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .logo-text { font-size: 2rem; font-weight: 700; color: var(--main-text); text-decoration: none; }
+        .logo-text span { color: var(--primary); }
+        
+        .nav-menu { display: flex; list-style: none; gap: 30px; }
+        .nav-link { 
+            text-decoration: none; color: var(--main-text); font-size: 0.85rem; 
+            text-transform: uppercase; font-weight: 500; letter-spacing: 1px;
+            position: relative; padding: 5px 0; transition: color 0.3s;
+        }
+        .nav-link::after {
+            content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 1px;
+            background: var(--primary); transition: width 0.3s ease;
+        }
+        .nav-link:hover::after { width: 100%; }
+        .nav-link:hover { color: var(--primary); }
+
+        .nav-actions { display: flex; align-items: center; gap: 20px; font-size: 1.2rem; }
+        .action-icon { cursor: pointer; position: relative; transition: transform 0.3s; }
+        .action-icon:hover { transform: scale(1.15); color: var(--primary); }
+        .badge {
+            position: absolute; top: -8px; right: -10px; background: var(--primary);
+            color: #000; font-size: 0.65rem; font-weight: 700;
+            width: 16px; height: 16px; border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+        }
+
+        /* Hero Engine */
+        .hero-viewport {
+            width: 100%; height: 100vh; position: relative;
+            display: flex; align-items: center; overflow: hidden;
+        }
+        #webgl-canvas-container {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;
+            pointer-events: auto;
+        }
+        .hero-overlay {
+            position: absolute; top:0; left:0; width:100%; height:100%;
+            background: linear-gradient(to right, rgba(10,10,12,0.8) 30%, rgba(10,10,12,0.2) 100%);
+            z-index: 2; pointer-events: none;
+        }
+        .light-theme .hero-overlay {
+            background: linear-gradient(to right, rgba(252,248,248,0.85) 30%, rgba(252,248,248,0.1) 100%);
+        }
+        .hero-content {
+            position: relative; z-index: 3; max-width: 800px;
+            padding: 0 80px; pointer-events: auto;
+        }
+        .hero-title {
+            font-size: 4.5rem; font-weight: 700; line-height: 1.1;
+            margin-bottom: 25px; text-transform: uppercase;
+        }
+        .hero-subtitle {
+            font-size: 1.1rem; font-weight: 300; line-height: 1.6;
+            margin-bottom: 40px; color: var(--primary); max-width: 500px;
+        }
+        .btn-luxury {
+            display: inline-block; padding: 15px 40px; border: 1px solid var(--primary);
+            background: transparent; color: var(--main-text); text-transform: uppercase;
+            font-size: 0.85rem; letter-spacing: 2px; text-decoration: none;
+            position: relative; overflow: hidden; cursor: pointer; transition: all 0.4s;
+        }
+        .btn-luxury::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: var(--primary); transition: all 0.4s; z-index: -1;
+        }
+        .btn-luxury:hover::before { left: 0; }
+        .btn-luxury:hover { color: #000; box-shadow: var(--glow); }
+
+        /* Dynamic Main Workspace Container */
+        .app-workspace {
+            max-width: 1500px; margin: 60px auto; padding: 0 40px;
+            display: grid; grid-template-columns: 300px 1fr; gap: 40px;
+        }
+
+        /* Filter Core Systems */
+        .sidebar-filters {
+            background: var(--glass-core); border: 1px solid var(--border-core);
+            padding: 30px; border-radius: 4px; height: fit-content;
+            backdrop-filter: blur(10px);
+        }
+        .filter-group { margin-bottom: 35px; }
+        .filter-title { 
+            font-size: 1rem; text-transform: uppercase; margin-bottom: 15px;
+            border-bottom: 1px solid var(--border-core); padding-bottom: 8px;
+            color: var(--primary);
+        }
+        .search-wrapper { position: relative; }
+        .search-input {
+            width: 100%; padding: 12px 40px 12px 15px; background: rgba(0,0,0,0.2);
+            border: 1px solid var(--border-core); color: var(--main-text);
+            border-radius: 4px; font-family: inherit;
+        }
+        .search-wrapper i { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); }
+        
+        .filter-list { list-style: none; }
+        .filter-item { 
+            padding: 8px 0; display: flex; justify-content: space-between; 
+            cursor: pointer; font-size: 0.9rem; transition: color 0.2s;
+        }
+        .filter-item:hover, .filter-item.active { color: var(--primary); }
+
+        /* Price Slider Controls */
+        .price-slider-container { padding: 10px 0; }
+        .range-input {
+            width: 100%; -webkit-appearance: none; background: rgba(255,255,255,0.1);
+            height: 4px; border-radius: 2px; outline: none;
+        }
+        .range-input::-webkit-slider-thumb {
+            -webkit-appearance: none; width: 16px; height: 16px;
+            border-radius: 50%; background: var(--primary); cursor: pointer;
+            box-shadow: var(--glow);
+        }
+        .price-values {
+            display: flex; justify-content: space-between; margin-top: 10px; font-size: 0.85rem;
+        }
+
+        /* Grid Framework Product Render */
+        .catalog-engine { display: flex; flex-direction: column; gap: 30px; }
+        .catalog-controls {
+            display: flex; justify-content: space-between; align-items: center;
+            background: var(--glass-core); border: 1px solid var(--border-core);
+            padding: 15px 25px; border-radius: 4px; backdrop-filter: blur(10px);
+        }
+        .catalog-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        /* Card Architectural Viewport */
+        .luxury-card {
+            background: var(--card-bg); border: 1px solid var(--border-core);
+            border-radius: 4px; overflow: hidden; position: relative;
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            transform-style: preserve-3d; perspective: 1000px;
+        }
+        .luxury-card:hover {
+            border-color: var(--primary);
+            box-shadow: var(--glow);
+            transform: translateY(-10px);
+        }
+        .card-visuals {
+            width: 100%; height: 320px; position: relative; overflow: hidden;
+            background: #111115; display: flex; justify-content: center; align-items: center;
+        }
+        .light-theme .card-visuals { background: #eaeaea; }
+        
+        .card-img {
+            max-width: 80%; max-height: 80%; object-fit: contain;
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        .luxury-card:hover .card-img { transform: scale(1.12) rotate(2deg); }
+        
+        /* Fallback beautiful programmatic CSS placeholder icons when images aren't present */
+        .card-vector-fallback {
+            font-size: 5rem; color: var(--primary); opacity: 0.25; position: absolute;
+        }
+
+        .card-badges { position: absolute; top: 15px; left: 15px; display: flex; flex-direction: column; gap: 5px; }
+        .badge-discount { background: #e63946; color: #fff; font-size: 0.7rem; padding: 4px 8px; font-weight: 600; }
+        
+        .card-actions-overlay {
+            position: absolute; bottom: -50px; left: 0; width: 100%; display: flex;
+            justify-content: center; gap: 10px; padding: 15px; transition: bottom 0.4s ease;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+        }
+        .luxury-card:hover .card-actions-overlay { bottom: 0; }
+        
+        .circle-action-btn {
+            width: 40px; height: 40px; border-radius: 50%; background: #fff; color: #000;
+            display: flex; justify-content: center; align-items: center; cursor: pointer;
+            border: none; transition: all 0.3s;
+        }
+        .circle-action-btn:hover { background: var(--primary); color: #fff; transform: translateY(-3px); }
+
+        .card-info { padding: 20px; }
+        .card-category { font-size: 0.75rem; text-transform: uppercase; color: var(--primary); letter-spacing: 1px; margin-bottom: 5px; }
+        .card-title { font-size: 1rem; font-weight: 500; margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .card-rating { font-size: 0.8rem; color: #ffb703; margin-bottom: 12px; }
+        .card-rating span { color: var(--main-text); opacity: 0.5; font-size: 0.75rem; margin-left: 5px; }
+        .card-price-matrix { display: flex; align-items: center; gap: 10px; }
+        .current-price { font-weight: 600; font-size: 1.1rem; }
+        .old-price { text-decoration: line-through; opacity: 0.4; font-size: 0.9rem; }
+
+        /* Slideway Panels (Cart / Detail Viewports) */
+        .slide-panel {
+            position: fixed; top: 0; right: -450px; width: 450px; height: 100vh;
+            background: var(--bg-dark); border-left: 1px solid var(--border-core);
+            z-index: 1000; box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+            transition: right 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            display: flex; flex-direction: column; padding: 30px;
+        }
+        .light-theme .slide-panel { background: var(--bg-light); }
+        .slide-panel.active { right: 0; }
+        
+        .panel-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-core); padding-bottom: 20px; margin-bottom: 20px; }
+        .panel-close { cursor: pointer; font-size: 1.5rem; transition: color 0.2s; }
+        .panel-close:hover { color: var(--primary); }
+
+        .cart-stream-container { flex: 1; overflow-y: auto; padding-right: 5px; }
+        .cart-luxury-item {
+            display: flex; gap: 15px; padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
+            align-items: center;
+        }
+        .cart-item-img { width: 70px; height: 70px; background: rgba(255,255,255,0.05); display:flex; justify-content:center; align-items:center; border-radius:4px;}
+        .cart-item-img i { font-size: 2rem; color: var(--primary); }
+        .cart-item-details { flex: 1; }
+        .cart-item-name { font-size: 0.9rem; font-weight: 500; margin-bottom: 5px; }
+        .cart-item-price { font-size: 0.85rem; color: var(--primary); }
+        .quantity-controller { display: flex; align-items: center; gap: 12px; margin-top: 8px; }
+        .qty-btn { background: transparent; border: 1px solid var(--border-core); color: var(--main-text); width: 24px; height: 24px; display: flex; justify-content: center; align-items: center; cursor: pointer; }
+        
+        .panel-summary-footer { border-top: 1px solid var(--border-core); padding-top: 20px; margin-top: auto; }
+        .summary-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 0.95rem; }
+
+        /* Global Structural Overlays */
+        .glass-scrim-layer {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 950;
+            display: none;
+        }
+
+        /* AI Interactive Companion Module */
+        #ai-assistant-widget {
+            position: fixed; bottom: 30px; right: 30px; z-index: 850;
+        }
+        .ai-trigger-bubble {
+            width: 60px; height: 60px; border-radius: 50%; background: var(--primary);
+            box-shadow: var(--glow); display: flex; justify-content: center; align-items: center;
+            color: #000; font-size: 1.5rem; cursor: pointer; transition: transform 0.3s;
+        }
+        .ai-trigger-bubble:hover { transform: scale(1.1) rotate(15deg); }
+        
+        .ai-chat-viewport {
+            position: absolute; bottom: 80px; right: 0; width: 360px; height: 480px;
+            background: var(--glass-core); border: 1px solid var(--border-core);
+            backdrop-filter: blur(20px); border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            display: none; flex-direction: column; overflow: hidden;
+        }
+        .ai-chat-header { background: var(--primary); padding: 15px; color: #000; font-weight: 600; display: flex; justify-content: space-between; }
+        .ai-msg-stream { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; font-size: 0.85rem; }
+        .msg-bubble { padding: 10px 14px; border-radius: 12px; max-width: 80%; word-wrap: break-word; }
+        .msg-bubble.system { background: rgba(255,255,255,0.08); align-self: flex-start; border-top-left-radius: 0; }
+        .msg-bubble.user { background: var(--primary); color: #000; align-self: flex-end; border-top-right-radius: 0; }
+        .ai-input-dock { display: flex; border-top: 1px solid var(--border-core); background: rgba(0,0,0,0.2); }
+        .ai-input-dock input { flex: 1; padding: 15px; background: transparent; border: none; color: var(--main-text); outline: none; font-family: inherit; }
+        .ai-send-btn { padding: 0 20px; background: transparent; border: none; color: var(--primary); cursor: pointer; }
+
+        /* Flash Sale Countdown Core Banner */
+        .promo-countdown-strip {
+            background: var(--luxury-purple); border-top: 1px solid var(--border-core); border-bottom: 1px solid var(--border-core);
+            padding: 20px; text-align: center; position: relative;
+        }
+        .countdown-title { font-family: 'Cinzel'; font-size: 1.4rem; color: var(--primary); margin-bottom: 10px; }
+        .countdown-digits { display: flex; justify-content: center; gap: 20px; font-size: 1.5rem; font-weight: 600; }
+        .digit-group span { display: block; font-size: 0.7rem; text-transform: uppercase; opacity: 0.5; letter-spacing: 1px; }
+
+        /* Checkout Wizard Modals */
+        .checkout-wizard-panel {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.9);
+            width: 90%; max-width: 700px; background: var(--bg-dark); border: 1px solid var(--border-core);
+            z-index: 1100; padding: 40px; border-radius: 4px; display: none; opacity: 0;
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            max-height: 85vh; overflow-y: auto;
+        }
+        .light-theme .checkout-wizard-panel { background: var(--bg-light); }
+        .checkout-wizard-panel.active { display: block; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        .wizard-step { display: none; }
+        .wizard-step.active { display: block; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+        .form-group { display: flex; flex-direction: column; gap: 8px; }
+        .form-group label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; }
+        .form-control { padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-core); color: var(--main-text); border-radius: 4px; font-family: inherit; }
+        
+        /* Interactive Payment Methods Selectors */
+        .payment-method-selector { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin: 20px 0; }
+        .pay-option { border: 1px solid var(--border-core); padding: 15px; text-align: center; cursor: pointer; border-radius: 4px; transition: all 0.3s; }
+        .pay-option:hover, .pay-option.active { border-color: var(--primary); background: rgba(212, 163, 115, 0.1); }
+        .pay-option i { display: block; font-size: 1.5rem; margin-bottom: 8px; color: var(--primary); }
+
+        /* Management Panel / Control Dashboard */
+        .admin-dashboard-link {
+            background: #111; color: var(--primary); padding: 15px; font-size: 0.8rem; text-transform: uppercase; text-align: center; border-bottom: 1px solid var(--border-core); letter-spacing: 2px; cursor: pointer;
+        }
+
+        /* Responsive Breakpoint Engines */
+        @media(max-width: 1024px) {
+            .app-workspace { grid-template-columns: 1fr; }
+            .sidebar-filters { display: none; } /* Mobile Filter Strategy */
+            .hero-title { font-size: 3rem; }
+        }
+        @media(max-width: 500px) {
+            .hero-content { padding: 0 20px; }
+            .hero-title { font-size: 2.2rem; }
+            .slide-panel { width: 100vw; right: -100vw; }
+            .form-row { grid-template-columns: 1fr; }
+            .payment-method-selector { grid-template-columns: 1fr 1fr; }
         }
     </style>
 </head>
 <body>
 
-    <!-- HUD Overlay -->
-    <div class="absolute top-0 left-0 w-full h-full pointer-events-none flex flex-col justify-between p-6 z-10">
-        <!-- Top Row: Logo & High Scores -->
-        <div class="flex justify-between items-start">
-            <div class="bg-gray-900/90 p-4 rounded-lg neon-border pointer-events-auto">
-                <h1 class="text-3xl font-extrabold text-red-500 tracking-wider uppercase m-0">🏭 LOL Factory</h1>
-                <p class="text-xs text-gray-400 mt-1">Navigate the factory floor! Avoid boxes. Hit yellow boosts.</p>
-            </div>
-            
-            <div class="bg-gray-900/90 p-4 rounded-lg border border-gray-700 text-right">
-                <div class="text-sm text-gray-400">HIGH SCORE</div>
-                <div id="highScoreVal" class="text-2xl font-bold text-yellow-400">0</div>
+    <!-- Dynamic Custom Luxury Tracking Cursors -->
+    <div id="custom-cursor"></div>
+    <div id="custom-cursor-blur"></div>
+
+    <!-- Screen Masking Scrim -->
+    <div class="glass-scrim-layer" id="global-scrim"></div>
+
+    <!-- Performance Animated Platform Loader -->
+    <div id="luxury-loader">
+        <div class="loader-logo">SANA</div>
+        <div class="loader-bar"><div class="loader-progress" id="load-progress-bar"></div></div>
+    </div>
+
+    <!-- Optional Admin Control View Gate -->
+    <div class="admin-dashboard-link" onclick="uiEngine.toggleAdminPanel()">
+        <i class="fa-solid from fa-gauge-high"></i> Toggle SANA Live Admin System Controller
+    </div>
+
+    <!-- Framework Navigation Header -->
+    <header id="main-header">
+        <div class="nav-container">
+            <a href="#" class="logo-text">SANA<span>.</span></a>
+            <ul class="nav-menu">
+                <li><a href="#" class="nav-link" onclick="catalogEngine.resetFilters()">Home</a></li>
+                <li><a href="#" class="nav-link" onclick="catalogEngine.filterCategory('Lipsticks')">Lipsticks</a></li>
+                <li><a href="#" class="nav-link" onclick="catalogEngine.filterCategory('Perfumes')">Perfumes</a></li>
+                <li><a href="#" class="nav-link" onclick="catalogEngine.filterCategory('Skincare')">Skincare</a></li>
+                <li><a href="#" class="nav-link" onclick="uiEngine.showToast('Luxury Membership Loyalty portal triggered')">Loyalty</a></li>
+            </ul>
+            <div class="nav-actions">
+                <i class="fa-solid fa-moon action-icon" id="theme-toggle-btn" onclick="uiEngine.toggleTheme()"></i>
+                <i class="fa-solid fa-heart action-icon" onclick="uiEngine.toggleWishlistPanel()">
+                    <span class="badge" id="wishlist-count-badge">0</span>
+                </i>
+                <i class="fa-solid fa-bag-shopping action-icon" onclick="uiEngine.toggleCartPanel()">
+                    <span class="badge" id="cart-count-badge">0</span>
+                </i>
+                <i class="fa-solid fa-user action-icon" onclick="uiEngine.toggleProfilePanel()"></i>
             </div>
         </div>
+    </header>
 
-        <!-- Bottom Row: Speedometer & Controls Info -->
-        <div class="flex justify-between items-end">
-            <!-- Left Side controls guide -->
-            <div class="bg-gray-900/80 p-4 rounded-lg border border-gray-700 text-gray-300 text-xs space-y-1">
-                <p class="font-bold text-red-400 mb-1">CONTROLS:</p>
-                <p>⚡ <span class="font-bold">W / Up Arrow:</span> Accelerate</p>
-                <p>🛑 <span class="font-bold">S / Down Arrow:</span> Reverse / Brake</p>
-                <p>🔄 <span class="font-bold">A/D / Left/Right:</span> Steer</p>
-            </div>
+    <!-- WebGL Three.js Visual Viewport Hero Section -->
+    <section class="hero-viewport">
+        <div id="webgl-canvas-container"></div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">Reveal Your<br>Natural Beauty</h1>
+            <p class="hero-subtitle">Immerse yourself in precision engineered cosmetic formulations structured around organic architectural longevity.</p>
+            <a href="#shop-anchor" class="btn-luxury">Explore Collection</a>
+        </div>
+    </section>
 
-            <!-- Middle Speedometer & Score -->
-            <div class="flex flex-col items-center bg-gray-900/90 p-6 rounded-xl neon-border min-w-[200px]">
-                <div class="text-xs text-gray-400 uppercase tracking-widest">Score</div>
-                <div id="scoreVal" class="text-3xl font-black text-white neon-text">0</div>
-                <div class="w-full bg-gray-800 h-1 my-2 rounded-full overflow-hidden">
-                    <div id="speedBar" class="bg-red-500 h-full transition-all duration-75" style="width: 0%"></div>
+    <!-- Flash Sale Countdown Matrix Banner -->
+    <section class="promo-countdown-strip">
+        <div class="countdown-title">LIMITED QUANTITY ROYAL COUTURE FLASH SALE</div>
+        <div class="countdown-digits" id="live-countdown-clock">
+            <div class="digit-group">02 <span class="days">HR</span></div>:
+            <div class="digit-group">43 <span class="days">MIN</span></div>:
+            <div class="digit-group">12 <span class="days">SEC</span></div>
+        </div>
+    </section>
+
+    <div id="shop-anchor"></div>
+
+    <!-- Main Production Application Workspace Grid Mapping -->
+    <main class="app-workspace">
+        
+        <!-- Sidebar Parametric Search & Filtering Controllers -->
+        <aside class="sidebar-filters">
+            <div class="filter-group">
+                <h3 class="filter-title">Search</h3>
+                <div class="search-wrapper">
+                    <input type="text" class="search-input" id="catalog-search-field" placeholder="Search collection..." oninput="catalogEngine.handleSearch(event)">
+                    <i class="fa-solid fa-magnifying-glass"></i>
                 </div>
-                <div class="text-xs text-gray-400"><span id="speedVal" class="text-lg font-bold text-red-400">0</span> KM/H</div>
+            </div>
+            <div class="filter-group">
+                <h3 class="filter-title">Categories</h3>
+                <ul class="filter-list" id="category-filter-list">
+                    <!-- Dynamic Generation -->
+                </ul>
+            </div>
+            <div class="filter-group">
+                <h3 class="filter-title">Price Filter</h3>
+                <div class="price-slider-container">
+                    <input type="range" class="range-input" id="price-range-slider" min="0" max="300" value="300" oninput="catalogEngine.handlePriceSlider(event)">
+                    <div class="price-values">
+                        <span>$0</span>
+                        <span id="slider-max-display">$300</span>
+                    </div>
+                </div>
+            </div>
+            <div class="filter-group">
+                <h3 class="filter-title">Brand Houses</h3>
+                <ul class="filter-list" id="brand-filter-list">
+                    <!-- Dynamic Generation -->
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Product Rendering System Engine Workspace Grid -->
+        <section class="catalog-engine">
+            <div class="catalog-controls">
+                <div style="font-size: 0.85rem; opacity: 0.7;" id="catalog-counter-display">Showing all architectural items</div>
+                <div>
+                    <select id="catalog-sort-dropdown" onchange="catalogEngine.handleSort(event)" style="background: transparent; color: var(--main-text); border: 1px solid var(--border-core); padding: 8px 12px; font-family: inherit; outline:none;">
+                        <option value="popular" style="color:#000;">Most Popular</option>
+                        <option value="low-high" style="color:#000;">Price: Low to High</option>
+                        <option value="high-low" style="color:#000;">Price: High to Low</option>
+                        <option value="rating" style="color:#000;">Highest Rated</option>
+                    </select>
+                </div>
             </div>
 
-            <!-- Reset Button pointer-events-auto -->
-            <button id="resetBtn" class="pointer-events-auto bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:scale-105 active:scale-95 transition-transform">
-                RESET CAR
-            </button>
+            <div class="catalog-grid" id="product-hydration-grid">
+                <!-- Hydro-injected via core data loops -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Slide Panel: Cart Drawer System -->
+    <div class="slide-panel" id="cart-drawer-panel">
+        <div class="panel-header">
+            <h3>Your Shopping Bag</h3>
+            <i class="fa-solid fa-xmark panel-close" onclick="uiEngine.toggleCartPanel()"></i>
+        </div>
+        <div class="cart-stream-container" id="cart-items-stream">
+            <!-- Dynamic Cart Items Injector -->
+        </div>
+        <div class="panel-summary-footer">
+            <div class="summary-row"><span>Subtotal</span><span id="cart-subtotal-val">$0.00</span></div>
+            <div class="summary-row"><span>Eco-Freight Shipping</span><span id="cart-shipping-val">$15.00</span></div>
+            <div class="summary-row" style="font-weight:600; font-size:1.1rem; border-top:1px solid var(--border-core); padding-top:10px;">
+                <span>Total Due</span><span id="cart-grandtotal-val">$0.00</span>
+            </div>
+            <button class="btn-luxury" style="width: 100%; margin-top: 15px;" onclick="checkoutWizard.launchWizard()">Initiate Secure Checkout</button>
         </div>
     </div>
 
-    <!-- Three.js Library via CDN -->
+    <!-- Slide Panel: Wishlist Drawer System -->
+    <div class="slide-panel" id="wishlist-drawer-panel">
+        <div class="panel-header">
+            <h3>Your Curated Wishlist</h3>
+            <i class="fa-solid fa-xmark panel-close" onclick="uiEngine.toggleWishlistPanel()"></i>
+        </div>
+        <div class="cart-stream-container" id="wishlist-items-stream">
+            <!-- Dynamic Wishlist Items Injector -->
+        </div>
+    </div>
+
+    <!-- Slide Panel: Profile Authenticator & Order History Viewer -->
+    <div class="slide-panel" id="profile-drawer-panel">
+        <div class="panel-header">
+            <h3>SANA House Profile</h3>
+            <i class="fa-solid fa-xmark panel-close" onclick="uiEngine.toggleProfilePanel()"></i>
+        </div>
+        <div class="cart-stream-container" style="font-size:0.9rem;">
+            <div id="auth-logged-out-state">
+                <p style="opacity:0.7; margin-bottom:20px;">Access your secure architectural luxury ordering portfolio account tier.</p>
+                <div class="form-group" style="margin-bottom:15px;">
+                    <label>E-Mail Address</label>
+                    <input type="email" class="form-control" id="auth-email-input" value="couture@sana.beauty">
+                </div>
+                <div class="form-group" style="margin-bottom:20px;">
+                    <label>Access Pin</label>
+                    <input type="password" class="form-control" id="auth-pass-input" value="••••••••">
+                </div>
+                <button class="btn-luxury" style="width:100%;" onclick="authEngine.mockLogin()">Authenticate Account</button>
+            </div>
+            <div id="auth-logged-in-state" style="display:none;">
+                <h4 style="color:var(--primary); margin-bottom:10px;">Welcome Back, Comtesse</h4>
+                <p style="font-size:0.8rem; opacity:0.6; margin-bottom:25px;">Account Status: Premium Tier VIP Elite</p>
+                <h5 style="text-transform:uppercase; margin-bottom:15px; border-bottom:1px solid var(--border-core); padding-bottom:5px;">Historical Orders</h5>
+                <div style="background:rgba(255,255,255,0.02); padding:12px; border-radius:4px; font-size:0.8rem; border-left:2px solid var(--primary);">
+                    <strong>Order #SANA-9842</strong><br>
+                    Status: En Route via Air Courier Flight<br>
+                    <span style="opacity:0.5;">Value: $425.00 • Items: 3</span>
+                </div>
+                <button class="btn-luxury" style="width:100%; margin-top:40px; border-color:#e63946; color:#e63946;" onclick="authEngine.logout()">De-authenticate Account</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick View Overlay Structural Core Component -->
+    <div class="checkout-wizard-panel" id="quickview-modal-overlay">
+        <div class="panel-header">
+            <h3 id="qv-product-name">Product Architecture View</h3>
+            <i class="fa-solid fa-xmark panel-close" onclick="uiEngine.closeQuickView()"></i>
+        </div>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:30px; margin-top:20px;" id="qv-grid-split">
+            <div style="background:#111; border-radius:4px; display:flex; justify-content:center; align-items:center; height:300px;" id="qv-img-holder">
+                <!-- Programmatic Icon Render -->
+            </div>
+            <div>
+                <p id="qv-product-desc" style="font-size:0.9rem; line-height:1.6; opacity:0.8; margin-bottom:20px;"></p>
+                <div style="font-size:1.4rem; font-weight:600; margin-bottom:20px; color:var(--primary);" id="qv-product-price"></div>
+                <div class="form-group" style="margin-bottom:20px;">
+                    <label>Structural Matrix Composition</label>
+                    <p style="font-size:0.75rem; opacity:0.5; margin-top:5px;">Cruelty Free • Paraben Free • Clean Laboratory Grade Certification Eco-Sustain</p>
+                </div>
+                <button class="btn-luxury" id="qv-add-cart-btn" style="width:100%;">Commit to Shopping Bag</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Administrative Virtual Management Panel Terminal Component -->
+    <div class="checkout-wizard-panel" id="admin-panel-overlay" style="max-width:900px;">
+        <div class="panel-header">
+            <h3><i class="fa-solid fa-gauge-high"></i> SANA System Execution Control Panel</h3>
+            <i class="fa-solid fa-xmark panel-close" onclick="uiEngine.toggleAdminPanel()"></i>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:15px; margin-bottom:30px;">
+            <div style="background:rgba(255,255,255,0.02); padding:15px; border-radius:4px; border-top:2px solid var(--primary);">
+                <div style="font-size:0.75rem; opacity:0.5; text-transform:uppercase;">Gross Live Revenue</div>
+                <div style="font-size:1.6rem; font-weight:600; margin-top:5px;" id="admin-revenue-val">$142,530</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.02); padding:15px; border-radius:4px; border-top:2px solid #4ade80;">
+                <div style="font-size:0.75rem; opacity:0.5; text-transform:uppercase;">Active Inventory Items</div>
+                <div style="font-size:1.6rem; font-weight:600; margin-top:5px;">50 Products</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.02); padding:15px; border-radius:4px; border-top:2px solid #60a5fa;">
+                <div style="font-size:0.75rem; opacity:0.5; text-transform:uppercase;">System Server Uptime</div>
+                <div style="font-size:1.6rem; font-weight:600; margin-top:5px;">99.99%</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.02); padding:15px; border-radius:4px; border-top:2px solid #f43f5e;">
+                <div style="font-size:0.75rem; opacity:0.5; text-transform:uppercase;">Conversion Matrix Tier</div>
+                <div style="font-size:1.6rem; font-weight:600; margin-top:5px;">4.82%</div>
+            </div>
+        </div>
+        <h4>Platform Operational Data Catalog Modification Tools</h4>
+        <p style="font-size:0.8rem; opacity:0.6; margin-bottom:15px;">Inject real-time price updates into core product catalogs instantly.</p>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Select Architecture Target</label>
+                <select id="admin-product-select" class="form-control"></select>
+            </div>
+            <div class="form-group">
+                <label>New Price Point ($)</label>
+                <input type="number" class="form-control" id="admin-new-price" value="85">
+            </div>
+        </div>
+        <button class="btn-luxury" onclick="adminSystem.executePriceMutation()">Commit Price Override Instantly</button>
+    </div>
+
+    <!-- Production Checkout Wizard Panel Modal Stack -->
+    <div class="checkout-wizard-panel" id="checkout-wizard-modal">
+        <div class="panel-header">
+            <h3>SANA Core Checkout Protocol</h3>
+            <i class="fa-solid fa-xmark panel-close" onclick="checkoutWizard.closeWizard()"></i>
+        </div>
+        
+        <!-- Step 1: Logistic Routing Coordinates -->
+        <div class="wizard-step active" id="wizard-step-1">
+            <h4 style="margin-bottom:20px; text-transform:uppercase; color:var(--primary);">1. Logistics Routing Coordinates</h4>
+            <div class="form-row">
+                <div class="form-group"><label>First Legal Name</label><input type="text" class="form-control" value="Victoria"></div>
+                <div class="form-group"><label>Last Legal Name</label><input type="text" class="form-control" value="Archambault"></div>
+            </div>
+            <div class="form-group" style="margin-bottom:20px;"><label>Street Transit Vector Destination</label><input type="text" class="form-control" value="742 Rue du Faubourg Saint-Honoré"></div>
+            <div class="form-row">
+                <div class="form-group"><label>Postal Code Zone</label><input type="text" class="form-control" value="75008"></div>
+                <div class="form-group"><label>City Metroplex</label><input type="text" class="form-control" value="Paris"></div>
+            </div>
+            <button class="btn-luxury" style="width:100%; margin-top:20px;" onclick="checkoutWizard.navigate(2)">Progress to Payment Clearing</button>
+        </div>
+
+        <!-- Step 2: Financial Instrument Selection -->
+        <div class="wizard-step" id="wizard-step-2">
+            <h4 style="margin-bottom:20px; text-transform:uppercase; color:var(--primary);">2. Financial Instrument Verification</h4>
+            <div class="payment-method-selector">
+                <div class="pay-option active" onclick="checkoutWizard.setPaymentMethod('cc')"><i class="fa-solid fa-credit-card"></i>Credit Card</div>
+                <div class="pay-option" onclick="checkoutWizard.setPaymentMethod('cod')"><i class="fa-solid fa-truck-ramp-box"></i>C.O.D.</div>
+                <div class="pay-option" onclick="checkoutWizard.setPaymentMethod('jc')"><i class="fa-solid fa-mobile-screen"></i>JazzCash</div>
+                <div class="pay-option" onclick="checkoutWizard.setPaymentMethod('ep')"><i class="fa-solid fa-wallet"></i>EasyPaisa</div>
+            </div>
+            <div id="credit-card-form-subdock">
+                <div class="form-group" style="margin-bottom:15px;"><label>Secure Card Number Sequence</label><input type="text" class="form-control" value="4111 •••• •••• 8842"></div>
+                <div class="form-row">
+                    <div class="form-group"><label>Expiration Data</label><input type="text" class="form-control" value="11 / 29"></div>
+                    <div class="form-group"><label>Cryptographic CVV Security Code</label><input type="password" class="form-control" value="•••"></div>
+                </div>
+            </div>
+            <div style="display:flex; gap:15px; margin-top:30px;">
+                <button class="btn-luxury" style="background:transparent; border-color:rgba(255,255,255,0.2);" onclick="checkoutWizard.navigate(1)">Return Back</button>
+                <button class="btn-luxury" style="flex:1;" onclick="checkoutWizard.navigate(3)">Verify & Authorize Remittance</button>
+            </div>
+        </div>
+
+        <!-- Step 3: Confirmation -->
+        <div class="wizard-step" id="wizard-step-3" style="text-align:center; padding:20px 0;">
+            <i class="fa-solid fa-circle-check" style="font-size:4rem; color:var(--primary); margin-bottom:20px;"></i>
+            <h3 style="margin-bottom:15px;">Transaction Cryptographically Secured</h3>
+            <p style="opacity:0.7; font-size:0.9rem; max-width:450px; margin:0 auto 30px auto;">Your order has been ingested by our global distribution ledger routing infrastructure. Preparation telemetry data will broadcast directly over automated notification streams shortly.</p>
+            <button class="btn-luxury" onclick="checkoutWizard.closeWizard(true)">Conclude Checkout Session</button>
+        </div>
+    </div>
+
+    <!-- AI Beauty Assistant Interactive Companion Core Floating Widget Container -->
+    <div id="ai-assistant-widget">
+        <div class="ai-trigger-bubble" onclick="aiCompanionEngine.toggleWindow()">
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+        </div>
+        <div class="ai-chat-viewport" id="ai-chat-window">
+            <div class="ai-chat-header">
+                <span>SANA Alchemical Beauty AI</span>
+                <i class="fa-solid fa-minus" style="cursor:pointer;" onclick="aiCompanionEngine.toggleWindow()"></i>
+            </div>
+            <div class="ai-msg-stream" id="ai-messages-wrapper">
+                <div class="msg-bubble system">Greetings. I am your specialized SANA beauty concierge. Inquire about architectural formulations, product alignments, or specific cost optimization vectors instantly.</div>
+            </div>
+            <div class="ai-input-dock">
+                <input type="text" id="ai-user-query-input" placeholder="Inquire regarding alchemical blends..." onkeydown="if(event.key==='Enter') aiCompanionEngine.transmitMessage()">
+                <button class="ai-send-btn" onclick="aiCompanionEngine.transmitMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Core Footer Component Platform Blocks -->
+    <footer style="background:#050507; border-top:1px solid var(--border-core); padding:60px 40px 30px 40px; margin-top:120px; font-size:0.85rem;">
+        <div style="max-width:1400px; margin:0 auto; display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:40px; opacity:0.8;">
+            <div>
+                <h4 style="font-family:'Cinzel'; color:#fff; margin-bottom:20px; letter-spacing:2px;">SANA HOUSE</h4>
+                <p style="line-height:1.6; opacity:0.6;">Architectural high-fidelity luxury cosmetics formulated via sustainable global botanical resource harvesting arrays.</p>
+            </div>
+            <div>
+                <h4 style="font-family:'Cinzel'; color:#fff; margin-bottom:20px; letter-spacing:2px;">COLLECTIONS</h4>
+                <ul style="list-style:none; display:flex; flex-direction:column; gap:10px;">
+                    <li><a href="#" style="color:inherit; text-decoration:none; opacity:0.6;" onclick="catalogEngine.filterCategory('Lipsticks')">Matte Velours Lipsticks</a></li>
+                    <li><a href="#" style="color:inherit; text-decoration:none; opacity:0.6;" onclick="catalogEngine.filterCategory('Perfumes')">Alchemical High Fragrances</a></li>
+                    <li><a href="#" style="color:inherit; text-decoration:none; opacity:0.6;" onclick="catalogEngine.filterCategory('Skincare')">Molecular Regeneration Oils</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 style="font-family:'Cinzel'; color:#fff; margin-bottom:20px; letter-spacing:2px;">LEGAL LEDGER</h4>
+                <ul style="list-style:none; display:flex; flex-direction:column; gap:10px; opacity:0.6;">
+                    <li>Data Decryption Shield Compliance</li>
+                    <li>Eco-Freight Logistics Protocols</li>
+                    <li>Terms of Sovereign Formulation Utilization</li>
+                </ul>
+            </div>
+        </div>
+        <div style="max-width:1400px; margin:40px auto 0 auto; border-top:1px solid rgba(255,255,255,0.05); padding-top:20px; display:flex; justify-content:between; align-items:center; opacity:0.4; font-size:0.75rem;">
+            <div>© 2026 SANA Beauty International Luxury Core Systems Group. All Engineering Rights Reserved.</div>
+        </div>
+    </footer>
+
+    <!-- Essential Content Core Libraries and Engine Scripts CDNs Injection Link Array -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
 
     <script>
-        // --- GAME STATE ---
-        const game = {
-            score: 0,
-            highScore: localStorage.getItem('lol_highScore') || 0,
-            speed: 0,
-            maxSpeed: 0.8,
-            maxReverseSpeed: -0.2,
-            acceleration: 0.015,
-            deceleration: 0.008,
-            friction: 0.005,
-            steerSpeed: 0.04,
-            carRotation: 0,
-            boostActive: false,
-            boostTimer: 0
-        };
+        /**
+         * SANA Premium Cosmetics Ecosystem Engineering Core
+         * Fully procedural object structures, high-performance web analytics rendering data matrices.
+         */
 
-        document.getElementById('highScoreVal').innerText = game.highScore;
+        // --- CORE APPLICATION ARCHITECTURAL DATABASE (50 DEMO PRODUCTS MATRIX) ---
+        const SANA_PRODUCT_DATABASE = [];
+        const CORE_CATEGORIES = ['Lipsticks', 'Perfumes', 'Skincare', 'Foundations', 'Mascara', 'Palettes', 'Blushers', 'Highlighters', 'Serums', 'Toners'];
+        const HOUTURE_BRANDS = ['SANA Lab', 'Couture Prime', 'Aura Botanica', 'Onyx Parisian', 'Velasco Organics'];
 
-        // --- KEYBOARD CONTROLS ---
-        const keys = { w: false, a: false, s: false, d: false, ArrowUp: false, ArrowDown: false, ArrowLeft: false, ArrowRight: false };
-        window.addEventListener('keydown', (e) => { if (e.key in keys) keys[e.key] = true; });
-        window.addEventListener('keyup', (e) => { if (e.key in keys) keys[e.key] = false; });
-
-        // --- SETUP THREE.JS SCENE ---
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x0a0b10);
-        scene.fog = new THREE.FogExp2(0x0a0b10, 0.015);
-
-        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.shadowMap.enabled = true;
-        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-        document.body.appendChild(renderer.domElement);
-
-        // --- LIGHTING ---
-        const ambientLight = new THREE.AmbientLight(0x111122, 1.5);
-        scene.add(ambientLight);
-
-        const dirLight = new THREE.DirectionalLight(0xff0055, 1.5);
-        dirLight.position.set(50, 100, 50);
-        dirLight.castShadow = true;
-        dirLight.shadow.mapSize.width = 1024;
-        dirLight.shadow.mapSize.height = 1024;
-        scene.add(dirLight);
-
-        const pointLight = new THREE.PointLight(0x00ffff, 2, 100);
-        pointLight.position.set(0, 20, 0);
-        scene.add(pointLight);
-
-        // --- ENVIRONMENT: THE LOL FACTORY FLOOR ---
-        // Floor Grid Floor
-        const floorGeo = new THREE.PlaneGeometry(300, 300);
-        const floorMat = new THREE.MeshStandardMaterial({ 
-            color: 0x1a1c23, 
-            roughness: 0.8, 
-            metalness: 0.2 
-        });
-        const floor = new THREE.Mesh(floorGeo, floorMat);
-        floor.rotation.x = -Math.PI / 2;
-        floor.receiveShadow = true;
-        scene.add(floor);
-
-        // Add a factory grid helper to style the floor
-        const gridHelper = new THREE.GridHelper(300, 60, 0xef4444, 0x2d3748);
-        gridHelper.position.y = 0.01;
-        scene.add(gridHelper);
-
-        // --- FACTORY WALLS ---
-        const wallMat = new THREE.MeshStandardMaterial({ color: 0x0f1115 });
-        const wallGeo = new THREE.BoxGeometry(300, 20, 4);
-        
-        const walls = [];
-        const wallPositions = [
-            { x: 0, z: 150, rotY: 0 },
-            { x: 0, z: -150, rotY: 0 },
-            { x: 150, z: 0, rotY: Math.PI / 2 },
-            { x: -150, z: 0, rotY: Math.PI / 2 }
-        ];
-
-        wallPositions.forEach(pos => {
-            const wall = new THREE.Mesh(wallGeo, wallMat);
-            wall.position.set(pos.x, 10, pos.z);
-            wall.rotation.y = pos.rotY;
-            scene.add(wall);
-            walls.push(wall);
-        });
-
-        // --- THE PLAYER CAR (assembled from primitives) ---
-        const carGroup = new THREE.Group();
-        
-        // Body (Red chassis)
-        const bodyGeo = new THREE.BoxGeometry(2, 0.8, 4);
-        const bodyMat = new THREE.MeshStandardMaterial({ color: 0xef4444, metalness: 0.8, roughness: 0.2 });
-        const bodyMesh = new THREE.Mesh(bodyGeo, bodyMat);
-        bodyMesh.position.y = 0.6;
-        bodyMesh.castShadow = true;
-        carGroup.add(bodyMesh);
-
-        // Cabin (Glass/Top area)
-        const cabinGeo = new THREE.BoxGeometry(1.4, 0.6, 1.8);
-        const cabinMat = new THREE.MeshStandardMaterial({ color: 0x111111, metalness: 0.9, roughness: 0.1 });
-        const cabinMesh = new THREE.Mesh(cabinGeo, cabinMat);
-        cabinMesh.position.set(0, 1.1, -0.2);
-        cabinMesh.castShadow = true;
-        carGroup.add(cabinMesh);
-
-        // Spoiler
-        const spoilerGeo = new THREE.BoxGeometry(2.2, 0.1, 0.5);
-        const spoilerMesh = new THREE.Mesh(spoilerGeo, bodyMat);
-        spoilerMesh.position.set(0, 1.3, 1.8);
-        spoilerMesh.castShadow = true;
-        carGroup.add(spoilerMesh);
-
-        // Spoiler Mounts
-        const mountGeo = new THREE.BoxGeometry(0.1, 0.5, 0.1);
-        const m1 = new THREE.Mesh(mountGeo, bodyMat);
-        m1.position.set(0.8, 1.05, 1.8);
-        const m2 = m1.clone();
-        m2.position.x = -0.8;
-        carGroup.add(m1, m2);
-
-        // Wheels
-        const wheelGeo = new THREE.CylinderGeometry(0.5, 0.5, 0.4, 12);
-        const wheelMat = new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.9 });
-        wheelGeo.rotateZ(Math.PI / 2);
-
-        const wheels = [
-            { x: -1.1, y: 0.5, z: -1.2 },
-            { x: 1.1, y: 0.5, z: -1.2 },
-            { x: -1.1, y: 0.5, z: 1.2 },
-            { x: 1.1, y: 0.5, z: 1.2 }
-        ];
-
-        const wheelMeshes = [];
-        wheels.forEach(wPos => {
-            const wMesh = new THREE.Mesh(wheelGeo, wheelMat);
-            wMesh.position.set(wPos.x, wPos.y, wPos.z);
-            wMesh.castShadow = true;
-            carGroup.add(wMesh);
-            wheelMeshes.push(wMesh);
-        });
-
-        scene.add(carGroup);
-        carGroup.position.set(0, 0, 10);
-
-        // --- SPEED BOOST PADS ---
-        const boosts = [];
-        const boostGeo = new THREE.BoxGeometry(6, 0.1, 6);
-        const boostMat = new THREE.MeshStandardMaterial({ color: 0xeab308, emissive: 0xeab308, emissiveIntensity: 1 });
-
-        function createBoost(x, z) {
-            const bMesh = new THREE.Mesh(boostGeo, boostMat);
-            bMesh.position.set(x, 0.05, z);
-            scene.add(bMesh);
-            boosts.push(bMesh);
-        }
-        // Spawn scattered boosts
-        createBoost(-20, -30);
-        createBoost(30, 40);
-        createBoost(-40, 50);
-        createBoost(50, -50);
-        createBoost(0, -80);
-
-        // --- HAZARDS / OBSTACLES (Factory Boxes) ---
-        const obstacles = [];
-        const boxGeo = new THREE.BoxGeometry(4, 4, 4);
-        const boxMat = new THREE.MeshStandardMaterial({ color: 0x4b5563, roughness: 0.6 });
-
-        function createBox(x, z) {
-            const box = new THREE.Mesh(boxGeo, boxMat);
-            box.position.set(x, 2, z);
-            box.castShadow = true;
-            scene.add(box);
-            obstacles.push(box);
-        }
-
-        // Generate an obstacle maze layout
-        for(let i = 0; i < 25; i++) {
-            let rx = (Math.random() - 0.5) * 200;
-            let rz = (Math.random() - 0.5) * 200;
-            // Don't spawn right next to start
-            if (Math.abs(rx) > 10 || Math.abs(rz - 10) > 10) {
-                createBox(rx, rz);
-            }
-        }
-
-        // --- PROCEDURAL BACKGROUND MACHINERY ---
-        for (let i = 0; i < 8; i++) {
-            const pillarGeo = new THREE.CylinderGeometry(2, 2, 40, 8);
-            const pillarMat = new THREE.MeshStandardMaterial({ color: 0x1f2937, metalness: 0.8 });
-            const pillar = new THREE.Mesh(pillarGeo, pillarMat);
-            pillar.position.set((Math.random() - 0.5) * 280, 20, (Math.random() - 0.5) * 280);
-            scene.add(pillar);
-        }
-
-        // --- COLLISION LOGIC ---
-        function checkCollision(box1, box2, width1, length1, width2, length2) {
-            return Math.abs(box1.position.x - box2.position.x) < (width1 + width2) / 2 &&
-                   Math.abs(box1.position.z - box2.position.z) < (length1 + length2) / 2;
-        }
-
-        // --- GAME LOOP ---
-        const clock = new THREE.Clock();
-
-        function animate() {
-            requestAnimationFrame(animate);
-            const delta = clock.getDelta();
-
-            // Handle Input & Physics
-            const isAcc = keys.w || keys.ArrowUp;
-            const isDec = keys.s || keys.ArrowDown;
-            const isLeft = keys.a || keys.ArrowLeft;
-            const isRight = keys.d || keys.ArrowRight;
-
-            // Speed Boost cooldown/timer
-            if (game.boostActive) {
-                game.boostTimer -= delta;
-                if (game.boostTimer <= 0) {
-                    game.boostActive = false;
-                    game.maxSpeed = 0.8;
-                }
-            }
-
-            // Forward / Backward Acceleration
-            if (isAcc) {
-                game.speed += game.acceleration;
-                if (game.speed > game.maxSpeed) game.speed = game.maxSpeed;
-            } else if (isDec) {
-                game.speed -= game.acceleration;
-                if (game.speed < game.maxReverseSpeed) game.speed = game.maxReverseSpeed;
-            } else {
-                // Apply friction
-                if (game.speed > 0) {
-                    game.speed -= game.friction;
-                    if (game.speed < 0) game.speed = 0;
-                } else if (game.speed < 0) {
-                    game.speed += game.friction;
-                    if (game.speed > 0) game.speed = 0;
-                }
-            }
-
-            // Steering (Only turns while moving)
-            if (Math.abs(game.speed) > 0.05) {
-                const dir = game.speed > 0 ? 1 : -1;
-                if (isLeft) game.carRotation += game.steerSpeed * dir;
-                if (isRight) game.carRotation -= game.steerSpeed * dir;
-            }
-
-            // Spin wheels based on movement
-            wheelMeshes.forEach(wheel => {
-                wheel.rotation.x -= game.speed;
-            });
-
-            // Update Car Position
-            carGroup.rotation.y = game.carRotation;
+        // Programmatic Generator Matrix ensuring 50 distinct highly configured production mock products
+        (function generateComplexMockProducts() {
+            const productSeedPrefixes = ['Rouge', 'Alchemic', 'Luminous', 'Hydra', 'Sovereign', 'Velvet', 'Celestial', 'Imperial', 'Absolute', 'Orphic'];
+            const productSeedSuffixes = ['Elixir', 'Nectar', 'Plumper', 'Satin Polish', 'Matte Emulsion', 'Glow Prism', 'Infusion Matrix', 'Sculpt Core', 'Mist Aura', 'Silk Serum'];
             
-            // Temporary storage of old position in case of collision
-            const oldPos = carGroup.position.clone();
+            for(let i = 1; i <= 50; i++) {
+                const categoryIdx = i % CORE_CATEGORIES.length;
+                const brandIdx = i % HOUTURE_BRANDS.length;
+                const pref = productSeedPrefixes[i % productSeedPrefixes.length];
+                const suff = productSeedSuffixes[i % productSeedSuffixes.length];
+                
+                const basePrice = Math.floor(45 + (i * 4.8) % 220);
+                const discountRate = (i % 4 === 0) ? 0.20 : 0;
+                const oldPrice = discountRate > 0 ? Math.floor(basePrice / (1 - discountRate)) : null;
+                
+                SANA_PRODUCT_DATABASE.push({
+                    id: `SANA-PROD-${1000 + i}`,
+                    name: `${pref} ${suff} No. ${i}`,
+                    category: CORE_CATEGORIES[categoryIdx],
+                    brand: HOUTURE_BRANDS[brandIdx],
+                    description: `An elite, laboratory certified execution utilizing structured molecular delivery arrays for optimal skin alignment longevity.`,
+                    price: basePrice,
+                    oldPrice: oldPrice,
+                    discount: discountRate > 0 ? '20% OFF' : null,
+                    rating: (4.2 + (i % 9) * 0.1).toFixed(1),
+                    reviewsCount: 14 + (i * 7) % 340,
+                    stock: 5 + (i * 3) % 45,
+                    iconType: categoryIdx % 3 === 0 ? 'fa-lipstick' : (categoryIdx % 3 === 1 ? 'fa-bottle-droplet' : 'fa-spray-can-sparkles')
+                });
+            }
+        })();
 
-            carGroup.position.x -= Math.sin(game.carRotation) * game.speed;
-            carGroup.position.z -= Math.cos(game.carRotation) * game.speed;
-
-            // --- BORDERS & COLLISION RESOLUTION ---
-            // Outer wall bounds
-            if (Math.abs(carGroup.position.x) > 146 || Math.abs(carGroup.position.z) > 146) {
-                carGroup.position.copy(oldPos);
-                game.speed = -game.speed * 0.4; // Bounce backward slightly
+        // --- THREE.JS ADVANCED INTERACTIVE 3D WEBGL GRAPHICS MODULE ---
+        class WebGLEngine {
+            constructor() {
+                this.container = document.getElementById('webgl-canvas-container');
+                if(!this.container) return;
+                this.initEngine();
+                this.generateLuxuryProceduralGeometry();
+                this.hookInputListeners();
+                this.runLoop();
             }
 
-            // Obstacle Collisions
-            obstacles.forEach(obs => {
-                if (checkCollision(carGroup, obs, 2.2, 4.2, 4, 4)) {
-                    // Collision occurred! Bounce back
-                    carGroup.position.copy(oldPos);
-                    game.speed = -game.speed * 0.5;
-                    // Flash screen or decrease score
-                    game.score = Math.max(0, game.score - 50);
-                }
-            });
+            initEngine() {
+                this.scene = new THREE.Scene();
+                // Match luxury dark background parameters inside WebGL buffer clearing metrics
+                this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+                this.camera.position.z = 6;
+                
+                this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                this.renderer.setSize(window.innerWidth, window.innerHeight);
+                this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+                this.renderer.shadowMap.enabled = true;
+                this.container.appendChild(this.renderer.domElement);
 
-            // Boost Pad Overlap Checks
-            boosts.forEach(boost => {
-                if (checkCollision(carGroup, boost, 2.2, 4.2, 6, 6)) {
-                    if (!game.boostActive) {
-                        game.boostActive = true;
-                        game.boostTimer = 1.5; // boost duration
-                        game.maxSpeed = 1.6; // double speed cap
-                        game.speed = 1.6;
-                        game.score += 200; // bonus points
-                    }
-                }
-            });
+                // Luxury Lighting Configurations Array Mapping
+                const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+                this.scene.add(ambientLight);
 
-            // Dynamic camera trail following behind the car
-            const targetCamOffset = new THREE.Vector3(
-                Math.sin(game.carRotation) * 12,
-                6,
-                Math.cos(game.carRotation) * 12
-            );
-            const targetCamPos = carGroup.position.clone().add(targetCamOffset);
-            camera.position.lerp(targetCamPos, 0.1);
-            camera.lookAt(carGroup.position);
+                const directionalHeroLight = new THREE.DirectionalLight(0xfae1dd, 1.2);
+                directionalHeroLight.position.set(5, 8, 5);
+                this.scene.add(directionalHeroLight);
 
-            // Increment simple survival/driving score
-            if (Math.abs(game.speed) > 0.1) {
-                game.score += Math.round(Math.abs(game.speed) * 2);
+                const secondaryRimLight = new THREE.DirectionalLight(0xd4a373, 0.8);
+                secondaryRimLight.position.set(-5, -3, -2);
+                this.scene.add(secondaryRimLight);
+
+                this.pivotGroup = new THREE.Group();
+                this.scene.add(this.pivotGroup);
+                
+                this.mouseTargetX = 0;
+                this.mouseTargetY = 0;
             }
 
-            // Keep high score saved
-            if (game.score > game.highScore) {
-                game.highScore = game.score;
-                localStorage.setItem('lol_highScore', game.highScore);
-                document.getElementById('highScoreVal').innerText = game.highScore;
+            generateLuxuryProceduralGeometry() {
+                // Construct geometric physical structures representing abstract perfume glass/lipstick containers
+                this.productMeshes = [];
+                
+                // Object 1: High Luxury Glass Perfume Flacon
+                const glassMat = new THREE.MeshStandardMaterial({
+                    color: 0xd4a373, roughness: 0.1, metalness: 0.9,
+                    transparent: true, opacity: 0.85, wireframe: false
+                });
+                const perfumeCoreGeo = new THREE.CylinderGeometry(0.8, 0.8, 1.8, 8);
+                const flaconMesh = new THREE.Mesh(perfumeCoreGeo, glassMat);
+                flaconMesh.position.set(2, 0.5, 0);
+                this.pivotGroup.add(flaconMesh);
+                this.productMeshes.push(flaconMesh);
+
+                // Object 2: Precious Gold Core SANA Structural Lipstick Tube
+                const goldCoutureMat = new THREE.MeshStandardMaterial({
+                    color: 0x111115, roughness: 0.2, metalness: 0.8
+                });
+                const innerGoldMat = new THREE.MeshStandardMaterial({
+                    color: 0xd4a373, roughness: 0.05, metalness: 0.95
+                });
+                const crimsonLipstickMat = new THREE.MeshStandardMaterial({
+                    color: 0x9e0019, roughness: 0.4, metalness: 0.1
+                });
+
+                const lipstickBaseGroup = new THREE.Group();
+                
+                const baseCylinder = new THREE.Mesh(new THREE.CylinderGeometry(0.4, 0.4, 1.2, 32), goldCoutureMat);
+                lipstickBaseGroup.add(baseCylinder);
+                
+                const innerChamber = new THREE.Mesh(new THREE.CylinderGeometry(0.35, 0.35, 0.6, 32), innerGoldMat);
+                innerChamber.position.y = 0.6;
+                lipstickBaseGroup.add(innerChamber);
+
+                const lipstickBullet = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.3, 0.5, 32), crimsonLipstickMat);
+                lipstickBullet.position.y = 0.9;
+                lipstickBullet.rotation.x = 0.2; // Sliced tip look
+                lipstickBaseGroup.add(lipstickBullet);
+
+                lipstickBaseGroup.position.set(-2, -0.5, 1);
+                this.pivotGroup.add(lipstickBaseGroup);
+                this.productMeshes.push(lipstickBaseGroup);
             }
 
-            // Update UI HUD values
-            document.getElementById('scoreVal').innerText = game.score;
-            const displaySpeed = Math.round(Math.abs(game.speed) * 180);
-            document.getElementById('speedVal').innerText = displaySpeed;
-            document.getElementById('speedBar').style.width = `${Math.min(100, (displaySpeed / 288) * 100)}%`;
+            hookInputListeners() {
+                window.addEventListener('mousemove', (e) => {
+                    this.mouseTargetX = (e.clientX / window.innerWidth) * 2 - 1;
+                    this.mouseTargetY = -(e.clientY / window.innerHeight) * 2 + 1;
+                });
 
-            renderer.render(scene, camera);
+                window.addEventListener('resize', () => {
+                    this.camera.aspect = window.innerWidth / window.innerHeight;
+                    this.camera.updateProjectionMatrix();
+                    this.renderer.setSize(window.innerWidth, window.innerHeight);
+                });
+            }
+
+            runLoop() {
+                const clock = new THREE.Clock();
+                
+                const animate = () => {
+                    requestAnimationFrame(animate);
+                    const elapsed = clock.getElapsedTime();
+
+                    // Natural Floating Physics Oscillations Loop
+                    this.productMeshes.forEach((mesh, index) => {
+                        mesh.rotation.y += 0.008 * (index + 1);
+                        mesh.position.y += Math.sin(elapsed + index * 10) * 0.003;
+                    });
+
+                    // Smooth Camera Tracker Trajectory Metrics
+                    this.pivotGroup.rotation.y += (this.mouseTargetX * 0.4 - this.pivotGroup.rotation.y) * 0.05;
+                    this.pivotGroup.rotation.x += (this.mouseTargetY * 0.3 - this.pivotGroup.rotation.x) * 0.05;
+
+                    this.renderer.render(this.scene, this.camera);
+                };
+                animate();
+            }
         }
 
-        // --- RESET BUTTON FUNCTIONALITY ---
-        document.getElementById('resetBtn').addEventListener('click', () => {
-            carGroup.position.set(0, 0, 10);
-            carGroup.rotation.set(0, 0, 0);
-            game.speed = 0;
-            game.carRotation = 0;
-            game.score = 0;
+        // --- TRANSACTION STATE AND SYSTEMS CONTROL LOGIC (CART/WISHLIST) ---
+        class TransactionCartSystem {
+            constructor() {
+                this.cartRegistry = [];
+                this.wishlistRegistry = [];
+                this.freightShippingCost = 15;
+            }
+
+            addItemToBag(productId) {
+                const matchedItem = SANA_PRODUCT_DATABASE.find(p => p.id === productId);
+                if(!matchedItem) return;
+
+                const trackingInstance = this.cartRegistry.find(item => item.product.id === productId);
+                if(trackingInstance) {
+                    trackingInstance.quantity++;
+                } else {
+                    this.cartRegistry.push({ product: matchedItem, quantity: 1 });
+                }
+
+                uiEngine.showToast(`${matchedItem.name} secure allocated into shopping bag loop.`);
+                this.recomputeTotals();
+            }
+
+            removeQuantityOrItem(productId) {
+                const trackingIdx = this.cartRegistry.findIndex(item => item.product.id === productId);
+                if(trackingIdx === -1) return;
+
+                this.cartRegistry[trackingIdx].quantity--;
+                if(this.cartRegistry[trackingIdx].quantity <= 0) {
+                    this.cartRegistry.splice(trackingIdx, 1);
+                }
+                this.recomputeTotals();
+            }
+
+            toggleWishlistAllocation(productId) {
+                const matchedItem = SANA_PRODUCT_DATABASE.find(p => p.id === productId);
+                const trackingIdx = this.wishlistRegistry.findIndex(p => p.id === productId);
+
+                if(trackingIdx > -1) {
+                    this.wishlistRegistry.splice(trackingIdx, 1);
+                    uiEngine.showToast(`Item dropped from wishlist tracking ledger.`);
+                } else {
+                    this.wishlistRegistry.push(matchedItem);
+                    uiEngine.showToast(`Item successfully bound into private wishlist registry.`);
+                }
+                this.recomputeTotals();
+            }
+
+            recomputeTotals() {
+                let absoluteSubtotal = 0;
+                let activeItemsCounter = 0;
+
+                this.cartRegistry.forEach(entry => {
+                    absoluteSubtotal += (entry.product.price * entry.quantity);
+                    activeItemsCounter += entry.quantity;
+                });
+
+                const computedGrandTotal = absoluteSubtotal > 0 ? (absoluteSubtotal + this.freightShippingCost) : 0;
+
+                // Bind UI Displays
+                document.getElementById('cart-count-badge').innerText = activeItemsCounter;
+                document.getElementById('wishlist-count-badge').innerText = this.wishlistRegistry.length;
+                document.getElementById('cart-subtotal-val').innerText = `$${absoluteSubtotal.toFixed(2)}`;
+                document.getElementById('cart-grandtotal-val').innerText = `$${computedGrandTotal.toFixed(2)}`;
+
+                this.renderCartDrawerStream();
+                this.renderWishlistDrawerStream();
+            }
+
+            renderCartDrawerStream() {
+                const targetStreamDom = document.getElementById('cart-items-stream');
+                if(!targetStreamDom) return;
+
+                if(this.cartRegistry.length === 0) {
+                    targetStreamDom.innerHTML = `<p style="opacity:0.4; text-align:center; margin-top:40px;">Shopping container empty.</p>`;
+                    return;
+                }
+
+                targetStreamDom.innerHTML = this.cartRegistry.map(entry => `
+                    <div class="cart-luxury-item">
+                        <div class="cart-item-img"><i class="fa-solid ${entry.product.iconType}"></i></div>
+                        <div class="cart-item-details">
+                            <div class="cart-item-name">${entry.product.name}</div>
+                            <div class="cart-item-price">$${entry.product.price}</div>
+                            <div class="quantity-controller">
+                                <button class="qty-btn" onclick="cartSystem.removeQuantityOrItem('${entry.product.id}')">-</button>
+                                <span>${entry.quantity}</span>
+                                <button class="qty-btn" onclick="cartSystem.addItemToBag('${entry.product.id}')">+</button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            renderWishlistDrawerStream() {
+                const targetStreamDom = document.getElementById('wishlist-items-stream');
+                if(!targetStreamDom) return;
+
+                if(this.wishlistRegistry.length === 0) {
+                    targetStreamDom.innerHTML = `<p style="opacity:0.4; text-align:center; margin-top:40px;">Wishlist empty.</p>`;
+                    return;
+                }
+
+                targetStreamDom.innerHTML = this.wishlistRegistry.map(product => `
+                    <div class="cart-luxury-item">
+                        <div class="cart-item-img"><i class="fa-solid ${product.iconType}"></i></div>
+                        <div class="cart-item-details">
+                            <div class="cart-item-name">${product.name}</div>
+                            <div class="cart-item-price">$${product.price}</div>
+                            <button class="btn-luxury" style="padding: 5px 10px; font-size:0.65rem; margin-top:5px;" onclick="cartSystem.addItemToBag('${product.id}')">Transfer to Bag</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // --- CATALOG DATA DISPATCH & RENDERING FILTER ENGINE ---
+        class SANAProductCatalogEngine {
+            constructor() {
+                this.activeCategoryFilter = null;
+                this.activeBrandFilter = null;
+                this.activeMaxPriceBound = 300;
+                this.activeSearchString = '';
+                this.activeSortMode = 'popular';
+            }
+
+            initCatalogMounts() {
+                this.renderFilteringOptionsLayout();
+                this.executeHydrationPipeline();
+            }
+
+            renderFilteringOptionsLayout() {
+                const catContainer = document.getElementById('category-filter-list');
+                const brandContainer = document.getElementById('brand-filter-list');
+
+                catContainer.innerHTML = `<li class="filter-item active" id="cat-all-node" onclick="catalogEngine.filterCategory(null)">All Categories</li>` +
+                    CORE_CATEGORIES.map(cat => `<li class="filter-item" onclick="catalogEngine.filterCategory('${cat}', this)">${cat}</li>`).join('');
+
+                brandContainer.innerHTML = `<li class="filter-item active" id="brand-all-node" onclick="catalogEngine.filterBrand(null)">All Brands</li>` +
+                    HOUTURE_BRANDS.map(brand => `<li class="filter-item" onclick="catalogEngine.filterBrand('${brand}', this)">${brand}</li>`).join('');
+            }
+
+            filterCategory(cat, element) {
+                this.activeCategoryFilter = cat;
+                this.updateActiveFilterUIElement(element, 'category-filter-list');
+                this.executeHydrationPipeline();
+            }
+
+            filterBrand(brand, element) {
+                this.activeBrandFilter = brand;
+                this.updateActiveFilterUIElement(element, 'brand-filter-list');
+                this.executeHydrationPipeline();
+            }
+
+            updateActiveFilterUIElement(element, parentId) {
+                const items = document.querySelectorAll(`#${parentId} .filter-item`);
+                items.forEach(i => i.classList.remove('active'));
+                if(element) element.classList.add('active');
+                else {
+                    document.getElementById(parentId === 'category-filter-list' ? 'cat-all-node' : 'brand-all-node').classList.add('active');
+                }
+            }
+
+            handleSearch(event) {
+                this.activeSearchString = event.target.value.toLowerCase();
+                this.executeHydrationPipeline();
+            }
+
+            handlePriceSlider(event) {
+                this.activeMaxPriceBound = parseInt(event.target.value);
+                document.getElementById('slider-max-display').innerText = `$${this.activeMaxPriceBound}`;
+                this.executeHydrationPipeline();
+            }
+
+            handleSort(event) {
+                this.activeSortMode = event.target.value;
+                this.executeHydrationPipeline();
+            }
+
+            resetFilters() {
+                this.activeCategoryFilter = null;
+                this.activeBrandFilter = null;
+                this.activeMaxPriceBound = 300;
+                this.activeSearchString = '';
+                document.getElementById('catalog-search-field').value = '';
+                document.getElementById('price-range-slider').value = 300;
+                document.getElementById('slider-max-display').innerText = '$300';
+                this.updateActiveFilterUIElement(null, 'category-filter-list');
+                this.updateActiveFilterUIElement(null, 'brand-filter-list');
+                this.executeHydrationPipeline();
+            }
+
+            executeHydrationPipeline() {
+                const displayGrid = document.getElementById('product-hydration-grid');
+                if(!displayGrid) return;
+
+                // Core Filtering Matrix Computation
+                let processedDataset = SANA_PRODUCT_DATABASE.filter(product => {
+                    const matchesCategory = !this.activeCategoryFilter || product.category === this.activeCategoryFilter;
+                    const matchesBrand = !this.activeBrandFilter || product.brand === this.activeBrandFilter;
+                    const matchesPrice = product.price <= this.activeMaxPriceBound;
+                    const matchesSearch = !this.activeSearchString || product.name.toLowerCase().includes(this.activeSearchString);
+                    return matchesCategory && matchesBrand && matchesPrice && matchesSearch;
+                });
+
+                // Sorting Processing Implementation Array Block
+                if(this.activeSortMode === 'low-high') processedDataset.sort((a,b) => a.price - b.price);
+                else if(this.activeSortMode === 'high-low') processedDataset.sort((a,b) => b.price - a.price);
+                else if(this.activeSortMode === 'rating') processedDataset.sort((a,b) => b.rating - a.rating);
+
+                document.getElementById('catalog-counter-display').innerText = `Displaying ${processedDataset.length} premium architecture instances`;
+
+                if(processedDataset.length === 0) {
+                    displayGrid.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding: 60px 0; opacity:0.5;">No products match specified architectural parameters.</div>`;
+                    return;
+                }
+
+                displayGrid.innerHTML = processedDataset.map(product => `
+                    <div class="luxury-card" id="card-${product.id}" onmousemove="uiEngine.handleCardTilt(event, this)" onmouseleave="uiEngine.resetCardTilt(this)">
+                        <div class="card-visuals">
+                            <i class="fa-solid ${product.iconType} card-vector-fallback"></i>
+                            <div class="card-badges">
+                                ${product.oldPrice ? `<span class="badge-discount">${product.discount}</span>` : ''}
+                            </div>
+                            <div class="card-actions-overlay">
+                                <button class="circle-action-btn" title="Quick Architecture View" onclick="uiEngine.openQuickView('${product.id}')"><i class="fa-solid fa-eye"></i></button>
+                                <button class="circle-action-btn" title="Bag Retention Allocation" onclick="cartSystem.addItemToBag('${product.id}')"><i class="fa-solid fa-bag-shopping"></i></button>
+                                <button class="circle-action-btn" title="Wishlist Ledger Pin" onclick="cartSystem.toggleWishlistAllocation('${product.id}')"><i class="fa-solid fa-heart"></i></button>
+                            </div>
+                        </div>
+                        <div class="card-info">
+                            <div class="card-category">${product.brand} • ${product.category}</div>
+                            <h4 class="card-title">${product.name}</h4>
+                            <div class="card-rating">
+                                <i class="fa-solid fa-star"></i> ${product.rating} <span>(${product.reviewsCount} reviews)</span>
+                            </div>
+                            <div class="card-price-matrix">
+                                <span class="current-price">$${product.price}.00</span>
+                                ${product.oldPrice ? `<span class="old-price">$${product.oldPrice}.00</span>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // --- GLOBAL INTERACTIVE INTERFACE UI COORDINATOR ---
+        class LuxuryUIPlatformEngine {
+            constructor() {
+                this.hookPlatformGlobalAnimationTriggers();
+            }
+
+            hookPlatformGlobalAnimationTriggers() {
+                // Tracking Vector Laser Custom Cursor Engine Loop
+                window.addEventListener('mousemove', (e) => {
+                    gsap.to('#custom-cursor', { x: e.clientX, y: e.clientY, duration: 0.05 });
+                    gsap.to('#custom-cursor-blur', { x: e.clientX, y: e.clientY, duration: 0.15 });
+                });
+
+                // Launch Platform Simulation Post Simulated Resource Pipeline Load Out
+                window.addEventListener('DOMContentLoaded', () => {
+                    setTimeout(() => {
+                        gsap.to('#load-progress-bar', { width: '100%', duration: 0.8, onComplete: () => {
+                            gsap.to('#luxury-loader', { opacity: 0, duration: 0.5, onComplete: () => {
+                                document.getElementById('luxury-loader').style.display = 'none';
+                                this.triggerScrollRevealHeroSequence();
+                            }});
+                        }});
+                    }, 500);
+                });
+
+                // Setup Core Promo Countdown Driver
+                this.runSaleTimerCountdownModule();
+            }
+
+            triggerScrollRevealHeroSequence() {
+                gsap.from('.hero-title', { opacity:0, y: 50, duration: 1, delay: 0.2, ease: 'power4.out' });
+                gsap.from('.hero-subtitle', { opacity:0, y: 30, duration: 1, delay: 0.5, ease: 'power4.out' });
+                gsap.from('.btn-luxury', { opacity:0, scale: 0.9, duration: 0.8, delay: 0.7, ease: 'back.out(1.7)' });
+            }
+
+            handleCardTilt(e, card) {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const xc = rect.width / 2;
+                const yc = rect.height / 2;
+                const angleX = (yc - y) / 12;
+                const angleY = (x - xc) / 12;
+                card.style.transform = `rotateX(${angleX}deg) rotateY(${angleY}deg) translateY(-5px)`;
+            }
+
+            resetCardTilt(card) {
+                card.style.transform = `rotateX(0deg) rotateY(0deg) translateY(0px)`;
+            }
+
+            toggleTheme() {
+                document.body.classList.toggle('light-theme');
+                const isLight = document.body.classList.contains('light-theme');
+                document.getElementById('theme-toggle-btn').className = isLight ? "fa-solid fa-sun action-icon" : "fa-solid fa-moon action-icon";
+                this.showToast(`Ecosystem visual theme altered to luxury ${isLight ? 'light' : 'dark'} variant mapping.`);
+            }
+
+            toggleCartPanel() { document.getElementById('cart-drawer-panel').classList.toggle('active'); this.toggleScrimDisplay(); }
+            toggleWishlistPanel() { document.getElementById('wishlist-drawer-panel').classList.toggle('active'); this.toggleScrimDisplay(); }
+            toggleProfilePanel() { document.getElementById('profile-drawer-panel').classList.toggle('active'); this.toggleScrimDisplay(); }
+            toggleAdminPanel() { 
+                const panel = document.getElementById('admin-panel-overlay');
+                panel.classList.toggle('active');
+                this.toggleScrimDisplay();
+                
+                // Pre-fill Admin Selection Dropdown with runtime options
+                const dropdown = document.getElementById('admin-product-select');
+                if(dropdown.options.length === 0) {
+                    dropdown.innerHTML = SANA_PRODUCT_DATABASE.slice(0, 15).map(p => `<option value="${p.id}">${p.name}</option>`).join('');
+                }
+            }
+
+            toggleScrimDisplay() {
+                const scrim = document.getElementById('global-scrim');
+                const visible = document.querySelectorAll('.slide-panel.active, .checkout-wizard-panel.active').length > 0;
+                scrim.style.display = visible ? 'block' : 'none';
+            }
+
+            openQuickView(productId) {
+                const targetProduct = SANA_PRODUCT_DATABASE.find(p => p.id === productId);
+                if(!targetProduct) return;
+
+                document.getElementById('qv-product-name').innerText = targetProduct.name;
+                document.getElementById('qv-product-desc').innerText = `Architectural formulation series belonging to the brand group ${targetProduct.brand}. This line guarantees up to 24-hour structural skin persistence while defending cellular hydration metrics via organic lipolysis containment loops.`;
+                document.getElementById('qv-product-price').innerText = `$${targetProduct.price}.00`;
+                document.getElementById('qv-img-holder').innerHTML = `<i class="fa-solid ${targetProduct.iconType}" style="font-size:6rem; color:var(--primary);"></i>`;
+                
+                const btn = document.getElementById('qv-add-cart-btn');
+                btn.onclick = () => { cartSystem.addItemToBag(productId); this.closeQuickView(); };
+
+                document.getElementById('quickview-modal-overlay').classList.add('active');
+                this.toggleScrimDisplay();
+            }
+
+            closeQuickView() {
+                document.getElementById('quickview-modal-overlay').classList.remove('active');
+                this.toggleScrimDisplay();
+            }
+
+            runSaleTimerCountdownModule() {
+                let initialSeconds = 9800; // Simulated Dynamic Baseline Ticker Interval
+                const displayNode = document.getElementById('live-countdown-clock');
+                
+                setInterval(() => {
+                    initialSeconds--;
+                    if(initialSeconds <= 0) initialSeconds = 9800;
+                    
+                    const hours = Math.floor(initialSeconds / 3600);
+                    const minutes = Math.floor((initialSeconds % 3600) / 60);
+                    const seconds = initialSeconds % 60;
+
+                    displayNode.innerHTML = `
+                        <div class="digit-group">${hours < 10 ? '0'+hours : hours} <span class="days">HR</span></div>:
+                        <div class="digit-group">${minutes < 10 ? '0'+minutes : minutes} <span class="days">MIN</span></div>:
+                        <div class="digit-group">${seconds < 10 ? '0'+seconds : seconds} <span class="days">SEC</span></div>
+                    `;
+                }, 1000);
+            }
+
+            showToast(message) {
+                // High performance transient notifications architecture
+                const toastNode = document.createElement('div');
+                toastNode.style.position = 'fixed';
+                toastNode.style.bottom = '40px';
+                toastNode.style.left = '40px';
+                toastNode.style.background = 'var(--primary)';
+                toastNode.style.color = '#000';
+                toastNode.style.padding = '15px 25px';
+                toastNode.style.borderRadius = '4px';
+                toastNode.style.zIndex = '5000';
+                toastNode.style.fontSize = '0.85rem';
+                toastNode.style.fontWeight = '500';
+                toastNode.style.boxShadow = 'var(--glow)';
+                toastNode.innerText = message;
+
+                document.body.appendChild(toastNode);
+                gsap.from(toastNode, { transform: 'translateY(20px)', opacity:0, duration:0.3 });
+                gsap.to(toastNode, { opacity: 0, delay: 3, duration: 0.4, onComplete: () => toastNode.remove() });
+            }
+        }
+
+        // --- CHECKOUT ROUTING TRANSIT WIZARD ENGINE ---
+        class CheckoutWizardEngine {
+            constructor() {
+                this.currentStep = 1;
+                this.paymentMethod = 'cc';
+            }
+
+            launchWizard() {
+                if(cartSystem.cartRegistry.length === 0) {
+                    uiEngine.showToast("Your shopping repository must possess allocation weight prior to executing checkout clear.");
+                    return;
+                }
+                uiEngine.toggleCartPanel(); // Close drawer layout
+                this.currentStep = 1;
+                this.navigate(1);
+                document.getElementById('checkout-wizard-modal').classList.add('active');
+                uiEngine.toggleScrimDisplay();
+            }
+
+            closeWizard(clearCart = false) {
+                document.getElementById('checkout-wizard-modal').classList.remove('active');
+                uiEngine.toggleScrimDisplay();
+                if(clearCart) {
+                    cartSystem.cartRegistry = [];
+                    cartSystem.recomputeTotals();
+                }
+            }
+
+            navigate(stepTarget) {
+                document.querySelectorAll('.wizard-step').forEach(stepNode => stepNode.classList.remove('active'));
+                document.getElementById(`wizard-step-${stepTarget}`).classList.add('active');
+                this.currentStep = stepTarget;
+            }
+
+            setPaymentMethod(methodKey) {
+                this.paymentMethod = methodKey;
+                document.querySelectorAll('.pay-option').forEach(opt => opt.classList.remove('active'));
+                event.currentTarget.classList.add('active');
+                
+                const cardSubDock = document.getElementById('credit-card-form-subdock');
+                cardSubDock.style.display = (methodKey === 'cc') ? 'block' : 'none';
+            }
+        }
+
+        // --- AUTH PROTOCOL EMULATION DRIVER ---
+        class AuthenticationSystemEngine {
+            mockLogin() {
+                const emailVal = document.getElementById('auth-email-input').value;
+                if(!emailVal) return;
+                document.getElementById('auth-logged-out-state').style.display = 'none';
+                document.getElementById('auth-logged-in-state').style.display = 'block';
+                uiEngine.showToast(`Session key authorized for identity sequence profile.`);
+            }
+            logout() {
+                document.getElementById('auth-logged-in-state').style.display = 'none';
+                document.getElementById('auth-logged-out-state').style.display = 'block';
+                uiEngine.showToast(`Session cryptographic authentication trace detached.`);
+            }
+        }
+
+        // --- CONCIERGE INTERACTIVE COMPANION AUTOMATION (AI CHAT MODAL) ---
+        class AIBeautyCompanionEngine {
+            toggleWindow() {
+                const chatWin = document.getElementById('ai-chat-window');
+                chatWin.style.display = (chatWin.style.display === 'none' || !chatWin.style.display) ? 'flex' : 'none';
+            }
+
+            transmitMessage() {
+                const inputNode = document.getElementById('ai-user-query-input');
+                const msgStream = document.getElementById('ai-messages-wrapper');
+                if(!inputNode.value.trim()) return;
+
+                const queryText = inputNode.value;
+                const userBubble = document.createElement('div');
+                userBubble.className = "msg-bubble user";
+                userBubble.innerText = queryText;
+                msgStream.appendChild(userBubble);
+                inputNode.value = '';
+
+                msgStream.scrollTop = msgStream.scrollHeight;
+
+                // Synthesize AI Alchemical Beauty Assistant Responses
+                setTimeout(() => {
+                    const responseBubble = document.createElement('div');
+                    responseBubble.className = "msg-bubble system";
+                    responseBubble.innerText = this.computeAlgorithmicConciergeOutput(queryText);
+                    msgStream.appendChild(responseBubble);
+                    msgStream.scrollTop = msgStream.scrollHeight;
+                }, 600);
+            }
+
+            computeAlgorithmicConciergeOutput(query) {
+                const normalisedStr = query.toLowerCase();
+                if(normalisedStr.includes('lipstick') || normalisedStr.includes('matte')) {
+                    return "Our Crimson Velvet Lipsticks utilize a specialized cross-polymer mesh array providing intense non-migrating saturation for up to 18 hours.";
+                }
+                if(normalisedStr.includes('discount') || normalisedStr.includes('price')) {
+                    return "The luxury core system is actively projecting a 20% validation off selected items via our seasonal Flash Couture array panel.";
+                }
+                if(normalisedStr.includes('skin') || normalisedStr.includes('oil')) {
+                    return "SANA molecular regeneration serums contain cold-pressed lipids engineered to reconstruct barrier functionality within 7 cycles of target deployment.";
+                }
+                return "Fascinating query vector. SANA lab configurations recommend consulting our premier catalog system index vectors to evaluate chemical compatibility matches.";
+            }
+        }
+
+        // --- ADMIN SYSTEM DATA MANAGEMENT MUTATION CONTROLLER ---
+        class AdminDataSystemController {
+            executePriceMutation() {
+                const targetProductId = document.getElementById('admin-product-select').value;
+                const targetNewPrice = parseFloat(document.getElementById('admin-new-price').value);
+
+                if(!targetProductId || isNaN(targetNewPrice)) return;
+
+                const targetIdx = SANA_PRODUCT_DATABASE.findIndex(p => p.id === targetProductId);
+                if(targetIdx > -1) {
+                    SANA_PRODUCT_DATABASE[targetIdx].price = targetNewPrice;
+                    // Force refresh grid viewports instantly
+                    catalogEngine.executeHydrationPipeline();
+                    uiEngine.showToast(`Administrative Live Data Mutation Matrix Overrode price to $${targetNewPrice} for target ${targetProductId}.`);
+                    
+                    // Increment administrative gross mock valuation displays inside control nodes
+                    document.getElementById('admin-revenue-val').innerText = `$${142530 + targetNewPrice}`;
+                }
+            }
+        }
+
+        // --- MASTER INITIALIZATION ENTRY POINT BOOTSTRAPPER ---
+        const uiEngine = new LuxuryUIPlatformEngine();
+        const webglEngine = new WebGLEngine();
+        const cartSystem = new TransactionCartSystem();
+        const catalogEngine = new SANAProductCatalogEngine();
+        const checkoutWizard = new CheckoutWizardEngine();
+        const authEngine = new AuthenticationSystemEngine();
+        const aiCompanionEngine = new AIBeautyCompanionEngine();
+        const adminSystem = new AdminDataSystemController();
+
+        // Hydrate and fire initial grid layers
+        catalogEngine.initCatalogMounts();
+        cartSystem.recomputeTotals();
+
+        // Attach close event handlers onto global screen masking scrim infrastructure
+        document.getElementById('global-scrim').addEventListener('click', () => {
+            document.querySelectorAll('.slide-panel, .checkout-wizard-panel').forEach(node => node.classList.remove('active'));
+            uiEngine.toggleScrimDisplay();
         });
 
-        // --- WINDOW RESIZE SUPPORT ---
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
-
-        // Start the engine!
-        animate();
     </script>
 </body>
 </html>
